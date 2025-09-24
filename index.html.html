@@ -1,92 +1,4 @@
-        function updateProgress() {
-            const inputs = document.querySelectorAll('.blank-input');
-            const filledInputs = Array.from(inputs).filter(input => input.value.trim() !== '');
-            const progressPercentage = (filledInputs.length / inputs.length) * 100;
-            document.getElementById('progressFill').style.width = progressPercentage + '%';
-            
-            // Show early finish button when 80% complete
-            const earlyFinishBtn = document.getElementById('earlyFinishBtn');
-            if (progressPercentage >= 80) {
-                earlyFinishBtn.style.display = 'inline-block';
-            } else {
-                earlyFinishBtn.style.display = 'none';
-            }
-        }
-
-        function earlyFinish() {
-            if (confirm('아직 시간이 남았지만 시험을 완료하시겠습니까?')) {
-                clearInterval(timerInterval);
-                calculateResults();
-            }
-        }
-
-        // Enhanced data storage to Firebase-compatible format or localStorage
-        function storeTestResults(results) {
-            // Create a comprehensive test result object
-            const testResult = {
-                id: `${results.participantData.participantId}_${Date.now()}`,
-                timestamp: new Date().toISOString(),
-                ...results
-            };
-            
-            // Store in localStorage (accessible to researcher)
-            const allResults = JSON.parse(localStorage.getItem('korean_ctest_all_results') || '[]');
-            allResults.push(testResult);
-            localStorage.setItem('korean_ctest_all_results', JSON.stringify(allResults));
-            
-            // Also store individual result
-            localStorage.setItem(`korean_ctest_${testResult.id}`, JSON.stringify(testResult));
-            
-            // Send to researcher if email is provided
-            if (results.participantData.email) {
-                sendEmailToResearcher(testResult);
-            }
-            
-            return testResult.id;
-        }
-
-        function sendEmailToResearcher(testResult) {
-            // This creates a mailto link that can be sent to the researcher
-            const subject = encodeURIComponent(`한국어 C-Test 결과 - ${testResult.participantData.participantId}`);
-            const body = encodeURIComponent(`
-실험 참여자 결과를 첨부합니다.
-
-참여자 ID: ${testResult.participantData.participantId}
-완료 시간: ${testResult.testMetadata.testEndTime}
-총점: ${testResult.overallResults.percentageScore}%
-
-상세 데이터는 첨부된 JSON 파일을 참고해 주세요.
-
----
-${JSON.stringify(testResult, null, 2)}
-            `);
-            
-            // You can replace this email with your actual research email        @media (max-width: 768px) {
-            .container {
-                margin: 10px;
-                padding: 15px;
-            }
-            
-            .control-panel {
-                flex-direction: column;
-            }
-            
-            .passage-text {
-                font-size: 1em;
-                line-height: 1.8;
-            }
-            
-            .blank-input {
-                font-size: 1em;
-                width: 20px;
-                margin: 0 2px;
-            }
-            
-            .form-row {
-                flex-direction: column;
-            }
-            
-            .form-row .form-<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -333,42 +245,6 @@ ${JSON.stringify(testResult, null, 2)}
             border-bottom-color: #ffc107;
         }
 
-        @media (max-width: 768px) {
-            .container {
-                margin: 10px;
-                padding: 15px;
-            }
-            
-            .control-panel {
-                flex-direction: column;
-            }
-            
-            .passage-text {
-                font-size: 1em;
-            }
-            
-            .blank-input {
-                font-size: 1em;
-            }
-        }
-
-        .start-screen {
-            text-align: center;
-            padding: 50px 20px;
-        }
-
-        .start-screen h2 {
-            color: #667eea;
-            margin-bottom: 20px;
-            font-size: 2em;
-        }
-
-        .start-screen p {
-            margin-bottom: 15px;
-            font-size: 1.1em;
-        }
-
-        // Participant information form
         .participant-form {
             background: #e8f4f8;
             padding: 30px;
@@ -406,6 +282,58 @@ ${JSON.stringify(testResult, null, 2)}
         .form-row .form-group {
             flex: 1;
             min-width: 250px;
+        }
+
+        .start-screen {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .start-screen h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .start-screen p {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            .control-panel {
+                flex-direction: column;
+            }
+            
+            .passage-text {
+                font-size: 1em;
+                line-height: 1.8;
+            }
+            
+            .blank-input {
+                font-size: 1em;
+                width: 20px;
+                margin: 0 2px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .form-row .form-group {
+                min-width: auto;
+            }
         }
     </style>
 </head>
@@ -505,7 +433,7 @@ ${JSON.stringify(testResult, null, 2)}
 
         <div id="testContent" style="display: none;">
             <div class="timer" id="timer">
-                남은 시간: 40:00
+                남은 시간: 30:00
             </div>
 
             <div class="instructions">
@@ -523,9 +451,9 @@ ${JSON.stringify(testResult, null, 2)}
                     <span class="passage-level">Level 1</span>
                 </div>
                 <div class="passage-text" id="passage1">
-                    안녕하세요. 제 이름은 김철수입니다. 저는 대학<input type="text" class="blank-input" data-answer="교에" data-passage="1" data-item="1"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="1"> 다닙니다.
-                    아침에 일어<input type="text" class="blank-input" data-answer="나서" data-passage="1" data-item="2"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="2"> 학교 체육<input type="text" class="blank-input" data-answer="관에" data-passage="1" data-item="3"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="3"> 갑니다. 체육<input type="text" class="blank-input" data-answer="관에서" data-passage="1" data-item="4"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="4"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="4"> 운동을 합<input type="text" class="blank-input" data-answer="니다" data-passage="1" data-item="5"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="5">.
-                    운동을 한 다<input type="text" class="blank-input" data-answer="음에" data-passage="1" data-item="6"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="6"> 아침을 먹습니다. 아침은 기숙<input type="text" class="blank-input" data-answer="사" data-passage="1" data-item="7"> 식당에서 먹습니다. 저는 대학<input type="text" class="blank-input" data-answer="교에서" data-passage="1" data-item="8"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="8"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="8"> 한국어를 배<input type="text" class="blank-input" data-answer="웁니다" data-passage="1" data-item="9"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="9"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="9">. 한국어 수<input type="text" class="blank-input" data-answer="업은" data-passage="1" data-item="10"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="10"> 매일 오<input type="text" class="blank-input" data-answer="전" data-passage="1" data-item="11"> 10시에 시작<input type="text" class="blank-input" data-answer="합니다" data-passage="1" data-item="12"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="12"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="12">. 한국어는 쓰<input type="text" class="blank-input" data-answer="기와" data-passage="1" data-item="13"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="13"> 말하기가 어<input type="text" class="blank-input" data-answer="렵습니다" data-passage="1" data-item="14"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="14"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="14"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="14">. 그렇지만 듣<input type="text" class="blank-input" data-answer="기와" data-passage="1" data-item="15"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="15"> 읽기는 쉽<input type="text" class="blank-input" data-answer="습니다" data-passage="1" data-item="16"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="16"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="16">. 한국어 배<input type="text" class="blank-input" data-answer="우는" data-passage="1" data-item="17"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="17"> 것이 참 재미<input type="text" class="blank-input" data-answer="있습니다" data-passage="1" data-item="18"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="18"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="18"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="18">. 주말에는 친<input type="text" class="blank-input" data-answer="구와" data-passage="1" data-item="19"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="19"> 같이 극<input type="text" class="blank-input" data-answer="장에서" data-passage="1" data-item="20"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="20"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="20"> 영화를 봅니다. 영화를<input type="text" class="blank-input" data-answer="본" data-passage="1" data-item="21"> 후에 한국 식당에서 저<input type="text" class="blank-input" data-answer="녁을" data-passage="1" data-item="22"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="22"> 먹습니다. 한국 식<input type="text" class="blank-input" data-answer="당이" data-passage="1" data-item="23"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="23"> 극장 바<input type="text" class="blank-input" data-answer="로" data-passage="1" data-item="24"> 옆에 있습니다. 불고<input type="text" class="blank-input" data-answer="기가" data-passage="1" data-item="25"><input type="text" class="blank-input" data-answer="" data-passage="1" data-item="25"> 맛있습니다. 김치찌개는 맵습니다.
+                    안녕하세요. 제 이름은 김철수입니다. 저는 대학<input type="text" class="blank-input" data-answer="교" data-passage="1" data-item="1"><input type="text" class="blank-input" data-answer="에" data-passage="1" data-item="1"> 다닙니다.
+                    아침에 일어<input type="text" class="blank-input" data-answer="나" data-passage="1" data-item="2"><input type="text" class="blank-input" data-answer="서" data-passage="1" data-item="2"> 학교 체육<input type="text" class="blank-input" data-answer="관" data-passage="1" data-item="3"><input type="text" class="blank-input" data-answer="에" data-passage="1" data-item="3"> 갑니다. 체육<input type="text" class="blank-input" data-answer="관" data-passage="1" data-item="4"><input type="text" class="blank-input" data-answer="에" data-passage="1" data-item="4"><input type="text" class="blank-input" data-answer="서" data-passage="1" data-item="4"> 운동을 합<input type="text" class="blank-input" data-answer="니" data-passage="1" data-item="5"><input type="text" class="blank-input" data-answer="다" data-passage="1" data-item="5">.
+                    운동을 한 다<input type="text" class="blank-input" data-answer="음" data-passage="1" data-item="6"><input type="text" class="blank-input" data-answer="에" data-passage="1" data-item="6"> 아침을 먹습니다. 아침은 기숙<input type="text" class="blank-input" data-answer="사" data-passage="1" data-item="7"> 식당에서 먹습니다. 저는 대학<input type="text" class="blank-input" data-answer="교" data-passage="1" data-item="8"><input type="text" class="blank-input" data-answer="에" data-passage="1" data-item="8"><input type="text" class="blank-input" data-answer="서" data-passage="1" data-item="8"> 한국어를 배<input type="text" class="blank-input" data-answer="웁" data-passage="1" data-item="9"><input type="text" class="blank-input" data-answer="니" data-passage="1" data-item="9"><input type="text" class="blank-input" data-answer="다" data-passage="1" data-item="9">. 한국어 수<input type="text" class="blank-input" data-answer="업" data-passage="1" data-item="10"><input type="text" class="blank-input" data-answer="은" data-passage="1" data-item="10"> 매일 오<input type="text" class="blank-input" data-answer="전" data-passage="1" data-item="11"> 10시에 시작<input type="text" class="blank-input" data-answer="합" data-passage="1" data-item="12"><input type="text" class="blank-input" data-answer="니" data-passage="1" data-item="12"><input type="text" class="blank-input" data-answer="다" data-passage="1" data-item="12">. 한국어는 쓰<input type="text" class="blank-input" data-answer="기" data-passage="1" data-item="13"><input type="text" class="blank-input" data-answer="와" data-passage="1" data-item="13"> 말하기가 어<input type="text" class="blank-input" data-answer="렵" data-passage="1" data-item="14"><input type="text" class="blank-input" data-answer="습" data-passage="1" data-item="14"><input type="text" class="blank-input" data-answer="니" data-passage="1" data-item="14"><input type="text" class="blank-input" data-answer="다" data-passage="1" data-item="14">. 그렇지만 듣<input type="text" class="blank-input" data-answer="기" data-passage="1" data-item="15"><input type="text" class="blank-input" data-answer="와" data-passage="1" data-item="15"> 읽기는 쉽<input type="text" class="blank-input" data-answer="습" data-passage="1" data-item="16"><input type="text" class="blank-input" data-answer="니" data-passage="1" data-item="16"><input type="text" class="blank-input" data-answer="다" data-passage="1" data-item="16">. 한국어 배<input type="text" class="blank-input" data-answer="우" data-passage="1" data-item="17"><input type="text" class="blank-input" data-answer="는" data-passage="1" data-item="17"> 것이 참 재미<input type="text" class="blank-input" data-answer="있" data-passage="1" data-item="18"><input type="text" class="blank-input" data-answer="습" data-passage="1" data-item="18"><input type="text" class="blank-input" data-answer="니" data-passage="1" data-item="18"><input type="text" class="blank-input" data-answer="다" data-passage="1" data-item="18">. 주말에는 친<input type="text" class="blank-input" data-answer="구" data-passage="1" data-item="19"><input type="text" class="blank-input" data-answer="와" data-passage="1" data-item="19"> 같이 극<input type="text" class="blank-input" data-answer="장" data-passage="1" data-item="20"><input type="text" class="blank-input" data-answer="에" data-passage="1" data-item="20"><input type="text" class="blank-input" data-answer="서" data-passage="1" data-item="20"> 영화를 봅니다. 영화를<input type="text" class="blank-input" data-answer="본" data-passage="1" data-item="21"> 후에 한국 식당에서 저<input type="text" class="blank-input" data-answer="녁" data-passage="1" data-item="22"><input type="text" class="blank-input" data-answer="을" data-passage="1" data-item="22"> 먹습니다. 한국 식<input type="text" class="blank-input" data-answer="당" data-passage="1" data-item="23"><input type="text" class="blank-input" data-answer="이" data-passage="1" data-item="23"> 극장 바<input type="text" class="blank-input" data-answer="로" data-passage="1" data-item="24"> 옆에 있습니다. 불고<input type="text" class="blank-input" data-answer="기" data-passage="1" data-item="25"><input type="text" class="blank-input" data-answer="가" data-passage="1" data-item="25"> 맛있습니다. 김치찌개는 맵습니다.
                 </div>
             </div>
 
@@ -536,7 +464,7 @@ ${JSON.stringify(testResult, null, 2)}
                     <span class="passage-level">Level 1+</span>
                 </div>
                 <div class="passage-text" id="passage2">
-                    올 여름에는 가족들과 함께 제주도에 여행을 가려고 해요. 제주도는 한반<input type="text" class="blank-input" data-answer="도의" data-passage="2" data-item="26"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="26"> 남쪽에 있<input type="text" class="blank-input" data-answer="는" data-passage="2" data-item="27"> 섬이예요. 한국의 하와이라 불<input type="text" class="blank-input" data-answer="리는" data-passage="2" data-item="28"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="28"> 제주도는 자<input type="text" class="blank-input" data-answer="연이" data-passage="2" data-item="29"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="29"> 아름다워서 신혼<input type="text" class="blank-input" data-answer="여행" data-passage="2" data-item="30"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="30"> 장소로 인<input type="text" class="blank-input" data-answer="기가" data-passage="2" data-item="31"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="31"> 굉장히 많<input type="text" class="blank-input" data-answer="아요" data-passage="2" data-item="32"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="32">. 오늘은 여행<input type="text" class="blank-input" data-answer="사에" data-passage="2" data-item="33"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="33"> 전화를 걸<input type="text" class="blank-input" data-answer="어" data-passage="2" data-item="34"> 서울에서 제주도<input type="text" class="blank-input" data-answer="까지" data-passage="2" data-item="35"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="35"> 왕복 비행<input type="text" class="blank-input" data-answer="기표를" data-passage="2" data-item="36"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="36"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="36"> 네장 예<input type="text" class="blank-input" data-answer="약했어요" data-passage="2" data-item="37"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="37"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="37"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="37">. 여행<input type="text" class="blank-input" data-answer="사에서" data-passage="2" data-item="38"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="38"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="38"> 호텔도 소개<input type="text" class="blank-input" data-answer="해" data-passage="2" data-item="39"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="39"> 주었지만 호텔은 아직 안 정<input type="text" class="blank-input" data-answer="했어요" data-passage="2" data-item="40"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="40"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="40">. 인터넷으로 정<input type="text" class="blank-input" data-answer="보를" data-passage="2" data-item="41"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="41"> 더 찾아 보<input type="text" class="blank-input" data-answer="고" data-passage="2" data-item="42"> 어느 호텔이 좋<input type="text" class="blank-input" data-answer="은" data-passage="2" data-item="43"> 지 알아 보<input type="text" class="blank-input" data-answer="려고" data-passage="2" data-item="44"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="44"> 해요. 요<input type="text" class="blank-input" data-answer="즘은" data-passage="2" data-item="45"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="45"> 인터넷이 있<input type="text" class="blank-input" data-answer="어서" data-passage="2" data-item="46"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="46"> 호텔 뿐 아<input type="text" class="blank-input" data-answer="니라" data-passage="2" data-item="47"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="47"> 유명한 관<input type="text" class="blank-input" data-answer="광" data-passage="2" data-item="48"> 명소와 맛<input type="text" class="blank-input" data-answer="있는" data-passage="2" data-item="49"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="49"> 식당도 찾아 볼<input type="text" class="blank-input" data-answer="수" data-passage="2" data-item="50"> 있어서 참 편리해요.
+                    올 여름에는 가족들과 함께 제주도에 여행을 가려고 해요. 제주도는 한반<input type="text" class="blank-input" data-answer="도" data-passage="2" data-item="26"><input type="text" class="blank-input" data-answer="의" data-passage="2" data-item="26"> 남쪽에 있<input type="text" class="blank-input" data-answer="는" data-passage="2" data-item="27"> 섬이예요. 한국의 하와이라 불<input type="text" class="blank-input" data-answer="리" data-passage="2" data-item="28"><input type="text" class="blank-input" data-answer="는" data-passage="2" data-item="28"> 제주도는 자<input type="text" class="blank-input" data-answer="연" data-passage="2" data-item="29"><input type="text" class="blank-input" data-answer="이" data-passage="2" data-item="29"> 아름다워서 신혼<input type="text" class="blank-input" data-answer="여" data-passage="2" data-item="30"><input type="text" class="blank-input" data-answer="행" data-passage="2" data-item="30"> 장소로 인<input type="text" class="blank-input" data-answer="기" data-passage="2" data-item="31"><input type="text" class="blank-input" data-answer="가" data-passage="2" data-item="31"> 굉장히 많<input type="text" class="blank-input" data-answer="아" data-passage="2" data-item="32"><input type="text" class="blank-input" data-answer="요" data-passage="2" data-item="32">. 오늘은 여행<input type="text" class="blank-input" data-answer="사" data-passage="2" data-item="33"><input type="text" class="blank-input" data-answer="에" data-passage="2" data-item="33"> 전화를 걸<input type="text" class="blank-input" data-answer="어" data-passage="2" data-item="34"> 서울에서 제주도<input type="text" class="blank-input" data-answer="까" data-passage="2" data-item="35"><input type="text" class="blank-input" data-answer="지" data-passage="2" data-item="35"> 왕복 비행<input type="text" class="blank-input" data-answer="기" data-passage="2" data-item="36"><input type="text" class="blank-input" data-answer="표" data-passage="2" data-item="36"><input type="text" class="blank-input" data-answer="를" data-passage="2" data-item="36"> 네장 예<input type="text" class="blank-input" data-answer="약" data-passage="2" data-item="37"><input type="text" class="blank-input" data-answer="했" data-passage="2" data-item="37"><input type="text" class="blank-input" data-answer="어" data-passage="2" data-item="37"><input type="text" class="blank-input" data-answer="요" data-passage="2" data-item="37">. 여행<input type="text" class="blank-input" data-answer="사" data-passage="2" data-item="38"><input type="text" class="blank-input" data-answer="에" data-passage="2" data-item="38"><input type="text" class="blank-input" data-answer="서" data-passage="2" data-item="38"> 호텔도 소개<input type="text" class="blank-input" data-answer="해" data-passage="2" data-item="39"><input type="text" class="blank-input" data-answer="" data-passage="2" data-item="39"> 주었지만 호텔은 아직 안 정<input type="text" class="blank-input" data-answer="했" data-passage="2" data-item="40"><input type="text" class="blank-input" data-answer="어" data-passage="2" data-item="40"><input type="text" class="blank-input" data-answer="요" data-passage="2" data-item="40">. 인터넷으로 정<input type="text" class="blank-input" data-answer="보" data-passage="2" data-item="41"><input type="text" class="blank-input" data-answer="를" data-passage="2" data-item="41"> 더 찾아 보<input type="text" class="blank-input" data-answer="고" data-passage="2" data-item="42"> 어느 호텔이 좋<input type="text" class="blank-input" data-answer="은" data-passage="2" data-item="43"> 지 알아 보<input type="text" class="blank-input" data-answer="려" data-passage="2" data-item="44"><input type="text" class="blank-input" data-answer="고" data-passage="2" data-item="44"> 해요. 요<input type="text" class="blank-input" data-answer="즘" data-passage="2" data-item="45"><input type="text" class="blank-input" data-answer="은" data-passage="2" data-item="45"> 인터넷이 있<input type="text" class="blank-input" data-answer="어" data-passage="2" data-item="46"><input type="text" class="blank-input" data-answer="서" data-passage="2" data-item="46"> 호텔 뿐 아<input type="text" class="blank-input" data-answer="니" data-passage="2" data-item="47"><input type="text" class="blank-input" data-answer="라" data-passage="2" data-item="47"> 유명한 관<input type="text" class="blank-input" data-answer="광" data-passage="2" data-item="48"> 명소와 맛<input type="text" class="blank-input" data-answer="있" data-passage="2" data-item="49"><input type="text" class="blank-input" data-answer="는" data-passage="2" data-item="49"> 식당도 찾아 볼<input type="text" class="blank-input" data-answer="수" data-passage="2" data-item="50"> 있어서 참 편리해요.
                 </div>
             </div>
 
@@ -547,7 +475,7 @@ ${JSON.stringify(testResult, null, 2)}
                     <span class="passage-level">Level 1+</span>
                 </div>
                 <div class="passage-text" id="passage3">
-                    안녕하세요. 서울역 앞에 위치한 서울 백화점입니다. 저희 백화점<input type="text" class="blank-input" data-answer="에서는" data-passage="3" data-item="51"><input type="text" class="blank-input" data-answer="" data-passage="3" data-item="51"><input type="text" class="blank-input" data-answer="" data-passage="3" data-item="51"> 겨울철을 맞<input type="text" class="blank-input" data-answer="아" data-passage="3" data-item="52"> 겨울옷과 난<input type="text" class="blank-input" data-answer="방" data-passage="3" data-item="52"> 제품을 세일<input type="text" class="blank-input" data-answer="하고" data-passage="3" data-item="53"><input type="text" class="blank-input" data-answer="" data-passage="3" data-item="53"> 있습니다. 직장 여<input type="text" class="blank-input" data-answer="성을" data-passage="3" data-item="54"><input type="text" class="blank-input" data-answer="" data-passage="3" data-item="54"> 위한 여성복 코너<input type="text" class="blank-input" data-answer="에서" data-passage="3" data-item="55"><input type="text" class="blank-input" data-answer="" data-passage="3" data-item="55"> 여성 정<input type="text" class="blank-input" data-answer="장과" data-passage="3" data-item="56"><input type="text" class="blank-input" data-answer="" data-passage="3" data-item="56"> 겨울 속<input type="text" class="blank-input" data-answer="옷을" data-passage="3" data-item="57"><input type="text" class="blank-input" data-answer="" data-passage="3" data-item="57"> 50 프로 세일하고 있<input type="text" class="blank-input" data-answer="고" data-passage="3" data-item="58">, 삼층 아동<input type="text" class="blank-input" data-answer="복" data-passage="3" data-item="59"> 코너에서도 코<input type="text" class="blank-input" data-answer="트" data-passage="3" data-item="60">, 목도리, 장<input type="text" class="blank-input" data-answer="갑" data-passage="3" data-item="61"> 등의 겨<input type="text" class="blank-input" data-answer="울" data-passage="3" data-item="62"> 상품이 각 30프로씩 할<input type="text" class="blank-input" data-answer="인된" data-passage="3" data-item="63"><input type="text" class="blank-input" data-answer="" data-passage="3" data-item="63"> 가격에 판<input type="text" class="blank-input" data-answer="매되고" data-passage="3" data-item="64"><input type="text" class="blank-input" data-answer="" data-passage="3" data-item="64"><input type="text" class="blank-input" data-answer="" data-passage="3" data-item="64"> 있습니다. 칠<input type="text" class="blank-input" data-answer="층" data-passage="3" data-item="65"> 에서는 집안을 따<input type="text" class="blank-input" data-answer="뜻하게" data-passage="3" data-item="66"><input type="text" class="blank-input" data-answer="" data-passage="3" data-item="66"><input type="text" class="blank-input" data-answer="" data-passage="3" data-item="66"> 해 줄 전<input type="text" class="blank-input" data-answer="기" data-passage="3" data-item="67"> 히터와 가스 난<input type="text" class="blank-input" data-answer="로" data-passage="3" data-item="68"> 등 다양<input type="text" class="blank-input" data-answer="한" data-passage="3" data-item="69"> 난방용 가<input type="text" class="blank-input" data-answer="전" data-passage="3" data-item="70"> 제품을 특가판<input type="text" class="blank-input" data-answer="매하고" data-passage="3" data-item="71"><input type="text" class="blank-input" data-answer="" data-passage="3" data-item="71"><input type="text" class="blank-input" data-answer="" data-passage="3" data-item="71">                     있습니다. 저<input type="text" class="blank-input" data-answer="희" data-passage="3" data-item="72"> 서울 백화점과 함<input type="text" class="blank-input" data-answer="께" data-passage="3" data-item="73"> 겨울나기 준<input type="text" class="blank-input" data-answer="비를" data-passage="3" data-item="74"><input type="text" class="blank-input" data-answer="" data-passage="3" data-item="74"> 시작하세요. 고객 여러분의 많은 성원 부탁드립니다. 감사합니다.
+                    안녕하세요. 서울역 앞에 위치한 서울 백화점입니다. 저희 백화점<input type="text" class="blank-input" data-answer="에" data-passage="3" data-item="51"><input type="text" class="blank-input" data-answer="서" data-passage="3" data-item="51"><input type="text" class="blank-input" data-answer="는" data-passage="3" data-item="51"> 겨울철을 맞<input type="text" class="blank-input" data-answer="아" data-passage="3" data-item="52"> 겨울옷과 난<input type="text" class="blank-input" data-answer="방" data-passage="3" data-item="52"> 제품을 세일<input type="text" class="blank-input" data-answer="하" data-passage="3" data-item="53"><input type="text" class="blank-input" data-answer="고" data-passage="3" data-item="53"> 있습니다. 직장 여<input type="text" class="blank-input" data-answer="성" data-passage="3" data-item="54"><input type="text" class="blank-input" data-answer="을" data-passage="3" data-item="54"> 위한 여성복 코너<input type="text" class="blank-input" data-answer="에" data-passage="3" data-item="55"><input type="text" class="blank-input" data-answer="서" data-passage="3" data-item="55"> 여성 정<input type="text" class="blank-input" data-answer="장" data-passage="3" data-item="56"><input type="text" class="blank-input" data-answer="과" data-passage="3" data-item="56"> 겨울 속<input type="text" class="blank-input" data-answer="옷" data-passage="3" data-item="57"><input type="text" class="blank-input" data-answer="을" data-passage="3" data-item="57"> 50 프로 세일하고 있<input type="text" class="blank-input" data-answer="고" data-passage="3" data-item="58">, 삼층 아동<input type="text" class="blank-input" data-answer="복" data-passage="3" data-item="59"> 코너에서도 코<input type="text" class="blank-input" data-answer="트" data-passage="3" data-item="60">, 목도리, 장<input type="text" class="blank-input" data-answer="갑" data-passage="3" data-item="61"> 등의 겨<input type="text" class="blank-input" data-answer="울" data-passage="3" data-item="62"> 상품이 각 30프로씩 할<input type="text" class="blank-input" data-answer="인" data-passage="3" data-item="63"><input type="text" class="blank-input" data-answer="된" data-passage="3" data-item="63"> 가격에 판<input type="text" class="blank-input" data-answer="매" data-passage="3" data-item="64"><input type="text" class="blank-input" data-answer="되" data-passage="3" data-item="64"><input type="text" class="blank-input" data-answer="고" data-passage="3" data-item="64"> 있습니다. 칠<input type="text" class="blank-input" data-answer="층" data-passage="3" data-item="65"> 에서는 집안을 따<input type="text" class="blank-input" data-answer="뜻" data-passage="3" data-item="66"><input type="text" class="blank-input" data-answer="하" data-passage="3" data-item="66"><input type="text" class="blank-input" data-answer="게" data-passage="3" data-item="66"> 해 줄 전<input type="text" class="blank-input" data-answer="기" data-passage="3" data-item="67"> 히터와 가스 난<input type="text" class="blank-input" data-answer="로" data-passage="3" data-item="68"> 등 다양<input type="text" class="blank-input" data-answer="한" data-passage="3" data-item="69"> 난방용 가<input type="text" class="blank-input" data-answer="전" data-passage="3" data-item="70"> 제품을 특가판<input type="text" class="blank-input" data-answer="매" data-passage="3" data-item="71"><input type="text" class="blank-input" data-answer="하" data-passage="3" data-item="71"><input type="text" class="blank-input" data-answer="고" data-passage="3" data-item="71"> 있습니다. 저<input type="text" class="blank-input" data-answer="희" data-passage="3" data-item="72"> 서울 백화점과 함<input type="text" class="blank-input" data-answer="께" data-passage="3" data-item="73"> 겨울나기 준<input type="text" class="blank-input" data-answer="비" data-passage="3" data-item="74"><input type="text" class="blank-input" data-answer="를" data-passage="3" data-item="74"> 시작하세요. 고객 여러분의 많은 성원 부탁드립니다. 감사합니다.
                 </div>
             </div>
 
@@ -558,7 +486,7 @@ ${JSON.stringify(testResult, null, 2)}
                     <span class="passage-level">Level 2</span>
                 </div>
                 <div class="passage-text" id="passage4">
-                    도시의 가장 큰 문제점이라면 뭐니뭐니해도 교통 문제가 제일 크다. 도로에서는 교<input type="text" class="blank-input" data-answer="통" data-passage="4" data-item="76"> 체증으로 인<input type="text" class="blank-input" data-answer="하여" data-passage="4" data-item="77"><input type="text" class="blank-input" data-answer="" data-passage="4" data-item="77"> 에너지와 시<input type="text" class="blank-input" data-answer="간이" data-passage="4" data-item="78"><input type="text" class="blank-input" data-answer="" data-passage="4" data-item="78"> 낭비된다. 특히 출<input type="text" class="blank-input" data-answer="퇴근" data-passage="4" data-item="79"><input type="text" class="blank-input" data-answer="" data-passage="4" data-item="79"> 시간에는 한꺼<input type="text" class="blank-input" data-answer="번에" data-passage="4" data-item="80"><input type="text" class="blank-input" data-answer="" data-passage="4" data-item="80"> 차량이 일제<input type="text" class="blank-input" data-answer="히" data-passage="4" data-item="81"> 몰려서 도<input type="text" class="blank-input" data-answer="로가" data-passage="4" data-item="82"><input type="text" class="blank-input" data-answer="" data-passage="4" data-item="82"> 아주 복<input type="text" class="blank-input" data-answer="잡하다" data-passage="4" data-item="83"><input type="text" class="blank-input" data-answer="" data-passage="4" data-item="83"><input type="text" class="blank-input" data-answer="" data-passage="4" data-item="83">. 게다가 뉴욕 같은 대도<input type="text" class="blank-input" data-answer="시의" data-passage="4" data-item="84"><input type="text" class="blank-input" data-answer="" data-passage="4" data-item="84"> 주차난은 매<input type="text" class="blank-input" data-answer="우" data-passage="4" data-item="85"> 심각한 수준<input type="text" class="blank-input" data-answer="이다" data-passage="4" data-item="86"><input type="text" class="blank-input" data-answer="" data-passage="4" data-item="86">. 자동<input type="text" class="blank-input" data-answer="차는" data-passage="4" data-item="87"><input type="text" class="blank-input" data-answer="" data-passage="4" data-item="87"> 점점 많아<input type="text" class="blank-input" data-answer="지는" data-passage="4" data-item="88"><input type="text" class="blank-input" data-answer="" data-passage="4" data-item="88"> 반면 주<input type="text" class="blank-input" data-answer="차" data-passage="4" data-item="89"> 공간은 제<input type="text" class="blank-input" data-answer="한되어" data-passage="4" data-item="90"><input type="text" class="blank-input" data-answer="" data-passage="4" data-item="90"><input type="text" class="blank-input" data-answer="" data-passage="4" data-item="90"> 있기 때<input type="text" class="blank-input" data-answer="문에" data-passage="4" data-item="91"><input type="text" class="blank-input" data-answer="" data-passage="4" data-item="91"> 주차난이 생<input type="text" class="blank-input" data-answer="긴다" data-passage="4" data-item="92"><input type="text" class="blank-input" data-answer="" data-passage="4" data-item="92">. 주차장이 부족하면 사람<input type="text" class="blank-input" data-answer="들이" data-passage="4" data-item="93"><input type="text" class="blank-input" data-answer="" data-passage="4" data-item="93"> 주택가 골<input type="text" class="blank-input" data-answer="목" data-passage="4" data-item="94"> 이나 도로에까지 주차를 하<input type="text" class="blank-input" data-answer="는" data-passage="4" data-item="95"> 경우가 많다. 이렇게 불<input type="text" class="blank-input" data-answer="법" data-passage="4" data-item="96"> 으로 주<input type="text" class="blank-input" data-answer="차된" data-passage="4" data-item="97"><input type="text" class="blank-input" data-answer="" data-passage="4" data-item="97"> 차량은 또 다시 교통 혼<input type="text" class="blank-input" data-answer="잡의" data-passage="4" data-item="98"><input type="text" class="blank-input" data-answer="" data-passage="4" data-item="98"> 원인이 되<input type="text" class="blank-input" data-answer="어" data-passage="4" data-item="99"> 더 심<input type="text" class="blank-input" data-answer="각한" data-passage="4" data-item="100"><input type="text" class="blank-input" data-answer="" data-passage="4" data-item="100"> 교통 체증을 일으킨다. 따라서 교통 문제를 해결하기 위해서는 자가용보다는 버스나 지하철을 많이 이용해야 할 것이다.
+                    도시의 가장 큰 문제점이라면 뭐니뭐니해도 교통 문제가 제일 크다. 도로에서는 교<input type="text" class="blank-input" data-answer="통" data-passage="4" data-item="76"> 체증으로 인<input type="text" class="blank-input" data-answer="하" data-passage="4" data-item="77"><input type="text" class="blank-input" data-answer="여" data-passage="4" data-item="77"> 에너지와 시<input type="text" class="blank-input" data-answer="간" data-passage="4" data-item="78"><input type="text" class="blank-input" data-answer="이" data-passage="4" data-item="78"> 낭비된다. 특히 출<input type="text" class="blank-input" data-answer="퇴" data-passage="4" data-item="79"><input type="text" class="blank-input" data-answer="근" data-passage="4" data-item="79"> 시간에는 한꺼<input type="text" class="blank-input" data-answer="번" data-passage="4" data-item="80"><input type="text" class="blank-input" data-answer="에" data-passage="4" data-item="80"> 차량이 일제<input type="text" class="blank-input" data-answer="히" data-passage="4" data-item="81"> 몰려서 도<input type="text" class="blank-input" data-answer="로" data-passage="4" data-item="82"><input type="text" class="blank-input" data-answer="가" data-passage="4" data-item="82"> 아주 복<input type="text" class="blank-input" data-answer="잡" data-passage="4" data-item="83"><input type="text" class="blank-input" data-answer="하" data-passage="4" data-item="83"><input type="text" class="blank-input" data-answer="다" data-passage="4" data-item="83">. 게다가 뉴욕 같은 대도<input type="text" class="blank-input" data-answer="시" data-passage="4" data-item="84"><input type="text" class="blank-input" data-answer="의" data-passage="4" data-item="84"> 주차난은 매<input type="text" class="blank-input" data-answer="우" data-passage="4" data-item="85"> 심각한 수준<input type="text" class="blank-input" data-answer="이" data-passage="4" data-item="86"><input type="text" class="blank-input" data-answer="다" data-passage="4" data-item="86">. 자동<input type="text" class="blank-input" data-answer="차" data-passage="4" data-item="87"><input type="text" class="blank-input" data-answer="는" data-passage="4" data-item="87"> 점점 많아<input type="text" class="blank-input" data-answer="지" data-passage="4" data-item="88"><input type="text" class="blank-input" data-answer="는" data-passage="4" data-item="88"> 반면 주<input type="text" class="blank-input" data-answer="차" data-passage="4" data-item="89"> 공간은 제<input type="text" class="blank-input" data-answer="한" data-passage="4" data-item="90"><input type="text" class="blank-input" data-answer="되" data-passage="4" data-item="90"><input type="text" class="blank-input" data-answer="어" data-passage="4" data-item="90"> 있기 때<input type="text" class="blank-input" data-answer="문" data-passage="4" data-item="91"><input type="text" class="blank-input" data-answer="에" data-passage="4" data-item="91"> 주차난이 생<input type="text" class="blank-input" data-answer="긴" data-passage="4" data-item="92"><input type="text" class="blank-input" data-answer="다" data-passage="4" data-item="92">. 주차장이 부족하면 사람<input type="text" class="blank-input" data-answer="들" data-passage="4" data-item="93"><input type="text" class="blank-input" data-answer="이" data-passage="4" data-item="93"> 주택가 골<input type="text" class="blank-input" data-answer="목" data-passage="4" data-item="94"> 이나 도로에까지 주차를 하<input type="text" class="blank-input" data-answer="는" data-passage="4" data-item="95"> 경우가 많다. 이렇게 불<input type="text" class="blank-input" data-answer="법" data-passage="4" data-item="96"> 으로 주<input type="text" class="blank-input" data-answer="차" data-passage="4" data-item="97"><input type="text" class="blank-input" data-answer="된" data-passage="4" data-item="97"> 차량은 또 다시 교통 혼<input type="text" class="blank-input" data-answer="잡" data-passage="4" data-item="98"><input type="text" class="blank-input" data-answer="의" data-passage="4" data-item="98"> 원인이 되<input type="text" class="blank-input" data-answer="어" data-passage="4" data-item="99"> 더 심<input type="text" class="blank-input" data-answer="각" data-passage="4" data-item="100"><input type="text" class="blank-input" data-answer="한" data-passage="4" data-item="100"> 교통 체증을 일으킨다. 따라서 교통 문제를 해결하기 위해서는 자가용보다는 버스나 지하철을 많이 이용해야 할 것이다.
                 </div>
             </div>
 
@@ -576,7 +504,7 @@ ${JSON.stringify(testResult, null, 2)}
             <div class="score-display">
                 <h2>시험 결과</h2>
                 <div class="score-number" id="finalScore">0%</div>
-                <p>총 125문항 중 <span id="correctCount">0</span>문항 정답</p>
+                <p>총 100문항 중 <span id="correctCount">0</span>문항 정답</p>
             </div>
             
             <div class="feedback-section">
@@ -613,10 +541,10 @@ ${JSON.stringify(testResult, null, 2)}
         
         // Answer key updated for 4 passages only
         const answerKey = {
-            1: ["교에", "나서", "관에", "관에서", "니다", "음에", "사", "교에서", "웁니다", "업은", "전", "합니다", "기와", "렵습니다", "기와", "습니다", "우는", "있습니다", "구와", "장에서", "본", "녁을", "당이", "로", "기가"],
-            2: ["도의", "는", "리는", "연이", "여행", "기가", "아요", "사에", "어", "까지", "기표를", "약했어요", "사에서", "해", "했어요", "보를", "고", "은", "려고", "즘은", "어서", "니라", "광", "있는", "수"],
-            3: ["에서는", "아", "방", "하고", "성을", "에서", "장과", "옷을", "고", "복", "트", "갑", "울", "인된", "매되고", "층", "뜻하게", "기", "로", "한", "전", "매하고", "희", "께", "비를"],
-            4: ["통", "하여", "간이", "퇴근", "번에", "히", "로가", "잡하다", "시의", "우", "이다", "차는", "지는", "차", "한되어", "문에", "긴다", "들이", "목", "는", "법", "차된", "잡의", "어", "각한"]
+            1: ["교", "에", "나", "서", "관", "에", "관", "에", "서", "니", "다", "음", "에", "사", "교", "에", "서", "웁", "니", "다", "업", "은", "전", "합", "니", "다", "기", "와", "렵", "습", "니", "다", "기", "와", "습", "니", "다", "우", "는", "있", "습", "니", "다", "구", "와", "장", "에", "서", "본", "녁", "을", "당", "이", "로", "기", "가"],
+            2: ["도", "의", "는", "리", "는", "연", "이", "여", "행", "기", "가", "아", "요", "사", "에", "어", "까", "지", "기", "표", "를", "약", "했", "어", "요", "사", "에", "서", "해", "했", "어", "요", "보", "를", "고", "은", "려", "고", "즈", "은", "어", "서", "니", "라", "광", "있", "는", "수"],
+            3: ["에", "서", "는", "아", "방", "하", "고", "성", "을", "에", "서", "장", "과", "옷", "을", "고", "복", "트", "갑", "울", "인", "된", "매", "되", "고", "층", "뜻", "하", "게", "기", "로", "한", "전", "매", "하", "고", "희", "께", "비", "를"],
+            4: ["통", "하", "여", "간", "이", "퇴", "근", "번", "에", "히", "로", "가", "잡", "하", "다", "시", "의", "우", "이", "다", "차", "는", "지", "는", "차", "한", "되", "어", "문", "에", "긴", "다", "들", "이", "목", "는", "법", "차", "된", "잡", "의", "어", "각", "한"]
         };
 
         function validateParticipantForm() {
@@ -784,13 +712,6 @@ ${JSON.stringify(testResult, null, 2)}
             window.open(`mailto:${researcherEmail}?subject=${subject}&body=${body}`);
         }
 
-        // Auto-update progress when typing
-        document.addEventListener('input', function(e) {
-            if (e.target.classList.contains('blank-input')) {
-                updateProgress();
-            }
-        });
-
         function saveProgress() {
             const answers = {};
             const inputs = document.querySelectorAll('.blank-input');
@@ -874,11 +795,16 @@ ${JSON.stringify(testResult, null, 2)}
             const inputs = document.querySelectorAll('.blank-input');
             let totalScore = 0;
             let correctCount = 0;
-            const passageScores = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
-            const passageCounts = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+            const passageScores = {1: 0, 2: 0, 3: 0, 4: 0}; // Updated for 4 passages
+            const passageCounts = {1: 0, 2: 0, 3: 0, 4: 0}; // Updated for 4 passages
             const detailedResults = [];
+            const itemResponses = [];
 
-            inputs.forEach((input) => {
+            const testEndTime = Date.now();
+            const actualTestDuration = Math.round((testEndTime - testStartTime) / 1000 / 60); // minutes
+            const timeUsed = 30 - Math.round(timeRemaining / 60); // actual time used
+
+            inputs.forEach((input, index) => {
                 const passage = parseInt(input.dataset.passage);
                 const item = parseInt(input.dataset.item);
                 const userAnswer = input.value.trim();
@@ -892,6 +818,17 @@ ${JSON.stringify(testResult, null, 2)}
                     
                     if (score >= 0.8) correctCount++;
                     
+                    // Store individual item data for CSV export
+                    itemResponses.push({
+                        itemNumber: index + 1,
+                        passage: passage,
+                        itemInPassage: item,
+                        userResponse: userAnswer,
+                        correctAnswer: correctAnswer,
+                        score: score,
+                        isCorrect: score >= 0.8 ? 1 : 0
+                    });
+                    
                     detailedResults.push({
                         passage: passage,
                         item: item,
@@ -904,6 +841,34 @@ ${JSON.stringify(testResult, null, 2)}
 
             const totalItems = inputs.filter(input => input.dataset.answer).length;
             const finalPercentage = Math.round((totalScore / totalItems) * 100);
+
+            // Store complete test results
+            window.testResults = {
+                participantData: participantData,
+                testMetadata: {
+                    testStartTime: new Date(testStartTime).toISOString(),
+                    testEndTime: new Date(testEndTime).toISOString(),
+                    scheduledDuration: 30,
+                    actualDuration: actualTestDuration,
+                    timeUsed: timeUsed,
+                    timeRemaining: Math.round(timeRemaining / 60),
+                    completionMethod: timeRemaining <= 0 ? 'time_expired' : 'manual_submit',
+                    completionRate: Math.round((totalItems - inputs.filter(i => i.value.trim() === '').length) / totalItems * 100)
+                },
+                overallResults: {
+                    totalScore: totalScore,
+                    totalItems: totalItems,
+                    percentageScore: finalPercentage,
+                    correctCount: correctCount,
+                    passageScores: passageScores,
+                    passageCounts: passageCounts
+                },
+                itemResults: itemResponses
+            };
+
+            // Store results for researcher access
+            const resultId = storeTestResults(window.testResults);
+            console.log(`Test results stored with ID: ${resultId}`);
 
             displayResults(finalPercentage, correctCount, totalItems, passageScores, passageCounts, detailedResults);
         }
@@ -1022,20 +987,129 @@ ${JSON.stringify(testResult, null, 2)}
             document.body.removeChild(link);
         }
 
+        function downloadResults() {
+            if (!window.testResults) {
+                alert('결과 데이터가 없습니다.');
+                return;
+            }
+
+            const results = window.testResults;
+            
+            // Create CSV content
+            let csvContent = "data:text/csv;charset=utf-8,";
+            
+            // Add participant information
+            csvContent += "Participant Information\n";
+            csvContent += "Field,Value\n";
+            csvContent += `Participant ID,${results.participantData.participantId}\n`;
+            csvContent += `Age,${results.participantData.age || 'Not provided'}\n`;
+            csvContent += `Gender,${results.participantData.gender || 'Not provided'}\n`;
+            csvContent += `L1 Language,${results.participantData.l1Language || 'Not provided'}\n`;
+            csvContent += `Korean Study Duration,${results.participantData.koreanStudyDuration || 'Not provided'}\n`;
+            csvContent += `Korean Level,${results.participantData.koreanLevel || 'Not provided'}\n`;
+            csvContent += `Korean Exposure,${results.participantData.koreanExposure || 'Not provided'}\n`;
+            csvContent += `Email,${results.participantData.email || 'Not provided'}\n`;
+            csvContent += `Test Date,${results.participantData.testDate}\n`;
+            
+            // Add test metadata
+            csvContent += "\nTest Metadata\n";
+            csvContent += "Field,Value\n";
+            csvContent += `Test Start Time,${results.testMetadata.testStartTime}\n`;
+            csvContent += `Test End Time,${results.testMetadata.testEndTime}\n`;
+            csvContent += `Actual Duration (minutes),${results.testMetadata.actualDuration}\n`;
+            csvContent += `Time Used (minutes),${results.testMetadata.timeUsed}\n`;
+            csvContent += `Completion Method,${results.testMetadata.completionMethod}\n`;
+            csvContent += `Completion Rate (%),${results.testMetadata.completionRate}\n`;
+            
+            // Add overall results
+            csvContent += "\nOverall Results\n";
+            csvContent += "Measure,Score\n";
+            csvContent += `Total Score,${results.overallResults.totalScore}\n`;
+            csvContent += `Total Items,${results.overallResults.totalItems}\n`;
+            csvContent += `Percentage Score,${results.overallResults.percentageScore}\n`;
+            csvContent += `Correct Count,${results.overallResults.correctCount}\n`;
+            
+            // Add passage scores
+            csvContent += "\nPassage Scores\n";
+            csvContent += "Passage,Score,Total Items,Percentage\n";
+            for (let i = 1; i <= 4; i++) {
+                const passagePercentage = Math.round((results.overallResults.passageScores[i] / results.overallResults.passageCounts[i]) * 100);
+                csvContent += `Passage ${i},${results.overallResults.passageScores[i]},${results.overallResults.passageCounts[i]},${passagePercentage}\n`;
+            }
+            
+            // Add detailed item responses
+            csvContent += "\nDetailed Item Responses\n";
+            csvContent += "Item Number,Passage,Item in Passage,User Response,Correct Answer,Score,Is Correct\n";
+            results.itemResults.forEach(item => {
+                csvContent += `${item.itemNumber},${item.passage},${item.itemInPassage},"${item.userResponse}","${item.correctAnswer}",${item.score},${item.isCorrect}\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Korean_CTest_Results_${results.participantData.participantId}_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function sendResults() {
+            if (!window.testResults) {
+                alert('결과 데이터가 없습니다.');
+                return;
+            }
+
+            // Create a formatted JSON string for easy copying
+            const jsonData = JSON.stringify(window.testResults, null, 2);
+            
+            // Create a modal or new window with the data
+            const newWindow = window.open('', '_blank', 'width=800,height=600');
+            newWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>실험 결과 데이터</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; }
+                        pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
+                        .info { background: #e7f3ff; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
+                        button { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+                        button:hover { background: #0056b3; }
+                    </style>
+                </head>
+                <body>
+                    <h2>한국어 C-Test 실험 결과</h2>
+                    <div class="info">
+                        <strong>참여자 ID:</strong> ${window.testResults.participantData.participantId}<br>
+                        <strong>시험 완료 시간:</strong> ${window.testResults.testMetadata.testEndTime}<br>
+                        <strong>총점:</strong> ${window.testResults.overallResults.percentageScore}%<br>
+                        <button onclick="copyToClipboard()" style="margin-top: 10px;">데이터 복사하기</button>
+                    </div>
+                    
+                    <h3>상세 데이터 (JSON 형식):</h3>
+                    <pre id="jsonData">${jsonData}</pre>
+                    
+                    <script>
+                        function copyToClipboard() {
+                            const jsonData = document.getElementById('jsonData').textContent;
+                            navigator.clipboard.writeText(jsonData).then(function() {
+                                alert('데이터가 클립보드에 복사되었습니다.');
+                            });
+                        }
+                    </script>
+                </body>
+                </html>
+            `);
+            
+            // Also save to localStorage for researcher access
+            localStorage.setItem(`ctest_result_${window.testResults.participantData.participantId}_${Date.now()}`, jsonData);
+            
+            alert('새 창에서 결과를 확인하실 수 있습니다. 데이터는 로컬 스토리지에도 저장되었습니다.');
+        }
+
         function retakeTest() {
             localStorage.removeItem('koreanCtestProgress');
             location.reload();
-        }
-
-        function downloadResults() {
-            const results = document.getElementById('results').innerText;
-            const blob = new Blob([results], { type: 'text/plain' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'korean_ctest_results.txt';
-            a.click();
-            window.URL.revokeObjectURL(url);
         }
 
         // Initialize
@@ -1053,4 +1127,4 @@ ${JSON.stringify(testResult, null, 2)}
         });
     </script>
 </body>
-</html> 
+</html>

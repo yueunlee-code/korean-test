@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한국어 능력 평가 실험</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .container { max-width: 1000px; margin: 0 auto; background: rgba(255,255,255,0.95); border-radius: 15px; padding: 20px; }
+        .header { text-align: center; margin-bottom: 30px; color: #667eea; }
+        .timer { background: #ff6b6b; color: white; padding: 15px; text-align: center; border-radius: 10px; margin-bottom: 20px; font-size: 1.2em; font-weight: bold; }
+        .passage { background: white; border: 2px solid #e0e0e0; border-radius: 10px; padding: 25px; margin-bottom: 25px; }
+        .blank-input { display: inline-block; border: none; border-bottom: 2px solid #667eea; background: #f8f9ff; padding: 2px 4px; margin: 0 3px; text-align: center; width: 24px; font-size: 1.1em; }
+        .btn { padding: 12px 25px; border: none; border-radius: 8px; font-size: 1em; font-weight: bold; cursor: pointer; margin: 10px; background: #667eea; color: white; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group select { width: 300px; padding: 8px; border: 1px solid #ddd; border-radius: 5px; }
+        #results { display: none; background: #f8f9fa; padding: 30px; border-radius: 10px; margin-top: 30px; }
+        .score-number { font-size: 3em; font-weight: bold; color: #667eea; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>한국어 C-Test 온라인 평가</h1>
+            <p>Korean C-Test Online Assessment</p>
+        </div>
+
+        <div id="startScreen">
+            <h2>시험 안내</h2>
+            <div style="background: #e8f4f8; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                <h3>실험 참여자 정보 입력</h3>
+                <div class="form-group">
+                    <label for="participantId">참여자 ID (필수):</label>
+                    <input type="text" id="participantId" required placeholder="예: P001">
+                </div>
+                <div class="form-group">
+                    <label for="age">나이:</label>
+                    <input type="number" id="age" placeholder="예: 25">
+                </div>
+                <div class="form-group">
+                    <label for="koreanLevel">한국어 수준:</label>
+                    <select id="koreanLevel">
+                        <option value="beginner">초급</option>
+                        <option value="intermediate">중급</option>
+                        <option value="advanced">고급</option>
+                    </select>
+                </div>
+            </div>
+            
+            <p>이 시험은 <strong>30분</strong> 동안 진행됩니다.</p>
+            <p>총 <strong>4개의 지문</strong>이 있으며, 빈칸을 채워주세요.</p>
+            <button class="btn" onclick="startTest()">시험 시작</button>
+        </div>
+
+        <div id="testContent" style="display: none;">
+            <div class="timer" id="timer">남은 시간: 30:00</div>
+
+            <div class="passage">
+                <h3>지문 1: 일상생활</h3>
+                <p>안녕하세요. 제 이름은 김철수입니다. 저는 대학<input type="text" class="blank-input" data-answer="교"><input type="text" class="blank-input" data-answer="에"> 다닙니다. 
+                아침에 일어<input type="text" class="blank-input" data-answer="나"><input type="text" class="blank-input" data-answer="서"> 학교에 갑니다. 
+                한국어를 배<input type="text" class="blank-input" data-answer="우"><input type="text" class="blank-input" data-answer="는"> 것이 재미있습니다.</p>
+            </div>
+
+            <div class="passage">
+                <h3>지문 2: 여행</h3>
+                <p>올 여름에 제주도에 여행을 갑니다. 제주도는 한국의 남쪽에 있<input type="text" class="blank-input" data-answer="는"> 섬입니다. 
+                자연이 아름다<input type="text" class="blank-input" data-answer="워"><input type="text" class="blank-input" data-answer="서"> 인기가 많습니다.</p>
+            </div>
+
+            <button class="btn" onclick="submitTest()">시험 완료</button>
+        </div>
+
+        <div id="results">
+            <h2>시험 결과</h2>
+            <div class="score-number" id="finalScore">0%</div>
+            <p>참여해 주셔서 감사합니다!</p>
+            <button class="btn" onclick="downloadResults()">결과 다운로드</button>
+        </div>
+    </div>
+
+    <script>
+        let timeRemaining = 30 * 60;
+        let timerInterval;
+        let participantData = {};
+        let testStartTime;
+
+        function startTest() {
+            const participantId = document.getElementById('participantId').value.trim();
+            if (!participantId) {
+                alert('참여자 ID를 입력해주세요.');
+                return;
+            }
+
+            participantData = {
+                participantId: participantId,
+                age: document.getElementById('age').value,
+                koreanLevel: document.getElementById('koreanLevel').value,
+                testDate: new Date().toISOString()
+            };
+
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('testContent').style.display = 'block';
+            testStartTime = Date.now();
+            
+            setupInputHandlers();
+            startTimer();
+        }
+
+        function setupInputHandlers() {
+            const inputs = document.querySelectorAll('.blank-input');
+            inputs.forEach(input => {
+                input.addEventListener('input', function(e) {
+                    let value = e.target.value;
+                    value = value.replace(/[^\u3131-\u3163\uac00-\ud7af]/g, '');
+                    if (value.length > 1) {
+                        value = value.charAt(0);
+                    }
+                    e.target.value = value;
+                });
+            });
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                const minutes = Math.floor(timeRemaining / 60);
+                const seconds = timeRemaining % 60;
+                document.getElementById('timer').textContent = `남은 시간: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    submitTest();
+                }
+            }, 1000);
+        }
+
+        function submitTest() {
+            clearInterval(timerInterval);
+            calculateResults();
+        }
+
+        function calculateResults() {
+            const inputs = document.querySelectorAll('.blank-input');
+            let totalScore = 0;
+            let totalItems = 0;
+
+            inputs.forEach(input => {
+                const userAnswer = input.value.trim();
+                const correctAnswer = input.dataset.answer;
+                totalItems++;
+                if (userAnswer === correctAnswer) {
+                    totalScore++;
+                }
+            });
+
+            const percentage = Math.round((totalScore / totalItems) * 100);
+            
+            window.testResults = {
+                participantData: participantData,
+                testEndTime: new Date().toISOString(),
+                totalScore: totalScore,
+                totalItems: totalItems,
+                percentage: percentage,
+                timeUsed: Math.round((Date.now() - testStartTime) / 1000 / 60)
+            };
+
+            // Store results
+            localStorage.setItem(`ctest_result_${participantData.participantId}_${Date.now()}`, JSON.stringify(window.testResults));
+            
+            document.getElementById('testContent').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('finalScore').textContent = percentage + '%';
+        }
+
+        function downloadResults() {
+            if (!window.testResults) return;
+            
+            const csvContent = "data:text/csv;charset=utf-8," +
+                "ParticipantID,Age,KoreanLevel,TestDate,Score,Percentage,TimeUsed\n" +
+                `${window.testResults.participantData.participantId},${window.testResults.participantData.age},${window.testResults.participantData.koreanLevel},${window.testResults.participantData.testDate},${window.testResults.totalScore}/${window.testResults.totalItems},${window.testResults.percentage}%,${window.testResults.timeUsed}분`;
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Korean_CTest_${window.testResults.participantData.participantId}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>

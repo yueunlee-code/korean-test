@@ -7,7 +7,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; }
-        .container { background: rgba(255, 255, 255, 0.95); border-radius: 20px; padding: 40px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); max-width: 900px; width: 90%; text-align: center; backdrop-filter: blur(10px); }
+        .container { background: rgba(255, 255, 255, 0.95); border-radius: 20px; padding: 40px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); max-width: 1000px; width: 90%; text-align: center; backdrop-filter: blur(10px); }
         h1 { color: #2c3e50; margin-bottom: 20px; font-size: 2.5em; }
         h2 { color: #34495e; margin-bottom: 30px; font-size: 1.8em; }
         .intro-section { background: #f0f8ff; padding: 30px; border-radius: 15px; margin: 30px 0; border-left: 5px solid #667eea; }
@@ -27,9 +27,17 @@
         .form-group input { padding: 10px; width: 100%; max-width: 300px; border: 1px solid #ddd; border-radius: 5px; }
         .test-screen { display: none; min-height: 80vh; justify-content: center; align-items: center; }
         .stimulus-display { font-size: 4em; font-weight: bold; color: #2c3e50; min-height: 200px; display: flex; align-items: center; justify-content: center; margin: 40px 0; }
-        .flanker-stimulus { font-family: 'Courier New', monospace; letter-spacing: 0.2em; font-size: 3em; }
-        .instructions { background: #fff3cd; border: 1px solid #ffeeba; padding: 20px; border-radius: 10px; margin: 20px 0; color: #856404; }
-        .progress { background: #e9ecef; height: 10px; border-radius: 5px; margin: 20px 0; overflow: hidden; }
+        .flanker-stimulus { font-family: 'Courier New', monospace; letter-spacing: 0.3em; font-size: 4em; color: #2c3e50; }
+        .instructions { background: #fff3cd; border: 1px solid #ffeeba; padding: 25px; border-radius: 15px; margin: 25px 0; color: #856404; }
+        .instructions h3 { color: #856404; margin-bottom: 15px; font-size: 1.3em; }
+        .instructions p { margin-bottom: 12px; line-height: 1.6; }
+        .key-instruction { background: #e8f4fd; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #667eea; }
+        .key-instruction h4 { color: #2c3e50; margin-bottom: 15px; font-size: 1.2em; }
+        .key-demo { display: flex; justify-content: center; align-items: center; gap: 30px; margin: 20px 0; }
+        .key-item { text-align: center; background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .key-item .key { background: #667eea; color: white; padding: 10px 20px; border-radius: 8px; font-weight: bold; font-size: 1.1em; margin-bottom: 10px; display: inline-block; }
+        .key-item .arrow { font-size: 2em; margin: 10px 0; }
+        .progress { background: #e9ecef; height: 12px; border-radius: 6px; margin: 20px 0; overflow: hidden; }
         .progress-bar { background: linear-gradient(45deg, #667eea, #764ba2); height: 100%; transition: width 0.3s ease; }
         .results { display: none; text-align: center; padding: 30px; background: #f0f8ff; border-radius: 10px; margin: 20px 0; }
         .score { font-size: 3em; color: #667eea; font-weight: bold; margin: 20px 0; }
@@ -40,7 +48,11 @@
         .feedback.correct { color: #28a745; }
         .feedback.incorrect { color: #dc3545; }
         .completion-status { background: #d4edda; border: 1px solid #c3e6cb; padding: 15px; border-radius: 10px; margin: 20px 0; color: #155724; }
-        @media (max-width: 768px) { .test-selection { grid-template-columns: 1fr; } .stimulus-display { font-size: 2.5em; } .flanker-stimulus { font-size: 2em; } }
+        .example-section { background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #e9ecef; }
+        .example-section h4 { color: #2c3e50; margin-bottom: 15px; }
+        .flanker-example { font-family: 'Courier New', monospace; font-size: 2.5em; margin: 15px 0; letter-spacing: 0.3em; }
+        .correct-answer { color: #28a745; font-weight: bold; }
+        @media (max-width: 768px) { .test-selection { grid-template-columns: 1fr; } .stimulus-display { font-size: 2.5em; } .flanker-stimulus { font-size: 2.5em; } .key-demo { flex-direction: column; gap: 15px; } }
     </style>
 </head>
 <body>
@@ -51,7 +63,7 @@
             <div class="intro-section">
                 <h3>📖 실험 안내</h3>
                 <p><strong>이 실험은 작업 기억과 주의 집중 능력을 측정합니다.</strong></p>
-                <p>• <strong>Digit Span Test</strong>: 숫자를 순서대로 기억하는 능력</p>
+                <p>• <strong>Digit Span Test</strong>: 숫자를 순서대로 기억하는 능력 (3-10자리)</p>
                 <p>• <strong>Flanker Task</strong>: 주변 자극에 방해받지 않고 집중하는 능력</p>
                 <p>• <strong>소요 시간</strong>: 약 15분 (각 테스트 7-8분씩)</p>
             </div>
@@ -69,12 +81,12 @@
             <div class="test-selection">
                 <div class="test-card" onclick="selectTest('digitspan')">
                     <h3>🧠 Digit Span Test</h3>
-                    <p>화면에 나타나는 숫자를 순서대로 기억한 후 입력하세요.</p>
+                    <p>화면에 나타나는 숫자를 순서대로 기억한 후 입력하세요. 3자리부터 시작해서 점점 길어집니다.</p>
                     <div class="test-duration">약 7-8분</div>
                 </div>
                 <div class="test-card" onclick="selectTest('flanker')">
                     <h3>⚡ Flanker Task</h3>
-                    <p>화면 중앙의 화살표 방향을 빠르고 정확하게 판단하세요.</p>
+                    <p>화면 중앙의 화살표 방향을 빠르고 정확하게 판단하세요. Q키와 P키를 사용합니다.</p>
                     <div class="test-duration">약 7-8분</div>
                 </div>
             </div>
@@ -95,6 +107,9 @@
                     <p><strong>1단계:</strong> 화면에 숫자가 하나씩 나타납니다 (1초 간격)</p>
                     <p><strong>2단계:</strong> 모든 숫자가 사라진 후 순서대로 입력하세요</p>
                     <p><strong>3단계:</strong> 같은 길이에서 2번 틀리면 테스트 종료</p>
+                    <p><strong>범위:</strong> 3자리부터 시작해서 최대 10자리까지</p>
+                    <p><strong>💡 팁:</strong> 숫자를 소리 내어 반복하며 기억해 보세요</p>
+                    <br>
                     <p><strong>예시:</strong> 화면에 "3 → 7 → 2"가 나타나면 → "372"를 입력</p>
                 </div>
                 <button class="btn" onclick="startDigitSpanTest()">테스트 시작</button>
@@ -105,11 +120,11 @@
                 <div class="progress">
                     <div class="progress-bar" id="digitSpanProgress" style="width: 0%"></div>
                 </div>
-                <p>현재 길이: <span id="currentLength">3</span> | 시도: <span id="currentTrial">1</span>/2</p>
+                <p>현재 길이: <span id="currentLength">3</span>자리 | 시도: <span id="currentTrial">1</span>/2</p>
                 <div class="stimulus-display" id="digitDisplay">준비하세요...</div>
                 <div class="response-area" id="digitResponseArea" style="display: none;">
                     <p>숫자를 순서대로 입력하세요:</p>
-                    <input type="text" class="number-input" id="digitInput" placeholder="예: 1234" maxlength="9">
+                    <input type="text" class="number-input" id="digitInput" placeholder="예: 1234567" maxlength="12">
                     <br><br>
                     <button class="btn" onclick="submitDigitResponse()">제출</button>
                 </div>
@@ -122,15 +137,53 @@
                 <h2>⚡ Flanker Task</h2>
                 <div class="instructions">
                     <h3>🎯 테스트 방법</h3>
-                    <p><strong>←키:</strong> 중앙 화살표가 왼쪽을 가리킬 때</p>
-                    <p><strong>→키:</strong> 중앙 화살표가 오른쪽을 가리킬 때</p>
-                    <p><strong>예시:</strong></p>
-                    <p class="flanker-stimulus">← ← → ← ←</p>
-                    <p>위의 경우 가운데 화살표(→)를 보고 <strong>→키</strong>를 누르세요</p>
+                    <p><strong>목표:</strong> 화면 중앙의 화살표 방향을 빠르고 정확하게 판단하세요</p>
+                    <p><strong>중요:</strong> 주변 화살표는 무시하고 오직 <u>가운데 화살표</u>만 보세요!</p>
+                    <p><strong>총 시행:</strong> 80회 (약 7-8분 소요)</p>
                 </div>
+                
+                <div class="key-instruction">
+                    <h4>🎮 키보드 조작법</h4>
+                    <div class="key-demo">
+                        <div class="key-item">
+                            <div class="key">Q 키</div>
+                            <div class="arrow">←</div>
+                            <p>왼쪽 화살표일 때</p>
+                        </div>
+                        <div class="key-item">
+                            <div class="key">P 키</div>
+                            <div class="arrow">→</div>
+                            <p>오른쪽 화살표일 때</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example-section">
+                    <h4>📚 예시 문제</h4>
+                    <p><strong>문제 1:</strong></p>
+                    <div class="flanker-example">← ← ← ← ←</div>
+                    <p>가운데 화살표: <span class="correct-answer">← (왼쪽)</span> → <strong>Q키</strong> 누르기</p>
+                    
+                    <p style="margin-top: 20px;"><strong>문제 2:</strong></p>
+                    <div class="flanker-example">← ← → ← ←</div>
+                    <p>가운데 화살표: <span class="correct-answer">→ (오른쪽)</span> → <strong>P키</strong> 누르기</p>
+                    
+                    <p style="margin-top: 20px;"><strong>문제 3:</strong></p>
+                    <div class="flanker-example">→ → ← → →</div>
+                    <p>가운데 화살표: <span class="correct-answer">← (왼쪽)</span> → <strong>Q키</strong> 누르기</p>
+                </div>
+
+                <div class="instructions" style="background: #ffe6e6; border-color: #ff9999;">
+                    <h3 style="color: #cc0000;">⚠️ 주의사항</h3>
+                    <p style="color: #cc0000;"><strong>속도와 정확성</strong> 모두 중요합니다!</p>
+                    <p style="color: #cc0000;">주변 화살표에 <strong>속지 마세요</strong> - 오직 가운데만!</p>
+                    <p style="color: #cc0000;">Q키(왼쪽), P키(오른쪽)를 <strong>빠르게</strong> 눌러주세요</p>
+                </div>
+                
                 <button class="btn" onclick="startFlankerTest()">테스트 시작</button>
                 <button class="btn" onclick="returnToStart()" style="background: #6c757d;">돌아가기</button>
             </div>
+            
             <div id="flankerGame" style="display: none;">
                 <h2>Flanker Task</h2>
                 <div class="progress">
@@ -140,7 +193,11 @@
                 <div class="stimulus-display">
                     <div id="flankerStimulus" class="flanker-stimulus">+</div>
                 </div>
-                <p style="color: #666; margin-top: 20px;">⌨️ <strong>←키</strong> 또는 <strong>→키</strong>를 눌러주세요</p>
+                <p style="color: #666; margin-top: 20px; font-size: 1.2em;">
+                    <strong style="background: #e8f4fd; padding: 10px; border-radius: 10px;">
+                        Q키 (←) 또는 P키 (→) 를 눌러주세요
+                    </strong>
+                </p>
             </div>
         </div>
 
@@ -155,7 +212,7 @@
     <script>
         let currentTest = '', participantData = {}, testResults = {}, completedTests = [], allResults = {};
         let overallTimer = 15 * 60, overallInterval = null;
-        let digitSpanData = { currentLength: 3, currentTrial: 1, maxTrialsPerLength: 2, errors: 0, sequences: [], responses: [], startTime: null };
+        let digitSpanData = { currentLength: 3, currentTrial: 1, maxTrialsPerLength: 2, maxLength: 10, errors: 0, sequences: [], responses: [], startTime: null };
         let flankerData = { currentTrial: 0, totalTrials: 80, stimuli: [], responses: [], startTime: null, stimulusStartTime: null };
 
         function selectTest(testType) {
@@ -212,8 +269,9 @@
             const feedback = document.getElementById('digitFeedback');
             if (isCorrect) { feedback.textContent = '✅ 정답입니다!'; feedback.className = 'feedback correct'; digitSpanData.currentTrial = 1; digitSpanData.currentLength++; digitSpanData.errors = 0; }
             else { feedback.textContent = `❌ 오답입니다. 정답: ${correctAnswer}`; feedback.className = 'feedback incorrect'; digitSpanData.errors++; if (digitSpanData.errors >= 2) { finishDigitSpanTest(); return; } else digitSpanData.currentTrial++; }
-            document.getElementById('digitSpanProgress').style.width = Math.min((digitSpanData.currentLength - 3) * 15, 100) + '%'; input.value = '';
-            setTimeout(() => { if (digitSpanData.currentLength > 9) finishDigitSpanTest(); else generateDigitSequence(); }, 2000);
+            const totalExpectedLengths = digitSpanData.maxLength - 3 + 1; const currentProgress = (digitSpanData.currentLength - 3) / totalExpectedLengths * 100;
+            document.getElementById('digitSpanProgress').style.width = Math.min(currentProgress, 100) + '%'; input.value = '';
+            setTimeout(() => { if (digitSpanData.currentLength > digitSpanData.maxLength) finishDigitSpanTest(); else generateDigitSequence(); }, 2000);
         }
 
         function finishDigitSpanTest() {
@@ -234,9 +292,9 @@
             const congruent = ['← ← ← ← ←', '→ → → → →'], incongruent = ['→ → ← → →', '← ← → ← ←'];
             for (let i = 0; i < 40; i++) {
                 const congStim = congruent[Math.floor(Math.random() * 2)];
-                flankerData.stimuli.push({ stimulus: congStim, condition: 'congruent', correctResponse: congStim.charAt(4) === '←' ? 'ArrowLeft' : 'ArrowRight' });
+                flankerData.stimuli.push({ stimulus: congStim, condition: 'congruent', correctResponse: congStim.charAt(4) === '←' ? 'KeyQ' : 'KeyP' });
                 const incongStim = incongruent[Math.floor(Math.random() * 2)];
-                flankerData.stimuli.push({ stimulus: incongStim, condition: 'incongruent', correctResponse: incongStim.charAt(4) === '←' ? 'ArrowLeft' : 'ArrowRight' });
+                flankerData.stimuli.push({ stimulus: incongStim, condition: 'incongruent', correctResponse: incongStim.charAt(4) === '←' ? 'KeyQ' : 'KeyP' });
             }
             flankerData.stimuli = flankerData.stimuli.sort(() => Math.random() - 0.5);
         }
@@ -255,10 +313,10 @@
 
         function handleFlankerResponse(event) {
             if (currentTest !== 'flanker' || document.getElementById('flankerGame').style.display === 'none') return;
-            if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+            if (event.code === 'KeyQ' || event.code === 'KeyP') {
                 const reactionTime = performance.now() - flankerData.stimulusStartTime;
-                const currentStimulus = flankerData.stimuli[flankerData.currentTrial], isCorrect = event.key === currentStimulus.correctResponse;
-                flankerData.responses.push({ trial: flankerData.currentTrial, stimulus: currentStimulus.stimulus, condition: currentStimulus.condition, correctResponse: currentStimulus.correctResponse, userResponse: event.key, correct: isCorrect, reactionTime, timestamp: new Date() });
+                const currentStimulus = flankerData.stimuli[flankerData.currentTrial], isCorrect = event.code === currentStimulus.correctResponse;
+                flankerData.responses.push({ trial: flankerData.currentTrial, stimulus: currentStimulus.stimulus, condition: currentStimulus.condition, correctResponse: currentStimulus.correctResponse, userResponse: event.code, correct: isCorrect, reactionTime, timestamp: new Date() });
                 flankerData.currentTrial++; setTimeout(() => { showNextFlankerTrial(); }, 500);
             }
         }
@@ -281,10 +339,10 @@
             const resultsDiv = document.getElementById('testResults');
             if (testType === 'digitspan') {
                 const result = testResults.digitSpan;
-                resultsDiv.innerHTML = `<div class="score">${result.maxSpan}</div><h3>🧠 Digit Span Test 결과</h3><p>최대 기억 범위: <strong>${result.maxSpan}자리</strong></p><p>정답률: <strong>${Math.round(result.totalCorrect/result.totalTrials*100)}%</strong></p>`;
+                resultsDiv.innerHTML = `<div class="score">${result.maxSpan}</div><h3>🧠 Digit Span Test 결과</h3><p>최대 기억 범위: <strong>${result.maxSpan}자리</strong></p><p>정답률: <strong>${Math.round(result.totalCorrect/result.totalTrials*100)}%</strong></p><p>총 시행 수: ${result.totalTrials}회</p><p>소요 시간: ${Math.round((result.endTime - result.startTime)/1000)}초</p>`;
             } else if (testType === 'flanker') {
                 const result = testResults.flanker;
-                resultsDiv.innerHTML = `<div class="score">${Math.round(result.totalAccuracy*100)}%</div><h3>⚡ Flanker Task 결과</h3><p>전체 정답률: <strong>${Math.round(result.totalAccuracy*100)}%</strong></p><p>Flanker 효과: <strong>${Math.round(result.flankerEffect)}ms</strong></p>`;
+                resultsDiv.innerHTML = `<div class="score">${Math.round(result.totalAccuracy*100)}%</div><h3>⚡ Flanker Task 결과</h3><p>전체 정답률: <strong>${Math.round(result.totalAccuracy*100)}%</strong></p><p>평균 반응시간: <strong>${Math.round(result.meanReactionTime)}ms</strong></p><p>Flanker 효과: <strong>${Math.round(result.flankerEffect)}ms</strong></p><p>일치 조건 정답률: <strong>${Math.round(result.congruentAccuracy*100)}%</strong></p><p>불일치 조건 정답률: <strong>${Math.round(result.incongruentAccuracy*100)}%</strong></p><p>소요 시간: ${Math.round((result.endTime - result.startTime)/1000)}초</p>`;
             }
         }
 
@@ -300,9 +358,13 @@
             }
             if (testResults.flanker) {
                 const fl = testResults.flanker;
-                csv += '\n=== FLANKER TASK RESULTS ===\nParticipantID,Name,TestDate,TotalAccuracy,MeanRT,FlankerEffect\n';
-                csv += `${fl.participantData.pid},${fl.participantData.name},${timestamp},${Math.round(fl.totalAccuracy*100)}%,${Math.round(fl.meanReactionTime)}ms,${Math.round(fl.flankerEffect)}ms\n\nTrial,Stimulus,Condition,Correct,ReactionTime\n`;
-                fl.responses.forEach(r => { csv += `${r.trial+1},"${r.stimulus}",${r.condition},${r.correct ? 'O' : 'X'},${Math.round(r.reactionTime)}ms\n`; });
+                csv += '\n=== FLANKER TASK RESULTS ===\nParticipantID,Name,TestDate,TotalAccuracy,MeanRT,FlankerEffect,CongruentAccuracy,IncongruentAccuracy\n';
+                csv += `${fl.participantData.pid},${fl.participantData.name},${timestamp},${Math.round(fl.totalAccuracy*100)}%,${Math.round(fl.meanReactionTime)}ms,${Math.round(fl.flankerEffect)}ms,${Math.round(fl.congruentAccuracy*100)}%,${Math.round(fl.incongruentAccuracy*100)}%\n\nTrial,Stimulus,Condition,CorrectKey,UserKey,Correct,ReactionTime\n`;
+                fl.responses.forEach(r => { 
+                    const correctKey = r.correctResponse === 'KeyQ' ? 'Q' : 'P';
+                    const userKey = r.userResponse === 'KeyQ' ? 'Q' : 'P';
+                    csv += `${r.trial+1},"${r.stimulus}",${r.condition},${correctKey},${userKey},${r.correct ? 'O' : 'X'},${Math.round(r.reactionTime)}ms\n`; 
+                });
             }
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const url = window.URL.createObjectURL(blob); const a = document.createElement('a');
@@ -317,7 +379,18 @@
             if (allResults.digitSpan && allResults.flanker) {
                 const ds = allResults.digitSpan, fl = allResults.flanker;
                 csv += 'TestName,KeyResult,Accuracy\nDigit Span Test,Max Span: ' + ds.maxSpan + ',' + Math.round(ds.totalCorrect/ds.totalTrials*100) + '%\n';
-                csv += 'Flanker Task,Flanker Effect: ' + Math.round(fl.flankerEffect) + 'ms,' + Math.round(fl.totalAccuracy*100) + '%\n';
+                csv += 'Flanker Task,Flanker Effect: ' + Math.round(fl.flankerEffect) + 'ms,' + Math.round(fl.totalAccuracy*100) + '%\n\n';
+                
+                // 상세 결과 추가
+                csv += '=== DIGIT SPAN DETAILED RESULTS ===\nTrial,Length,Sequence,Response,Correct\n';
+                ds.responses.forEach((r, i) => { csv += `${i+1},${r.length},"${r.sequence.join('')}","${r.response}",${r.correct ? 'O' : 'X'}\n`; });
+                
+                csv += '\n=== FLANKER TASK DETAILED RESULTS ===\nTrial,Stimulus,Condition,CorrectKey,UserKey,Correct,ReactionTime\n';
+                fl.responses.forEach(r => { 
+                    const correctKey = r.correctResponse === 'KeyQ' ? 'Q' : 'P';
+                    const userKey = r.userResponse === 'KeyQ' ? 'Q' : 'P';
+                    csv += `${r.trial+1},"${r.stimulus}",${r.condition},${correctKey},${userKey},${r.correct ? 'O' : 'X'},${Math.round(r.reactionTime)}ms\n`; 
+                });
             }
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a'); a.href = url; a.download = `WorkingMemoryTests_Complete_${participantData.pid}_${new Date().toISOString().slice(0,10)}.csv`;
@@ -357,7 +430,7 @@
             }
         });
 
-        console.log('Part 3: 작업 기억 과제 준비 완료');
+        console.log('Part 3: 작업 기억 과제 준비 완료 (Digit Span: 3-10자리, Flanker: Q/P 키)');
     </script>
 </body>
 </html>

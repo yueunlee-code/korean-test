@@ -273,64 +273,86 @@
             const blanks = document.querySelectorAll('.blank');
             blanks.forEach(function(blank, index) {
                 blank.id = 'blank_' + index;
-                let isProcessing = false; // 처리 중 플래그
+                let lastValue = '';
+                let isComposing = false;
                 
-                // 입력 이벤트
-                blank.addEventListener('input', function() {
-                    if (isProcessing) return; // 처리 중이면 무시
-                    
-                    isProcessing = true;
-                    
-                    setTimeout(() => {
-                        let value = this.value;
-                        
-                        // 완성된 한글만 추출
-                        let koreanChars = value.match(/[가-힣]/g);
-                        
-                        if (koreanChars && koreanChars.length > 0) {
-                            // 첫 번째 완성된 한글만 사용
-                            this.value = koreanChars[0];
-                            
-                            // 다음 칸으로 이동 (딜레이 추가)
-                            setTimeout(() => {
-                                moveToNext(this);
-                                isProcessing = false; // 처리 완료
-                            }, 50);
-                        } else {
-                            this.value = '';
-                            isProcessing = false;
-                        }
-                    }, 50);
+                // 조합 시작
+                blank.addEventListener('compositionstart', function() {
+                    isComposing = true;
                 });
                 
-                // 키다운 이벤트 - 더 엄격한 제어
-                blank.addEventListener('keydown', function(e) {
-                    if (isProcessing) return;
+                // 조합 중
+                blank.addEventListener('compositionupdate', function() {
+                    // 조합 중에는 아무것도 하지 않음
+                });
+                
+                // 조합 완료
+                blank.addEventListener('compositionend', function() {
+                    isComposing = false;
+                    handleInput.call(this);
+                });
+                
+                // 입력 처리 함수
+                function handleInput() {
+                    if (isComposing) return; // 조합 중이면 처리하지 않음
                     
-                    // 백스페이스, 탭, 엔터만 허용
-                    if (e.key === 'Backspace' || e.key === 'Tab') {
+                    let value = this.value;
+                    
+                    // 완성된 한글만 추출
+                    let koreanChar = value.match(/[가-힣]/);
+                    
+                    if (koreanChar) {
+                        // 하나의 완성된 한글만 유지
+                        this.value = koreanChar[0];
+                        
+                        // 값이 변경되었고 이전과 다르면 다음 칸으로 이동
+                        if (this.value !== lastValue) {
+                            lastValue = this.value;
+                            setTimeout(() => {
+                                moveToNext(this);
+                            }, 10);
+                        }
+                    } else {
+                        // 완성된 한글이 없으면 비움
+                        this.value = '';
+                        lastValue = '';
+                    }
+                }
+                
+                // input 이벤트 (조합 완료 후에만 처리)
+                blank.addEventListener('input', handleInput);
+                
+                // 키다운 처리
+                blank.addEventListener('keydown', function(e) {
+                    // 백스페이스
+                    if (e.key === 'Backspace') {
+                        lastValue = '';
                         return;
                     }
                     
+                    // 엔터로 다음 칸 이동
                     if (e.key === 'Enter') {
                         e.preventDefault();
                         moveToNext(this);
                         return;
                     }
                     
-                    // 이미 글자가 있으면 지우고 새로 입력 준비
-                    if (this.value.length > 0) {
+                    // 탭은 기본 동작
+                    if (e.key === 'Tab') {
+                        return;
+                    }
+                    
+                    // 이미 글자가 있으면 교체 준비
+                    if (this.value && !isComposing) {
+                        lastValue = '';
                         this.value = '';
                     }
                 });
                 
-                // 포커스 이벤트
+                // 포커스 시 선택
                 blank.addEventListener('focus', function() {
-                    if (!isProcessing) {
-                        // 포커스 받을 때 기존 내용이 있으면 선택
-                        if (this.value) {
-                            this.select();
-                        }
+                    if (this.value && !isComposing) {
+                        this.select();
                     }
                 });
                 
@@ -341,20 +363,14 @@
             });
         }
         
-        // 다음 빈칸으로 이동 - 중복 방지 강화
+        // 다음 빈칸으로 이동
         function moveToNext(currentBlank) {
             const blanks = Array.from(document.querySelectorAll('.blank'));
             const currentIndex = blanks.indexOf(currentBlank);
             
             if (currentIndex < blanks.length - 1) {
                 const nextBlank = blanks[currentIndex + 1];
-                
-                // 다음 칸이 비어있는지 확인하고 포커스 이동
-                setTimeout(() => {
-                    nextBlank.focus();
-                    // 다음 칸의 커서를 맨 앞으로 위치
-                    nextBlank.setSelectionRange(0, 0);
-                }, 10);
+                nextBlank.focus();
             }
         }
 

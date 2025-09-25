@@ -272,51 +272,66 @@
         function setupBlankInputs() {
             const blanks = document.querySelectorAll('.blank');
             blanks.forEach(function(blank, index) {
-                // 각 입력칸에 고유 ID 부여
                 blank.id = 'blank_' + index;
+                let isProcessing = false; // 처리 중 플래그
                 
-                // 입력 완료 후 처리
+                // 입력 이벤트
                 blank.addEventListener('input', function() {
-                    // 잠시 후 처리하여 IME 완료를 기다림
+                    if (isProcessing) return; // 처리 중이면 무시
+                    
+                    isProcessing = true;
+                    
                     setTimeout(() => {
                         let value = this.value;
                         
-                        // 완성된 한글만 추출 (가-힣)
+                        // 완성된 한글만 추출
                         let koreanChars = value.match(/[가-힣]/g);
                         
                         if (koreanChars && koreanChars.length > 0) {
                             // 첫 번째 완성된 한글만 사용
                             this.value = koreanChars[0];
                             
-                            // 다음 빈칸으로 이동
-                            moveToNext(this);
+                            // 다음 칸으로 이동 (딜레이 추가)
+                            setTimeout(() => {
+                                moveToNext(this);
+                                isProcessing = false; // 처리 완료
+                            }, 50);
                         } else {
-                            // 완성된 한글이 없으면 비움
                             this.value = '';
+                            isProcessing = false;
                         }
-                    }, 100);
+                    }, 50);
                 });
                 
-                // 키 입력 처리
+                // 키다운 이벤트 - 더 엄격한 제어
                 blank.addEventListener('keydown', function(e) {
-                    // 백스페이스, 탭, 엔터는 허용
-                    if (e.key === 'Backspace' || e.key === 'Tab' || e.key === 'Enter') {
-                        if (e.key === 'Enter') {
-                            e.preventDefault();
-                            moveToNext(this);
-                        }
+                    if (isProcessing) return;
+                    
+                    // 백스페이스, 탭, 엔터만 허용
+                    if (e.key === 'Backspace' || e.key === 'Tab') {
                         return;
                     }
                     
-                    // 이미 글자가 있으면 지우고 새로 입력
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        moveToNext(this);
+                        return;
+                    }
+                    
+                    // 이미 글자가 있으면 지우고 새로 입력 준비
                     if (this.value.length > 0) {
                         this.value = '';
                     }
                 });
                 
-                // 포커스 시 전체 선택
+                // 포커스 이벤트
                 blank.addEventListener('focus', function() {
-                    this.select();
+                    if (!isProcessing) {
+                        // 포커스 받을 때 기존 내용이 있으면 선택
+                        if (this.value) {
+                            this.select();
+                        }
+                    }
                 });
                 
                 // 붙여넣기 방지
@@ -326,14 +341,20 @@
             });
         }
         
-        // 다음 빈칸으로 이동하는 함수
+        // 다음 빈칸으로 이동 - 중복 방지 강화
         function moveToNext(currentBlank) {
             const blanks = Array.from(document.querySelectorAll('.blank'));
             const currentIndex = blanks.indexOf(currentBlank);
+            
             if (currentIndex < blanks.length - 1) {
+                const nextBlank = blanks[currentIndex + 1];
+                
+                // 다음 칸이 비어있는지 확인하고 포커스 이동
                 setTimeout(() => {
-                    blanks[currentIndex + 1].focus();
-                }, 100);
+                    nextBlank.focus();
+                    // 다음 칸의 커서를 맨 앞으로 위치
+                    nextBlank.setSelectionRange(0, 0);
+                }, 10);
             }
         }
 

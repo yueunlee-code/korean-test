@@ -161,15 +161,15 @@
                 <div class="example-section">
                     <h4>📚 예시 문제</h4>
                     <p><strong>문제 1:</strong></p>
-                    <div class="flanker-example">← ← ← ← ←</div>
+                    <div class="flanker-example">←←←←←</div>
                     <p>가운데 화살표: <span class="correct-answer">← (왼쪽)</span> → <strong>Q키</strong> 누르기</p>
                     
                     <p style="margin-top: 20px;"><strong>문제 2:</strong></p>
-                    <div class="flanker-example">← ← → ← ←</div>
+                    <div class="flanker-example">←←→←←</div>
                     <p>가운데 화살표: <span class="correct-answer">→ (오른쪽)</span> → <strong>P키</strong> 누르기</p>
                     
                     <p style="margin-top: 20px;"><strong>문제 3:</strong></p>
-                    <div class="flanker-example">→ → ← → →</div>
+                    <div class="flanker-example">→→←→→</div>
                     <p>가운데 화살표: <span class="correct-answer">← (왼쪽)</span> → <strong>Q키</strong> 누르기</p>
                 </div>
 
@@ -289,12 +289,13 @@
         }
 
         function generateFlankerTrials() {
-            const congruent = ['← ← ← ← ←', '→ → → → →'], incongruent = ['→ → ← → →', '← ← → ← ←'];
+            // 5개 화살표를 한 줄로 배열 (공백 없이)
+            const congruent = ['←←←←←', '→→→→→'], incongruent = ['→→←→→', '←←→←←'];
             for (let i = 0; i < 40; i++) {
                 const congStim = congruent[Math.floor(Math.random() * 2)];
-                flankerData.stimuli.push({ stimulus: congStim, condition: 'congruent', correctResponse: congStim.charAt(4) === '←' ? 'KeyQ' : 'KeyP' });
+                flankerData.stimuli.push({ stimulus: congStim, condition: 'congruent', correctResponse: congStim.charAt(2) === '←' ? 'KeyQ' : 'KeyP' });
                 const incongStim = incongruent[Math.floor(Math.random() * 2)];
-                flankerData.stimuli.push({ stimulus: incongStim, condition: 'incongruent', correctResponse: incongStim.charAt(4) === '←' ? 'KeyQ' : 'KeyP' });
+                flankerData.stimuli.push({ stimulus: incongStim, condition: 'incongruent', correctResponse: incongStim.charAt(2) === '←' ? 'KeyQ' : 'KeyP' });
             }
             flankerData.stimuli = flankerData.stimuli.sort(() => Math.random() - 0.5);
         }

@@ -63,6 +63,7 @@
             font-size: 1em; 
             background: #f8f9ff; 
             padding: 2px;
+            vertical-align: baseline;
         }
         .blank:focus { 
             outline: none; 
@@ -164,48 +165,48 @@
                     <input type="tel" id="phone" placeholder="010-1234-5678" required>
                 </div>
             </div>
-            <button class="btn" onclick="startTest()">시험 시작 (30분)</button>
+            <button class="btn" onclick="startTest()">시험 시작 (20분)</button>
         </div>
 
         <div id="testArea" style="display:none;">
-            <div class="timer" id="timer">남은 시간: 30:00</div>
+            <div class="timer" id="timer">남은 시간: 20:00</div>
 
             <div class="passage">
                 <h3>지문 1: 일상생활</h3>
                 <div class="passage-text">
-                    안녕하세요. 제 이름은 김철수입니다. 저는 대학<input class="blank" data-answer="교"><input class="blank" data-answer="에"> 다닙니다.<br><br>
-                    아침에 일어<input class="blank" data-answer="나"><input class="blank" data-answer="서"> 학교에 갑니다. 한국어를 배<input class="blank" data-answer="우"><input class="blank" data-answer="는"> 것이 재미<input class="blank" data-answer="있"><input class="blank" data-answer="습"><input class="blank" data-answer="니"><input class="blank" data-answer="다">.<br><br>
-                    한국어 수<input class="blank" data-answer="업"><input class="blank" data-answer="은"> 매일 있습니다. 쓰<input class="blank" data-answer="기"><input class="blank" data-answer="와"> 말하기가 어<input class="blank" data-answer="렵"><input class="blank" data-answer="습"><input class="blank" data-answer="니"><input class="blank" data-answer="다">. 그렇지만 듣<input class="blank" data-answer="기"><input class="blank" data-answer="와"> 읽기는 쉽<input class="blank" data-answer="습"><input class="blank" data-answer="니"><input class="blank" data-answer="다">.<br><br>
-                    주말에는 친<input class="blank" data-answer="구"><input class="blank" data-answer="와"> 영화를 봅니다. 한국 음<input class="blank" data-answer="식"><input class="blank" data-answer="을"> 먹고 쇼<input class="blank" data-answer="핑"><input class="blank" data-answer="을"> 합니다.
+                    안녕하세요. 제 이름은 김철수입니다. 저는 대학<input class="blank" data-answer="교" maxlength="1"><input class="blank" data-answer="에" maxlength="1"> 다닙니다.<br><br>
+                    아침에 일어<input class="blank" data-answer="나" maxlength="1"><input class="blank" data-answer="서" maxlength="1"> 학교에 갑니다. 한국어를 배<input class="blank" data-answer="우" maxlength="1"><input class="blank" data-answer="는" maxlength="1"> 것이 재미<input class="blank" data-answer="있" maxlength="1"><input class="blank" data-answer="습" maxlength="1"><input class="blank" data-answer="니" maxlength="1"><input class="blank" data-answer="다" maxlength="1">.<br><br>
+                    한국어 수<input class="blank" data-answer="업" maxlength="1"><input class="blank" data-answer="은" maxlength="1"> 매일 있습니다. 쓰<input class="blank" data-answer="기" maxlength="1"><input class="blank" data-answer="와" maxlength="1"> 말하기가 어<input class="blank" data-answer="렵" maxlength="1"><input class="blank" data-answer="습" maxlength="1"><input class="blank" data-answer="니" maxlength="1"><input class="blank" data-answer="다" maxlength="1">. 그렇지만 듣<input class="blank" data-answer="기" maxlength="1"><input class="blank" data-answer="와" maxlength="1"> 읽기는 쉽<input class="blank" data-answer="습" maxlength="1"><input class="blank" data-answer="니" maxlength="1"><input class="blank" data-answer="다" maxlength="1">.<br><br>
+                    주말에는 친<input class="blank" data-answer="구" maxlength="1"><input class="blank" data-answer="와" maxlength="1"> 영화를 봅니다. 한국 음<input class="blank" data-answer="식" maxlength="1"><input class="blank" data-answer="을" maxlength="1"> 먹고 쇼<input class="blank" data-answer="핑" maxlength="1"><input class="blank" data-answer="을" maxlength="1"> 합니다.
                 </div>
             </div>
 
             <div class="passage">
                 <h3>지문 2: 여행 계획</h3>
                 <div class="passage-text">
-                    제주도는 한국의 남쪽에 있<input class="blank" data-answer="는"> 섬입니다. 자연이 아름다<input class="blank" data-answer="워"><input class="blank" data-answer="서"> 유명합니다.<br><br>
-                    여행<input class="blank" data-answer="사"><input class="blank" data-answer="에"> 전화를 걸<input class="blank" data-answer="어"> 비행<input class="blank" data-answer="기"> 표를 예<input class="blank" data-answer="약">했습니다. 호텔도 정<input class="blank" data-answer="했"><input class="blank" data-answer="어"><input class="blank" data-answer="요">.<br><br>
-                    인터넷<input class="blank" data-answer="이"> 있어서 편<input class="blank" data-answer="리">합니다. 맛<input class="blank" data-answer="있"><input class="blank" data-answer="는"> 식당도 찾<input class="blank" data-answer="을"> 수 있<input class="blank" data-answer="어"><input class="blank" data-answer="서"> 좋습니다.<br><br>
-                    가족들<input class="blank" data-answer="과"> 함께 가<input class="blank" data-answer="는"> 여행이 기<input class="blank" data-answer="대">됩니다.
+                    제주도는 한국의 남쪽에 있<input class="blank" data-answer="는" maxlength="1"> 섬입니다. 자연이 아름다<input class="blank" data-answer="워" maxlength="1"><input class="blank" data-answer="서" maxlength="1"> 유명합니다.<br><br>
+                    여행<input class="blank" data-answer="사" maxlength="1"><input class="blank" data-answer="에" maxlength="1"> 전화를 걸<input class="blank" data-answer="어" maxlength="1"> 비행<input class="blank" data-answer="기" maxlength="1"> 표를 예<input class="blank" data-answer="약" maxlength="1">했습니다. 호텔도 정<input class="blank" data-answer="했" maxlength="1"><input class="blank" data-answer="어" maxlength="1"><input class="blank" data-answer="요" maxlength="1">.<br><br>
+                    인터넷<input class="blank" data-answer="이" maxlength="1"> 있어서 편<input class="blank" data-answer="리" maxlength="1">합니다. 맛<input class="blank" data-answer="있" maxlength="1"><input class="blank" data-answer="는" maxlength="1"> 식당도 찾<input class="blank" data-answer="을" maxlength="1"> 수 있<input class="blank" data-answer="어" maxlength="1"><input class="blank" data-answer="서" maxlength="1"> 좋습니다.<br><br>
+                    가족들<input class="blank" data-answer="과" maxlength="1"> 함께 가<input class="blank" data-answer="는" maxlength="1"> 여행이 기<input class="blank" data-answer="대" maxlength="1">됩니다.
                 </div>
             </div>
 
             <div class="passage">
                 <h3>지문 3: 백화점 쇼핑</h3>
                 <div class="passage-text">
-                    백화점에서 겨울<input class="blank" data-answer="옷"><input class="blank" data-answer="을"> 사려고 합니다. 여성<input class="blank" data-answer="복"> 코너에서 정<input class="blank" data-answer="장"><input class="blank" data-answer="을"> 샀습니다.<br><br>
-                    아동복 코너에서는 코<input class="blank" data-answer="트">, 장<input class="blank" data-answer="갑"> 등을 팔고 있<input class="blank" data-answer="습"><input class="blank" data-answer="니"><input class="blank" data-answer="다">. 할<input class="blank" data-answer="인"> 가격에 살 수 있<input class="blank" data-answer="어"><input class="blank" data-answer="서"> 좋습니다.<br><br>
-                    전자제<input class="blank" data-answer="품"> 코너에서는 컴퓨<input class="blank" data-answer="터"><input class="blank" data-answer="와"> 휴대<input class="blank" data-answer="폰"><input class="blank" data-answer="을"> 팝니다. 세<input class="blank" data-answer="일"> 기간에 많<input class="blank" data-answer="이"> 샀습니다.
+                    백화점에서 겨울<input class="blank" data-answer="옷" maxlength="1"><input class="blank" data-answer="을" maxlength="1"> 사려고 합니다. 여성<input class="blank" data-answer="복" maxlength="1"> 코너에서 정<input class="blank" data-answer="장" maxlength="1"><input class="blank" data-answer="을" maxlength="1"> 샀습니다.<br><br>
+                    아동복 코너에서는 코<input class="blank" data-answer="트" maxlength="1">, 장<input class="blank" data-answer="갑" maxlength="1"> 등을 팔고 있<input class="blank" data-answer="습" maxlength="1"><input class="blank" data-answer="니" maxlength="1"><input class="blank" data-answer="다" maxlength="1">. 할<input class="blank" data-answer="인" maxlength="1"> 가격에 살 수 있<input class="blank" data-answer="어" maxlength="1"><input class="blank" data-answer="서" maxlength="1"> 좋습니다.<br><br>
+                    전자제<input class="blank" data-answer="품" maxlength="1"> 코너에서는 컴퓨<input class="blank" data-answer="터" maxlength="1"><input class="blank" data-answer="와" maxlength="1"> 휴대<input class="blank" data-answer="폰" maxlength="1"><input class="blank" data-answer="을" maxlength="1"> 팝니다. 세<input class="blank" data-answer="일" maxlength="1"> 기간에 많<input class="blank" data-answer="이" maxlength="1"> 샀습니다.
                 </div>
             </div>
 
             <div class="passage">
                 <h3>지문 4: 교통 문제</h3>
                 <div class="passage-text">
-                    도시의 교통 문제가 심각합니다. 교<input class="blank" data-answer="통"> 체증으로 시<input class="blank" data-answer="간"><input class="blank" data-answer="이"> 많이 걸립니다.<br><br>
-                    출<input class="blank" data-answer="퇴"><input class="blank" data-answer="근"> 시간에는 도<input class="blank" data-answer="로"><input class="blank" data-answer="가"> 복<input class="blank" data-answer="잡">합니다. 주<input class="blank" data-answer="차"> 공간이 부족<input class="blank" data-answer="해"><input class="blank" data-answer="서"> 문제입니다.<br><br>
-                    버스나 지하<input class="blank" data-answer="철"><input class="blank" data-answer="을"> 이용하는 것이 좋습니다. 환경<input class="blank" data-answer="에"><input class="blank" data-answer="도"> 도움이 됩<input class="blank" data-answer="니"><input class="blank" data-answer="다">.<br><br>
-                    정부에서는 대중교<input class="blank" data-answer="통"> 시설을 더 많<input class="blank" data-answer="이"> 만들고 있습니다.
+                    도시의 교통 문제가 심각합니다. 교<input class="blank" data-answer="통" maxlength="1"> 체증으로 시<input class="blank" data-answer="간" maxlength="1"><input class="blank" data-answer="이" maxlength="1"> 많이 걸립니다.<br><br>
+                    출<input class="blank" data-answer="퇴" maxlength="1"><input class="blank" data-answer="근" maxlength="1"> 시간에는 도<input class="blank" data-answer="로" maxlength="1"><input class="blank" data-answer="가" maxlength="1"> 복<input class="blank" data-answer="잡" maxlength="1">합니다. 주<input class="blank" data-answer="차" maxlength="1"> 공간이 부족<input class="blank" data-answer="해" maxlength="1"><input class="blank" data-answer="서" maxlength="1"> 문제입니다.<br><br>
+                    버스나 지하<input class="blank" data-answer="철" maxlength="1"><input class="blank" data-answer="을" maxlength="1"> 이용하는 것이 좋습니다. 환경<input class="blank" data-answer="에" maxlength="1"><input class="blank" data-answer="도" maxlength="1"> 도움이 됩<input class="blank" data-answer="니" maxlength="1"><input class="blank" data-answer="다" maxlength="1">.<br><br>
+                    정부에서는 대중교<input class="blank" data-answer="통" maxlength="1"> 시설을 더 많<input class="blank" data-answer="이" maxlength="1"> 만들고 있습니다.
                 </div>
             </div>
 
@@ -223,7 +224,7 @@
     </div>
 
     <script>
-        let timer = 30 * 60; // 30분
+        let timer = 20 * 60; // 20분으로 변경
         let interval;
         let startTime;
         let userData = {};
@@ -271,26 +272,63 @@
         function setupBlankInputs() {
             const blanks = document.querySelectorAll('.blank');
             blanks.forEach(function(blank) {
-                blank.addEventListener('input', function() {
+                // 포커스 시 내용 선택
+                blank.addEventListener('focus', function() {
+                    this.select();
+                });
+
+                // 입력 이벤트 처리
+                blank.addEventListener('input', function(e) {
                     let val = this.value;
-                    // 한국어만 허용
-                    val = val.replace(/[^\u3131-\u3163\uac00-\ud7af]/g, '');
+                    
+                    // 한국어만 허용 (한글 문자, 자음, 모음)
+                    val = val.replace(/[^\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF]/g, '');
+                    
                     // 1글자로 제한
                     if (val.length > 1) {
-                        val = val.charAt(0);
+                        val = val.charAt(val.length - 1); // 마지막 입력된 글자만 유지
                     }
+                    
                     this.value = val;
                 });
 
+                // 키보드 이벤트 처리
                 blank.addEventListener('keydown', function(e) {
-                    // 백스페이스와 삭제 허용
-                    if (e.key === 'Backspace' || e.key === 'Delete') {
+                    // 탭, 엔터, 백스페이스, 삭제, 방향키는 허용
+                    if (e.key === 'Tab' || e.key === 'Enter' || e.key === 'Backspace' || 
+                        e.key === 'Delete' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
                         return;
                     }
-                    // 이미 글자가 있으면 새 입력을 대체
+                    
+                    // 한국어가 아니면 입력 차단
+                    if (e.key.length === 1) {
+                        const koreanPattern = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF]/;
+                        if (!koreanPattern.test(e.key)) {
+                            e.preventDefault();
+                            return;
+                        }
+                    }
+                    
+                    // 이미 글자가 있으면 대체
                     if (this.value.length >= 1) {
                         this.value = '';
                     }
+                });
+
+                // 엔터키로 다음 빈칸으로 이동
+                blank.addEventListener('keyup', function(e) {
+                    if (e.key === 'Enter' || (this.value.length === 1 && e.key !== 'Backspace' && e.key !== 'Delete')) {
+                        const blanks = Array.from(document.querySelectorAll('.blank'));
+                        const currentIndex = blanks.indexOf(this);
+                        if (currentIndex < blanks.length - 1) {
+                            blanks[currentIndex + 1].focus();
+                        }
+                    }
+                });
+
+                // 붙여넣기 방지
+                blank.addEventListener('paste', function(e) {
+                    e.preventDefault();
                 });
             });
         }
@@ -321,7 +359,7 @@
             });
 
             const percentage = Math.round((correctCount / totalCount) * 100);
-            const timeUsed = 30 - Math.floor(timer / 60);
+            const timeUsed = 20 - Math.floor(timer / 60); // 20분에서 남은시간 빼기
             
             // 결과 저장
             window.testResult = {

@@ -272,21 +272,61 @@
         function setupBlankInputs() {
             const blanks = document.querySelectorAll('.blank');
             blanks.forEach(function(blank) {
+                let isComposing = false;
+
+                // IME 조합 시작
+                blank.addEventListener('compositionstart', function(e) {
+                    isComposing = true;
+                });
+
+                // IME 조합 끝
+                blank.addEventListener('compositionend', function(e) {
+                    isComposing = false;
+                    let val = this.value;
+                    
+                    // 완성된 한글만 허용 (완성형 한글)
+                    val = val.replace(/[^\uAC00-\uD7AF]/g, '');
+                    
+                    // 1글자로 제한
+                    if (val.length > 1) {
+                        val = val.charAt(val.length - 1);
+                    }
+                    
+                    this.value = val;
+                    
+                    // 글자 입력 완료 후 다음 칸으로 이동
+                    if (val.length === 1) {
+                        const blanks = Array.from(document.querySelectorAll('.blank'));
+                        const currentIndex = blanks.indexOf(this);
+                        if (currentIndex < blanks.length - 1) {
+                            setTimeout(() => {
+                                blanks[currentIndex + 1].focus();
+                            }, 50);
+                        }
+                    }
+                });
+
                 // 포커스 시 내용 선택
                 blank.addEventListener('focus', function() {
-                    this.select();
+                    if (!isComposing) {
+                        this.select();
+                    }
                 });
 
                 // 입력 이벤트 처리
                 blank.addEventListener('input', function(e) {
+                    if (isComposing) {
+                        return; // IME 조합 중일 때는 처리하지 않음
+                    }
+                    
                     let val = this.value;
                     
-                    // 한국어만 허용 (한글 문자, 자음, 모음)
-                    val = val.replace(/[^\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF]/g, '');
+                    // 완성된 한글만 허용
+                    val = val.replace(/[^\uAC00-\uD7AF]/g, '');
                     
                     // 1글자로 제한
                     if (val.length > 1) {
-                        val = val.charAt(val.length - 1); // 마지막 입력된 글자만 유지
+                        val = val.charAt(val.length - 1);
                     }
                     
                     this.value = val;
@@ -294,30 +334,31 @@
 
                 // 키보드 이벤트 처리
                 blank.addEventListener('keydown', function(e) {
-                    // 탭, 엔터, 백스페이스, 삭제, 방향키는 허용
-                    if (e.key === 'Tab' || e.key === 'Enter' || e.key === 'Backspace' || 
-                        e.key === 'Delete' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                    // IME 조합 중이면 기본 동작 허용
+                    if (isComposing) {
                         return;
                     }
                     
-                    // 한국어가 아니면 입력 차단
-                    if (e.key.length === 1) {
-                        const koreanPattern = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF]/;
-                        if (!koreanPattern.test(e.key)) {
-                            e.preventDefault();
-                            return;
-                        }
+                    // 특수키는 허용
+                    if (e.key === 'Tab' || e.key === 'Enter' || e.key === 'Backspace' || 
+                        e.key === 'Delete' || e.key === 'ArrowLeft' || e.key === 'ArrowRight' ||
+                        e.key === 'Home' || e.key === 'End') {
+                        return;
                     }
                     
-                    // 이미 글자가 있으면 대체
-                    if (this.value.length >= 1) {
+                    // 이미 글자가 있고 새 글자를 입력하려는 경우 기존 글자 삭제
+                    if (this.value.length >= 1 && e.key.length === 1) {
                         this.value = '';
                     }
                 });
 
                 // 엔터키로 다음 빈칸으로 이동
                 blank.addEventListener('keyup', function(e) {
-                    if (e.key === 'Enter' || (this.value.length === 1 && e.key !== 'Backspace' && e.key !== 'Delete')) {
+                    if (isComposing) {
+                        return;
+                    }
+                    
+                    if (e.key === 'Enter') {
                         const blanks = Array.from(document.querySelectorAll('.blank'));
                         const currentIndex = blanks.indexOf(this);
                         if (currentIndex < blanks.length - 1) {

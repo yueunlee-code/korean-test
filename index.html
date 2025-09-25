@@ -429,21 +429,94 @@
         function downloadCSV() {
             if (!window.testResult) return;
             
-            let csv = 'ParticipantID,Name,Age,MotherTongue,StudyDuration,Email,Phone,TestDate,TotalScore,CorrectCount,TotalItems,Percentage,TimeUsed\n';
             const r = window.testResult;
-            csv += `${r.userData.pid},${r.userData.pname},${r.userData.age},${r.userData.lang},${r.userData.duration},${r.userData.email},${r.userData.phone},${r.startTime.toISOString()},${r.correctCount}/${r.totalCount},${r.correctCount},${r.totalCount},${r.percentage}%,${r.timeUsed}분\n\n`;
+            let csv = '';
             
-            // 상세 결과 추가
-            csv += 'ItemNumber,UserAnswer,CorrectAnswer,IsCorrect\n';
-            r.details.forEach(function(item) {
-                csv += `${item.item},${item.userAnswer},${item.correctAnswer},${item.correct}\n`;
+            // 기본 참여자 정보
+            csv += '=== 참여자 기본 정보 ===\n';
+            csv += 'ParticipantID,Name,Age,MotherTongue,StudyDuration,Email,Phone,TestDate,StartTime,EndTime,TotalTimeUsed\n';
+            csv += `${r.userData.pid},${r.userData.pname},${r.userData.age},${r.userData.lang},"${r.userData.duration}",${r.userData.email},${r.userData.phone},${r.startTime.toLocaleDateString()},${r.startTime.toLocaleTimeString()},${r.endTime.toLocaleTimeString()},${r.timeUsed}분\n\n`;
+            
+            // 전체 점수 요약
+            csv += '=== 점수 요약 ===\n';
+            csv += 'TotalItems,CorrectCount,IncorrectCount,EmptyCount,AccuracyPercentage\n';
+            const emptyCount = r.totalCount - r.correctCount - (r.details.filter(item => item.userAnswer && !item.correct).length);
+            csv += `${r.totalCount},${r.correctCount},${r.details.filter(item => item.userAnswer && !item.correct).length},${emptyCount},${r.percentage}%\n\n`;
+            
+            // 지문별 상세 결과
+            csv += '=== 지문별 상세 결과 ===\n';
+            csv += 'PassageNumber,PassageTitle,ItemNumber,CorrectAnswer,UserAnswer,IsCorrect,ItemType\n';
+            
+            // 지문 구분을 위한 아이템 범위 정의
+            const passages = [
+                { title: '지문1_일상생활', start: 1, end: 26 },
+                { title: '지문2_여행계획', start: 27, end: 47 },
+                { title: '지문3_백화점쇼핑', start: 48, end: 68 },
+                { title: '지문4_교통문제', start: 69, end: 88 }
+            ];
+            
+            r.details.forEach(function(item, index) {
+                // 어느 지문에 속하는지 찾기
+                let passageInfo = passages.find(p => item.item >= p.start && item.item <= p.end);
+                if (!passageInfo) passageInfo = { title: '기타', start: 0, end: 999 };
+                
+                const passageNumber = passages.indexOf(passageInfo) + 1;
+                const userAnswer = item.userAnswer || '(공백)';
+                const correctAnswer = item.correctAnswer;
+                const isCorrect = item.correct ? 'O' : 'X';
+                
+                // 문항 유형 분류 (어미, 조사, 어간 등)
+                let itemType = '기타';
+                if (correctAnswer.match(/[은는이가을를]/)) itemType = '조사';
+                else if (correctAnswer.match(/[다요니습]/)) itemType = '어미';
+                else if (correctAnswer.match(/[서게와아]/)) itemType = '연결어미';
+                else if (correctAnswer.length === 1) itemType = '단일음절';
+                
+                csv += `${passageNumber},"${passageInfo.title}",${item.item},${correctAnswer},${userAnswer},${isCorrect},${itemType}\n`;
             });
             
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            csv += '\n=== 오답 분석 ===\n';
+            csv += 'ItemNumber,CorrectAnswer,UserAnswer,ErrorType\n';
+            r.details.forEach(function(item) {
+                if (!item.correct) {
+                    let errorType = '';
+                    if (!item.userAnswer) errorType = '무응답';
+                    else if (item.userAnswer.length !== item.correctAnswer.length) errorType = '길이오류';
+                    else errorType = '대체오류';
+                    
+                    csv += `${item.item},${item.correctAnswer},${item.userAnswer || '(공백)'},${errorType}\n`;
+                }
+            });
+            
+            csv += '\n=== 정답률 통계 ===\n';
+            csv += 'Category,Count,Percentage\n';
+            const totalAnswered = r.details.filter(item => item.userAnswer).length;
+            csv += `전체문항,${r.totalCount},100%\n`;
+            csv += `정답,${r.correctCount},${Math.round(r.correctCount/r.totalCount*100)}%\n`;
+            csv += `오답,${r.details.filter(item => item.userAnswer && !item.correct).length},${Math.round(r.details.filter(item => item.userAnswer && !item.correct).length/r.totalCount*100)}%\n`;
+            csv += `무응답,${r.totalCount - totalAnswered},${Math.round((r.totalCount - totalAnswered)/r.totalCount*100)}%\n`;
+            
+            // 지문별 정답률
+            csv += '\n=== 지문별 정답률 ===\n';
+            csv += 'PassageNumber,PassageTitle,TotalItems,CorrectItems,AccuracyRate\n';
+            passages.forEach(function(passage, index) {
+                const passageItems = r.details.filter(item => item.item >= passage.start && item.item <= passage.end);
+                const passageCorrect = passageItems.filter(item => item.correct).length;
+                const passageTotal = passageItems.length;
+                const passageRate = passageTotal > 0 ? Math.round(passageCorrect/passageTotal*100) : 0;
+                csv += `${index + 1},"${passage.title}",${passageTotal},${passageCorrect},${passageRate}%\n`;
+            });
+            
+            // UTF-8 BOM 추가하여 한글 인코딩 문제 해결
+            const BOM = '\uFEFF';
+            const csvWithBOM = BOM + csv;
+            
+            // 파일 다운로드
+            const blob = new Blob([csvWithBOM], { type: 'text/csv;charset=utf-8;' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `Korean_CTest_${r.userData.pid}_${new Date().toISOString().slice(0,10)}.csv`;
+            a.download = `Korean_CTest_DetailedResults_${r.userData.pid}_${new Date().toISOString().slice(0,10)}.csv`;
             a.click();
             window.URL.revokeObjectURL(url);
         }
@@ -467,12 +540,29 @@
                 return;
             }
 
-            let csv = 'ParticipantID,Name,Age,MotherTongue,StudyDuration,Email,Phone,TestDate,TotalScore,CorrectCount,TotalItems,Percentage,TimeUsed\n';
+            let csv = '=== 전체 참여자 요약 ===\n';
+            csv += 'ParticipantID,Name,Age,MotherTongue,StudyDuration,Email,Phone,TestDate,TotalScore,CorrectCount,TotalItems,Percentage,TimeUsed\n';
+            
             allResults.forEach(function(r) {
-                csv += `${r.userData.pid},${r.userData.pname},${r.userData.age},${r.userData.lang},${r.userData.duration},${r.userData.email},${r.userData.phone},${r.startTime},${r.correctCount}/${r.totalCount},${r.correctCount},${r.totalCount},${r.percentage}%,${r.timeUsed}분\n`;
+                csv += `${r.userData.pid},${r.userData.pname},${r.userData.age},${r.userData.lang},"${r.userData.duration}",${r.userData.email},${r.userData.phone},${new Date(r.startTime).toLocaleDateString()},${r.correctCount}/${r.totalCount},${r.correctCount},${r.totalCount},${r.percentage}%,${r.timeUsed}분\n`;
+            });
+            
+            csv += '\n=== 개별 참여자 상세 결과 ===\n';
+            allResults.forEach(function(r, participantIndex) {
+                csv += `\n--- 참여자 ${participantIndex + 1}: ${r.userData.pid} (${r.userData.pname}) ---\n`;
+                csv += 'ItemNumber,CorrectAnswer,UserAnswer,IsCorrect\n';
+                r.details.forEach(function(item) {
+                    const userAnswer = item.userAnswer || '(공백)';
+                    const isCorrect = item.correct ? 'O' : 'X';
+                    csv += `${item.item},${item.correctAnswer},${userAnswer},${isCorrect}\n`;
+                });
             });
 
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            // UTF-8 BOM 추가
+            const BOM = '\uFEFF';
+            const csvWithBOM = BOM + csv;
+            
+            const blob = new Blob([csvWithBOM], { type: 'text/csv;charset=utf-8;' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;

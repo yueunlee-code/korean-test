@@ -289,13 +289,24 @@
         }
 
         function generateFlankerTrials() {
-            // 5개 화살표를 한 줄로 배열 (공백 없이)
-            const congruent = ['←←←←←', '→→→→→'], incongruent = ['→→←→→', '←←→←←'];
+            // 화살표를 개별 span으로 구성하여 확실히 한 줄 배치
+            const congruent = [
+                '<span>←</span><span>←</span><span>←</span><span>←</span><span>←</span>',
+                '<span>→</span><span>→</span><span>→</span><span>→</span><span>→</span>'
+            ];
+            const incongruent = [
+                '<span>→</span><span>→</span><span>←</span><span>→</span><span>→</span>',
+                '<span>←</span><span>←</span><span>→</span><span>←</span><span>←</span>'
+            ];
+            
             for (let i = 0; i < 40; i++) {
                 const congStim = congruent[Math.floor(Math.random() * 2)];
-                flankerData.stimuli.push({ stimulus: congStim, condition: 'congruent', correctResponse: congStim.charAt(2) === '←' ? 'KeyQ' : 'KeyP' });
+                const congCenter = congStim.includes('<span>←</span><span>←</span><span>←</span>') ? '←' : '→';
+                flankerData.stimuli.push({ stimulus: congStim, condition: 'congruent', correctResponse: congCenter === '←' ? 'KeyQ' : 'KeyP' });
+                
                 const incongStim = incongruent[Math.floor(Math.random() * 2)];
-                flankerData.stimuli.push({ stimulus: incongStim, condition: 'incongruent', correctResponse: incongStim.charAt(2) === '←' ? 'KeyQ' : 'KeyP' });
+                const incongCenter = incongStim.includes('<span>←</span><span>←</span><span>→</span>') ? '→' : '←';
+                flankerData.stimuli.push({ stimulus: incongStim, condition: 'incongruent', correctResponse: incongCenter === '←' ? 'KeyQ' : 'KeyP' });
             }
             flankerData.stimuli = flankerData.stimuli.sort(() => Math.random() - 0.5);
         }
@@ -305,8 +316,10 @@
             const stimulus = document.getElementById('flankerStimulus');
             stimulus.textContent = '+';
             setTimeout(() => {
+                const stimulus = document.getElementById('flankerStimulus');
                 const currentStimulus = flankerData.stimuli[flankerData.currentTrial];
-                stimulus.textContent = currentStimulus.stimulus; flankerData.stimulusStartTime = performance.now();
+                stimulus.innerHTML = currentStimulus.stimulus; // innerHTML 사용
+                flankerData.stimulusStartTime = performance.now();
                 document.getElementById('flankerProgress').style.width = (flankerData.currentTrial / flankerData.totalTrials) * 100 + '%';
                 document.getElementById('flankerTrialCount').textContent = flankerData.currentTrial + 1;
             }, 500 + Math.random() * 1000);

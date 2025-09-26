@@ -355,26 +355,87 @@
         }
 
         function generateFlankerTrials() {
-            // 화살표를 더 간결하게 생성 (개별 span으로 구성하되 간격 최소화)
+            // 더 다양하고 균형잡힌 Flanker 조합 생성
             const congruent = [
-                '<span>←</span><span>←</span><span>←</span><span>←</span><span>←</span>',
-                '<span>→</span><span>→</span><span>→</span><span>→</span><span>→</span>'
-            ];
-            const incongruent = [
-                '<span>→</span><span>→</span><span>←</span><span>→</span><span>→</span>',
-                '<span>←</span><span>←</span><span>→</span><span>←</span><span>←</span>'
+                // 전체 일치 조건 (가운데와 양옆이 같은 방향)
+                '<span>←</span><span>←</span><span>←</span><span>←</span><span>←</span>',  // 모두 왼쪽
+                '<span>→</span><span>→</span><span>→</span><span>→</span><span>→</span>'   // 모두 오른쪽
             ];
             
-            for (let i = 0; i < 40; i++) {
-                const congStim = congruent[Math.floor(Math.random() * 2)];
-                const congCenter = congStim.includes('<span>←</span><span>←</span><span>←</span>') ? '←' : '→';
-                flankerData.stimuli.push({ stimulus: congStim, condition: 'congruent', correctResponse: congCenter === '←' ? 'KeyQ' : 'KeyP' });
+            const incongruent = [
+                // 가운데가 왼쪽(←)인 불일치 조건들
+                '<span>→</span><span>→</span><span>←</span><span>→</span><span>→</span>',  // 클래식 패턴
+                '<span>→</span><span>←</span><span>←</span><span>←</span><span>→</span>',  // 혼합 패턴 1
+                '<span>←</span><span>→</span><span>←</span><span>→</span><span>←</span>',  // 교대 패턴 1
+                '<span>→</span><span>→</span><span>←</span><span>←</span><span>→</span>',  // 비대칭 패턴 1
+                '<span>←</span><span>→</span><span>←</span><span>→</span><span>→</span>',  // 비대칭 패턴 2
+                '<span>→</span><span>←</span><span>←</span><span>→</span><span>←</span>',  // 복잡 패턴 1
                 
-                const incongStim = incongruent[Math.floor(Math.random() * 2)];
-                const incongCenter = incongStim.includes('<span>←</span><span>←</span><span>→</span>') ? '→' : '←';
-                flankerData.stimuli.push({ stimulus: incongStim, condition: 'incongruent', correctResponse: incongCenter === '←' ? 'KeyQ' : 'KeyP' });
+                // 가운데가 오른쪽(→)인 불일치 조건들  
+                '<span>←</span><span>←</span><span>→</span><span>←</span><span>←</span>',  // 클래식 패턴
+                '<span>←</span><span>→</span><span>→</span><span>→</span><span>←</span>',  // 혼합 패턴 2
+                '<span>→</span><span>←</span><span>→</span><span>←</span><span>→</span>',  // 교대 패턴 2
+                '<span>←</span><span>←</span><span>→</span><span>→</span><span>←</span>',  // 비대칭 패턴 3
+                '<span>→</span><span>←</span><span>→</span><span>←</span><span>←</span>',  // 비대칭 패턴 4
+                '<span>←</span><span>→</span><span>→</span><span>←</span><span>→</span>'   // 복잡 패턴 2
+            ];
+            
+            // 조건별 균등 분배 (총 80회 시행)
+            const trialsPerCondition = {
+                congruent: 20,      // 일치 조건 20회
+                incongruent: 60     // 불일치 조건 60회 (더 도전적)
+            };
+            
+            // 일치 조건 생성 (각 패턴 10회씩)
+            for (let i = 0; i < trialsPerCondition.congruent; i++) {
+                const stimIndex = i % congruent.length;
+                const stimulus = congruent[stimIndex];
+                const centerArrow = stimulus.includes('<span>←</span><span>←</span><span>←</span>') ? '←' : '→';
+                
+                flankerData.stimuli.push({
+                    stimulus: stimulus,
+                    condition: 'congruent',
+                    centerArrow: centerArrow,
+                    correctResponse: centerArrow === '←' ? 'KeyQ' : 'KeyP'
+                });
             }
+            
+            // 불일치 조건 생성 (각 패턴 5회씩)
+            for (let i = 0; i < trialsPerCondition.incongruent; i++) {
+                const stimIndex = i % incongruent.length;
+                const stimulus = incongruent[stimIndex];
+                
+                // 가운데(3번째) 화살표 추출
+                let centerArrow;
+                if (stimulus.includes('<span>←</span><span>←</span><span>←</span>') || 
+                    stimulus.includes('<span>→</span><span>←</span><span>←</span>') ||
+                    stimulus.includes('<span>←</span><span>→</span><span>←</span>') ||
+                    stimulus.includes('<span>→</span><span>→</span><span>←</span>') ||
+                    stimulus.includes('<span>←</span><span>←</span><span>→</span><span>→</span><span>←</span>') ||
+                    stimulus.includes('<span>→</span><span>←</span><span>→</span><span>←</span><span>←</span>') ||
+                    stimulus.includes('<span>←</span><span>→</span><span>→</span><span>←</span><span>→</span>')) {
+                    // 패턴 분석으로 가운데 화살표 결정
+                    const arrows = stimulus.match(/<span>([←→])<\/span>/g);
+                    centerArrow = arrows[2].includes('←') ? '←' : '→'; // 3번째(인덱스 2) 요소
+                } else {
+                    // 직접 매칭으로 확인
+                    centerArrow = stimulus.includes('><span>←</span><') ? '←' : '→';
+                }
+                
+                flankerData.stimuli.push({
+                    stimulus: stimulus,
+                    condition: 'incongruent', 
+                    centerArrow: centerArrow,
+                    correctResponse: centerArrow === '←' ? 'KeyQ' : 'KeyP'
+                });
+            }
+            
+            // 시행 순서 무작위 섞기
             flankerData.stimuli = flankerData.stimuli.sort(() => Math.random() - 0.5);
+            
+            console.log(`Flanker 시행 생성 완료: 총 ${flankerData.stimuli.length}개`);
+            console.log(`- 일치 조건: ${flankerData.stimuli.filter(s => s.condition === 'congruent').length}개`);
+            console.log(`- 불일치 조건: ${flankerData.stimuli.filter(s => s.condition === 'incongruent').length}개`);
         }
 
         function showNextFlankerTrial() {

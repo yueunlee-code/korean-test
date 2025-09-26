@@ -27,7 +27,33 @@
         .form-group input { padding: 10px; width: 100%; max-width: 300px; border: 1px solid #ddd; border-radius: 5px; }
         .test-screen { display: none; min-height: 80vh; justify-content: center; align-items: center; }
         .stimulus-display { font-size: 4em; font-weight: bold; color: #2c3e50; min-height: 200px; display: flex; align-items: center; justify-content: center; margin: 40px 0; }
-        .flanker-stimulus { font-family: 'Courier New', monospace; letter-spacing: 0.3em; font-size: 4em; color: #2c3e50; }
+        
+        /* 핵심 수정: Flanker 화살표 스타일 최적화 */
+        .flanker-stimulus { 
+            font-family: 'Courier New', monospace; 
+            font-weight: bold; 
+            color: #2c3e50; 
+            line-height: 1.2;
+            /* 반응형 폰트 크기 - 컨테이너에 맞춰 조정 */
+            font-size: clamp(2em, 6vw, 4em);
+            /* 컨테이너 제약 설정 */
+            max-width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            /* span 간격 조정 */
+            letter-spacing: 0.2em;
+            /* 중앙 정렬 보장 */
+            display: inline-block;
+            text-align: center;
+        }
+        
+        /* span 요소들 간격 조정 */
+        .flanker-stimulus span {
+            display: inline-block;
+            margin: 0 0.1em;
+            font-size: inherit;
+        }
+        
         .instructions { background: #fff3cd; border: 1px solid #ffeeba; padding: 25px; border-radius: 15px; margin: 25px 0; color: #856404; }
         .instructions h3 { color: #856404; margin-bottom: 15px; font-size: 1.3em; }
         .instructions p { margin-bottom: 12px; line-height: 1.6; }
@@ -50,9 +76,49 @@
         .completion-status { background: #d4edda; border: 1px solid #c3e6cb; padding: 15px; border-radius: 10px; margin: 20px 0; color: #155724; }
         .example-section { background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #e9ecef; }
         .example-section h4 { color: #2c3e50; margin-bottom: 15px; }
-        .flanker-example { font-family: 'Courier New', monospace; font-size: 2.5em; margin: 15px 0; letter-spacing: 0.3em; }
+        
+        /* 예시 섹션의 flanker 예시도 동일하게 제약 적용 */
+        .flanker-example { 
+            font-family: 'Courier New', monospace; 
+            font-size: clamp(1.8em, 4vw, 2.5em); 
+            margin: 15px 0; 
+            letter-spacing: 0.3em; 
+            max-width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
         .correct-answer { color: #28a745; font-weight: bold; }
-        @media (max-width: 768px) { .test-selection { grid-template-columns: 1fr; } .stimulus-display { font-size: 2.5em; } .flanker-stimulus { font-size: 2.5em; } .key-demo { flex-direction: column; gap: 15px; } }
+        
+        /* 모바일 최적화 */
+        @media (max-width: 768px) { 
+            .test-selection { grid-template-columns: 1fr; } 
+            .stimulus-display { font-size: 2.5em; } 
+            .flanker-stimulus { 
+                font-size: clamp(1.5em, 8vw, 2.5em);
+                letter-spacing: 0.1em;
+            } 
+            .flanker-example {
+                font-size: clamp(1.2em, 6vw, 1.8em);
+                letter-spacing: 0.2em;
+            }
+            .key-demo { flex-direction: column; gap: 15px; } 
+            .container {
+                padding: 20px;
+                width: 95%;
+            }
+        }
+        
+        /* 작은 화면에서 추가 제약 */
+        @media (max-width: 480px) {
+            .flanker-stimulus {
+                font-size: clamp(1.2em, 10vw, 2em);
+                letter-spacing: 0.05em;
+            }
+            .flanker-stimulus span {
+                margin: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -289,7 +355,7 @@
         }
 
         function generateFlankerTrials() {
-            // 화살표를 개별 span으로 구성하여 확실히 한 줄 배치
+            // 화살표를 더 간결하게 생성 (개별 span으로 구성하되 간격 최소화)
             const congruent = [
                 '<span>←</span><span>←</span><span>←</span><span>←</span><span>←</span>',
                 '<span>→</span><span>→</span><span>→</span><span>→</span><span>→</span>'

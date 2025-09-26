@@ -224,13 +224,12 @@
     </div>
 
     <script>
-        let timer = 20 * 60; // 20분으로 변경
+        let timer = 20 * 60;
         let interval;
         let startTime;
         let userData = {};
 
         function startTest() {
-            // 폼 검증
             const pid = document.getElementById('pid').value.trim();
             const pname = document.getElementById('pname').value.trim();
             const age = document.getElementById('age').value.trim();
@@ -247,14 +246,11 @@
             userData = { pid, pname, age, lang, duration, email, phone };
             startTime = new Date();
 
-            // 화면 전환
             document.getElementById('startForm').style.display = 'none';
             document.getElementById('testArea').style.display = 'block';
 
-            // 빈칸 입력 이벤트 설정
             setupBlankInputs();
 
-            // 타이머 시작
             interval = setInterval(function() {
                 timer--;
                 let min = Math.floor(timer / 60);
@@ -276,36 +272,27 @@
                 let lastValue = '';
                 let isComposing = false;
                 
-                // 조합 시작
                 blank.addEventListener('compositionstart', function() {
                     isComposing = true;
                 });
                 
-                // 조합 중
                 blank.addEventListener('compositionupdate', function() {
-                    // 조합 중에는 아무것도 하지 않음
                 });
                 
-                // 조합 완료
                 blank.addEventListener('compositionend', function() {
                     isComposing = false;
                     handleInput.call(this);
                 });
                 
-                // 입력 처리 함수
                 function handleInput() {
-                    if (isComposing) return; // 조합 중이면 처리하지 않음
+                    if (isComposing) return;
                     
                     let value = this.value;
-                    
-                    // 완성된 한글만 추출
                     let koreanChar = value.match(/[가-힣]/);
                     
                     if (koreanChar) {
-                        // 하나의 완성된 한글만 유지
                         this.value = koreanChar[0];
                         
-                        // 값이 변경되었고 이전과 다르면 다음 칸으로 이동
                         if (this.value !== lastValue) {
                             lastValue = this.value;
                             setTimeout(() => {
@@ -313,57 +300,47 @@
                             }, 10);
                         }
                     } else {
-                        // 완성된 한글이 없으면 비움
                         this.value = '';
                         lastValue = '';
                     }
                 }
                 
-                // input 이벤트 (조합 완료 후에만 처리)
                 blank.addEventListener('input', handleInput);
                 
-                // 키다운 처리
                 blank.addEventListener('keydown', function(e) {
-                    // 백스페이스
                     if (e.key === 'Backspace') {
                         lastValue = '';
                         return;
                     }
                     
-                    // 엔터로 다음 칸 이동
                     if (e.key === 'Enter') {
                         e.preventDefault();
                         moveToNext(this);
                         return;
                     }
                     
-                    // 탭은 기본 동작
                     if (e.key === 'Tab') {
                         return;
                     }
                     
-                    // 이미 글자가 있으면 교체 준비
                     if (this.value && !isComposing) {
                         lastValue = '';
                         this.value = '';
                     }
                 });
                 
-                // 포커스 시 선택
                 blank.addEventListener('focus', function() {
                     if (this.value && !isComposing) {
                         this.select();
                     }
                 });
                 
-                // 붙여넣기 방지
                 blank.addEventListener('paste', function(e) {
                     e.preventDefault();
                 });
             });
         }
         
-        // 다음 빈칸으로 이동
         function moveToNext(currentBlank) {
             const blanks = Array.from(document.querySelectorAll('.blank'));
             const currentIndex = blanks.indexOf(currentBlank);
@@ -400,9 +377,8 @@
             });
 
             const percentage = Math.round((correctCount / totalCount) * 100);
-            const timeUsed = 20 - Math.floor(timer / 60); // 20분에서 남은시간 빼기
+            const timeUsed = 20 - Math.floor(timer / 60);
             
-            // 결과 저장
             window.testResult = {
                 userData: userData,
                 startTime: startTime,
@@ -414,13 +390,10 @@
                 details: results
             };
 
-            // 로컬 저장
             localStorage.setItem(`result_${userData.pid}_${Date.now()}`, JSON.stringify(window.testResult));
 
-            // Google Sheets 자동 백업 (새로 추가)
             sendCtestToGoogleSheets(window.testResult);
 
-            // 결과 화면 표시
             document.getElementById('testArea').style.display = 'none';
             document.getElementById('resultArea').style.display = 'block';
             document.getElementById('score').textContent = percentage + '%';
@@ -435,22 +408,18 @@
             const r = window.testResult;
             let csv = '';
             
-            // 기본 참여자 정보
             csv += '=== 참여자 기본 정보 ===\n';
             csv += 'ParticipantID,Name,Age,MotherTongue,StudyDuration,Email,Phone,TestDate,StartTime,EndTime,TotalTimeUsed\n';
             csv += `${r.userData.pid},${r.userData.pname},${r.userData.age},${r.userData.lang},"${r.userData.duration}",${r.userData.email},${r.userData.phone},${r.startTime.toLocaleDateString()},${r.startTime.toLocaleTimeString()},${r.endTime.toLocaleTimeString()},${r.timeUsed}분\n\n`;
             
-            // 전체 점수 요약
             csv += '=== 점수 요약 ===\n';
             csv += 'TotalItems,CorrectCount,IncorrectCount,EmptyCount,AccuracyPercentage\n';
             const emptyCount = r.totalCount - r.correctCount - (r.details.filter(item => item.userAnswer && !item.correct).length);
             csv += `${r.totalCount},${r.correctCount},${r.details.filter(item => item.userAnswer && !item.correct).length},${emptyCount},${r.percentage}%\n\n`;
             
-            // 지문별 상세 결과
             csv += '=== 지문별 상세 결과 ===\n';
             csv += 'PassageNumber,PassageTitle,ItemNumber,CorrectAnswer,UserAnswer,IsCorrect,ItemType\n';
             
-            // 지문 구분을 위한 아이템 범위 정의
             const passages = [
                 { title: '지문1_일상생활', start: 1, end: 26 },
                 { title: '지문2_여행계획', start: 27, end: 47 },
@@ -459,7 +428,6 @@
             ];
             
             r.details.forEach(function(item, index) {
-                // 어느 지문에 속하는지 찾기
                 let passageInfo = passages.find(p => item.item >= p.start && item.item <= p.end);
                 if (!passageInfo) passageInfo = { title: '기타', start: 0, end: 999 };
                 
@@ -468,7 +436,6 @@
                 const correctAnswer = item.correctAnswer;
                 const isCorrect = item.correct ? 'O' : 'X';
                 
-                // 문항 유형 분류 (어미, 조사, 어간 등)
                 let itemType = '기타';
                 if (correctAnswer.match(/[은는이가을를]/)) itemType = '조사';
                 else if (correctAnswer.match(/[다요니습]/)) itemType = '어미';
@@ -499,7 +466,6 @@
             csv += `오답,${r.details.filter(item => item.userAnswer && !item.correct).length},${Math.round(r.details.filter(item => item.userAnswer && !item.correct).length/r.totalCount*100)}%\n`;
             csv += `무응답,${r.totalCount - totalAnswered},${Math.round((r.totalCount - totalAnswered)/r.totalCount*100)}%\n`;
             
-            // 지문별 정답률
             csv += '\n=== 지문별 정답률 ===\n';
             csv += 'PassageNumber,PassageTitle,TotalItems,CorrectItems,AccuracyRate\n';
             passages.forEach(function(passage, index) {
@@ -510,11 +476,63 @@
                 csv += `${index + 1},"${passage.title}",${passageTotal},${passageCorrect},${passageRate}%\n`;
             });
             
-            // UTF-8 BOM 추가하여 한글 인코딩 문제 해결
             const BOM = '\uFEFF';
             const csvWithBOM = BOM + csv;
             
-            // 파일 다운로드
+            const blob = new Blob([csvWithBOM], { type: 'text/csv;charset=utf-8;' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Korean_CTest_AllResults_${new Date().toISOString().slice(0,10)}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Google Sheets 연동 함수
+        function sendCtestToGoogleSheets(testResults) {
+            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwlzvmAWxenc4im55qrULtFdWGRyMWvdscL0qGBZNns8AXoqduIcgPu-Rga0uEQ-0kj/exec';
+            
+            const summary = `정답: ${testResults.correctCount}/${testResults.totalCount}, 정답률: ${testResults.percentage}%, 소요시간: ${testResults.timeUsed}분`;
+            
+            const payload = {
+                participantId: testResults.userData.pid,
+                participantName: testResults.userData.pname,
+                testType: 'C-Test (한국어)',
+                summary: summary,
+                details: {
+                    participantInfo: testResults.userData,
+                    totalItems: testResults.totalCount,
+                    correctAnswers: testResults.correctCount,
+                    accuracyPercentage: testResults.percentage,
+                    timeUsedMinutes: testResults.timeUsed,
+                    startTime: testResults.startTime.toISOString(),
+                    endTime: testResults.endTime.toISOString(),
+                    individualResponses: testResults.details,
+                    timestamp: new Date().toISOString()
+                }
+            };
+            
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.text())
+            .then(result => {
+                console.log('C-Test 결과가 성공적으로 백업되었습니다.');
+            })
+            .catch(error => {
+                console.log('백업 실패 (참여자에게는 영향 없음):', error);
+            });
+        }
+
+        console.log('한국어 C-Test가 로드되었습니다.');
+        console.log('연구자용: 모든 결과를 다운로드하려면 exportAllResults() 실행');
+        console.log('Google Sheets 연동이 활성화되었습니다.');
+    </script>
+</body>
+</html> + csv;
+            
             const blob = new Blob([csvWithBOM], { type: 'text/csv;charset=utf-8;' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -524,7 +542,6 @@
             window.URL.revokeObjectURL(url);
         }
 
-        // 연구자용 - 모든 결과 내보내기
         function exportAllResults() {
             const allResults = [];
             for (let i = 0; i < localStorage.length; i++) {
@@ -561,123 +578,5 @@
                 });
             });
 
-            // UTF-8 BOM 추가
             const BOM = '\uFEFF';
-            const csvWithBOM = BOM + csv;
-            
-            const blob = new Blob([csvWithBOM], { type: 'text/csv;charset=utf-8;' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Korean_CTest_AllResults_${new Date().toISOString().slice(0,10)}.csv`;
-            a.click();
-            window.URL.revokeObjectURL(url);
-        }
-
-        // ===========================================
-        // Google Sheets 자동 연동 함수들 (새로 추가)
-        // ===========================================
-
-        // Google Sheets 연동 함수
-        function sendCtestToGoogleSheets(testResults) {
-            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwlzvmAWxenc4im55qrULtFdWGRyMWvdscL0qGBZNns8AXoqduIcgPu-Rga0uEQ-0kj/exec';
-            
-            // 결과 요약 생성
-            const summary = `정답: ${testResults.correctCount}/${testResults.totalCount}, ` +
-                           `정답률: ${testResults.percentage}%, ` +
-                           `소요시간: ${testResults.timeUsed}분`;
-            
-            const payload = {
-                participantId: testResults.userData.pid,
-                participantName: testResults.userData.pname,
-                testType: 'C-Test (한국어)',
-                summary: summary,
-                details: {
-                    // 기본 정보
-                    participantInfo: testResults.userData,
-                    
-                    // 테스트 결과
-                    totalItems: testResults.totalCount,
-                    correctAnswers: testResults.correctCount,
-                    incorrectAnswers: testResults.details.filter(item => item.userAnswer && !item.correct).length,
-                    emptyAnswers: testResults.totalCount - testResults.details.filter(item => item.userAnswer).length,
-                    accuracyPercentage: testResults.percentage,
-                    
-                    // 시간 정보
-                    startTime: testResults.startTime.toISOString(),
-                    endTime: testResults.endTime.toISOString(),
-                    timeUsedMinutes: testResults.timeUsed,
-                    
-                    // 지문별 정답률
-                    passageScores: calculatePassageScores(testResults.details),
-                    
-                    // 오답 분석
-                    errorAnalysis: analyzeErrors(testResults.details),
-                    
-                    // 상세 응답 데이터
-                    individualResponses: testResults.details,
-                    
-                    // 메타데이터
-                    timestamp: new Date().toISOString(),
-                    testVersion: 'Korean C-Test v1.0'
-                }
-            };
-            
-            // Google Sheets로 데이터 전송
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            })
-            .then(response => response.text())
-            .then(result => {
-                console.log('C-Test 결과가 성공적으로 백업되었습니다.');
-            })
-            .catch(error => {
-                console.log('백업 실패 (참여자에게는 영향 없음):', error);
-            });
-        }
-
-        // 지문별 정답률 계산 함수
-        function calculatePassageScores(details) {
-            const passages = [
-                { title: '지문1_일상생활', start: 1, end: 26 },
-                { title: '지문2_여행계획', start: 27, end: 47 },
-                { title: '지문3_백화점쇼핑', start: 48, end: 68 },
-                { title: '지문4_교통문제', start: 69, end: 88 }
-            ];
-            
-            return passages.map((passage, index) => {
-                const passageItems = details.filter(item => item.item >= passage.start && item.item <= passage.end);
-                const passageCorrect = passageItems.filter(item => item.correct).length;
-                const passageTotal = passageItems.length;
-                const passageRate = passageTotal > 0 ? Math.round((passageCorrect / passageTotal) * 100) : 0;
-                
-                return {
-                    passageNumber: index + 1,
-                    title: passage.title,
-                    totalItems: passageTotal,
-                    correctItems: passageCorrect,
-                    accuracyRate: passageRate
-                };
-            });
-        }
-
-        // 오답 분석 함수
-        function analyzeErrors(details) {
-            const errors = details.filter(item => !item.correct);
-            const errorTypes = {
-                noResponse: errors.filter(item => !item.userAnswer).length,
-                substitution: errors.filter(item => item.userAnswer && item.userAnswer !== item.correctAnswer).length
-            };
-            
-            return {
-                totalErrors: errors.length,
-                errorTypes: errorTypes,
-                errorRate: Math.round((errors.length / details.length) * 100)
-            };
-        }
-
-        console.log('한국어 C-Test가 로드되었습니다.');
-        console.log('연구자용: 모든 결과를 다운로드하려면 exportAllResults() 실행');
-        console.log('Google Sheets 연동: GOOGLE_SCRIPT_URL을 설정하면 자동 백업됩니다.');
+            const csvWithBOM = BOM

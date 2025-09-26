@@ -392,8 +392,6 @@
 
             localStorage.setItem(`result_${userData.pid}_${Date.now()}`, JSON.stringify(window.testResult));
 
-            // sendCtestToGoogleSheets(window.testResult);
-
             document.getElementById('testArea').style.display = 'none';
             document.getElementById('resultArea').style.display = 'block';
             document.getElementById('score').textContent = percentage + '%';
@@ -483,100 +481,12 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `Korean_CTest_AllResults_${new Date().toISOString().slice(0,10)}.csv`;
-            a.click();
-            window.URL.revokeObjectURL(url);
-        }
-
-        // Google Sheets 연동 함수
-        function sendCtestToGoogleSheets(testResults) {
-            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwlzvmAWxenc4im55qrULtFdWGRyMWvdscL0qGBZNns8AXoqduIcgPu-Rga0uEQ-0kj/exec';
-            
-            const summary = `정답: ${testResults.correctCount}/${testResults.totalCount}, 정답률: ${testResults.percentage}%, 소요시간: ${testResults.timeUsed}분`;
-            
-            const payload = {
-                participantId: testResults.userData.pid,
-                participantName: testResults.userData.pname,
-                testType: 'C-Test (한국어)',
-                summary: summary,
-                details: {
-                    participantInfo: testResults.userData,
-                    totalItems: testResults.totalCount,
-                    correctAnswers: testResults.correctCount,
-                    accuracyPercentage: testResults.percentage,
-                    timeUsedMinutes: testResults.timeUsed,
-                    startTime: testResults.startTime.toISOString(),
-                    endTime: testResults.endTime.toISOString(),
-                    individualResponses: testResults.details,
-                    timestamp: new Date().toISOString()
-                }
-            };
-            
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            })
-            .then(response => response.text())
-            .then(result => {
-                console.log('C-Test 결과가 성공적으로 백업되었습니다.');
-            })
-            .catch(error => {
-                console.log('백업 실패 (참여자에게는 영향 없음):', error);
-            });
-        }
-
-        console.log('한국어 C-Test가 로드되었습니다.');
-        console.log('연구자용: 모든 결과를 다운로드하려면 exportAllResults() 실행');
-        console.log('Google Sheets 연동이 활성화되었습니다.');
-    </script>
-</body>
-</html> + csv;
-            
-            const blob = new Blob([csvWithBOM], { type: 'text/csv;charset=utf-8;' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
             a.download = `Korean_CTest_DetailedResults_${r.userData.pid}_${new Date().toISOString().slice(0,10)}.csv`;
             a.click();
             window.URL.revokeObjectURL(url);
         }
 
-        function exportAllResults() {
-            const allResults = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith('result_')) {
-                    try {
-                        allResults.push(JSON.parse(localStorage.getItem(key)));
-                    } catch (e) {
-                        console.log('파싱 오류:', key);
-                    }
-                }
-            }
-            
-            if (allResults.length === 0) {
-                alert('저장된 결과가 없습니다.');
-                return;
-            }
-
-            let csv = '=== 전체 참여자 요약 ===\n';
-            csv += 'ParticipantID,Name,Age,MotherTongue,StudyDuration,Email,Phone,TestDate,TotalScore,CorrectCount,TotalItems,Percentage,TimeUsed\n';
-            
-            allResults.forEach(function(r) {
-                csv += `${r.userData.pid},${r.userData.pname},${r.userData.age},${r.userData.lang},"${r.userData.duration}",${r.userData.email},${r.userData.phone},${new Date(r.startTime).toLocaleDateString()},${r.correctCount}/${r.totalCount},${r.correctCount},${r.totalCount},${r.percentage}%,${r.timeUsed}분\n`;
-            });
-            
-            csv += '\n=== 개별 참여자 상세 결과 ===\n';
-            allResults.forEach(function(r, participantIndex) {
-                csv += `\n--- 참여자 ${participantIndex + 1}: ${r.userData.pid} (${r.userData.pname}) ---\n`;
-                csv += 'ItemNumber,CorrectAnswer,UserAnswer,IsCorrect\n';
-                r.details.forEach(function(item) {
-                    const userAnswer = item.userAnswer || '(공백)';
-                    const isCorrect = item.correct ? 'O' : 'X';
-                    csv += `${item.item},${item.correctAnswer},${userAnswer},${isCorrect}\n`;
-                });
-            });
-
-            const BOM = '\uFEFF';
-            const csvWithBOM = BOM
+        console.log('한국어 C-Test가 준비되었습니다.');
+    </script>
+</body>
+</html>

@@ -28,26 +28,20 @@
         .test-screen { display: none; min-height: 80vh; justify-content: center; align-items: center; }
         .stimulus-display { font-size: 4em; font-weight: bold; color: #2c3e50; min-height: 200px; display: flex; align-items: center; justify-content: center; margin: 40px 0; }
         
-        /* 핵심 수정: Flanker 화살표 스타일 최적화 */
         .flanker-stimulus { 
             font-family: 'Courier New', monospace; 
             font-weight: bold; 
             color: #2c3e50; 
             line-height: 1.2;
-            /* 반응형 폰트 크기 - 컨테이너에 맞춰 조정 */
             font-size: clamp(2em, 6vw, 4em);
-            /* 컨테이너 제약 설정 */
             max-width: 100%;
             overflow: hidden;
             white-space: nowrap;
-            /* span 간격 조정 */
             letter-spacing: 0.2em;
-            /* 중앙 정렬 보장 */
             display: inline-block;
             text-align: center;
         }
         
-        /* span 요소들 간격 조정 */
         .flanker-stimulus span {
             display: inline-block;
             margin: 0 0.1em;
@@ -77,7 +71,6 @@
         .example-section { background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #e9ecef; }
         .example-section h4 { color: #2c3e50; margin-bottom: 15px; }
         
-        /* 예시 섹션의 flanker 예시도 동일하게 제약 적용 */
         .flanker-example { 
             font-family: 'Courier New', monospace; 
             font-size: clamp(1.8em, 4vw, 2.5em); 
@@ -90,7 +83,6 @@
         
         .correct-answer { color: #28a745; font-weight: bold; }
         
-        /* 모바일 최적화 */
         @media (max-width: 768px) { 
             .test-selection { grid-template-columns: 1fr; } 
             .stimulus-display { font-size: 2.5em; } 
@@ -109,7 +101,6 @@
             }
         }
         
-        /* 작은 화면에서 추가 제약 */
         @media (max-width: 480px) {
             .flanker-stimulus {
                 font-size: clamp(1.2em, 10vw, 2em);
@@ -310,8 +301,21 @@
         }
 
         function generateDigitSequence() {
-            const sequence = []; for (let i = 0; i < digitSpanData.currentLength; i++) sequence.push(Math.floor(Math.random() * 9) + 1);
-            digitSpanData.sequences.push(sequence); displayDigitSequence(sequence);
+            const sequence = [];
+            let previousDigit = null;
+            
+            for (let i = 0; i < digitSpanData.currentLength; i++) {
+                let digit;
+                do {
+                    digit = Math.floor(Math.random() * 9) + 1; // 1-9 사이의 숫자
+                } while (digit === previousDigit); // 이전 숫자와 같으면 다시 생성
+                
+                sequence.push(digit);
+                previousDigit = digit;
+            }
+            
+            digitSpanData.sequences.push(sequence); 
+            displayDigitSequence(sequence);
         }
 
         function displayDigitSequence(sequence) {
@@ -344,7 +348,8 @@
             const maxLength = Math.max(...digitSpanData.responses.filter(r => r.correct).map(r => r.length));
             const totalCorrect = digitSpanData.responses.filter(r => r.correct).length;
             testResults.digitSpan = { participantData, maxSpan: maxLength, totalCorrect, totalTrials: digitSpanData.responses.length, responses: digitSpanData.responses, startTime: digitSpanData.startTime, endTime: new Date() };
-            allResults.digitSpan = testResults.digitSpan; completedTests.push('Digit Span Test'); showResults('digitspan');
+            allResults.digitSpan = testResults.digitSpan; completedTests.push('Digit Span Test'); 
+            showResults('digitspan');
         }
 
         function startFlankerTest() {
@@ -355,87 +360,51 @@
         }
 
         function generateFlankerTrials() {
-            // 더 다양하고 균형잡힌 Flanker 조합 생성
             const congruent = [
-                // 전체 일치 조건 (가운데와 양옆이 같은 방향)
-                '<span>←</span><span>←</span><span>←</span><span>←</span><span>←</span>',  // 모두 왼쪽
-                '<span>→</span><span>→</span><span>→</span><span>→</span><span>→</span>'   // 모두 오른쪽
+                '<span>←</span><span>←</span><span>←</span><span>←</span><span>←</span>',
+                '<span>→</span><span>→</span><span>→</span><span>→</span><span>→</span>'
             ];
             
             const incongruent = [
-                // 가운데가 왼쪽(←)인 불일치 조건들
-                '<span>→</span><span>→</span><span>←</span><span>→</span><span>→</span>',  // 클래식 패턴
-                '<span>→</span><span>←</span><span>←</span><span>←</span><span>→</span>',  // 혼합 패턴 1
-                '<span>←</span><span>→</span><span>←</span><span>→</span><span>←</span>',  // 교대 패턴 1
-                '<span>→</span><span>→</span><span>←</span><span>←</span><span>→</span>',  // 비대칭 패턴 1
-                '<span>←</span><span>→</span><span>←</span><span>→</span><span>→</span>',  // 비대칭 패턴 2
-                '<span>→</span><span>←</span><span>←</span><span>→</span><span>←</span>',  // 복잡 패턴 1
-                
-                // 가운데가 오른쪽(→)인 불일치 조건들  
-                '<span>←</span><span>←</span><span>→</span><span>←</span><span>←</span>',  // 클래식 패턴
-                '<span>←</span><span>→</span><span>→</span><span>→</span><span>←</span>',  // 혼합 패턴 2
-                '<span>→</span><span>←</span><span>→</span><span>←</span><span>→</span>',  // 교대 패턴 2
-                '<span>←</span><span>←</span><span>→</span><span>→</span><span>←</span>',  // 비대칭 패턴 3
-                '<span>→</span><span>←</span><span>→</span><span>←</span><span>←</span>',  // 비대칭 패턴 4
-                '<span>←</span><span>→</span><span>→</span><span>←</span><span>→</span>'   // 복잡 패턴 2
+                '<span>→</span><span>→</span><span>←</span><span>→</span><span>→</span>',
+                '<span>→</span><span>←</span><span>←</span><span>←</span><span>→</span>',
+                '<span>←</span><span>→</span><span>←</span><span>→</span><span>←</span>',
+                '<span>→</span><span>→</span><span>←</span><span>←</span><span>→</span>',
+                '<span>←</span><span>→</span><span>←</span><span>→</span><span>→</span>',
+                '<span>→</span><span>←</span><span>←</span><span>→</span><span>←</span>',
+                '<span>←</span><span>←</span><span>→</span><span>←</span><span>←</span>',
+                '<span>←</span><span>→</span><span>→</span><span>→</span><span>←</span>',
+                '<span>→</span><span>←</span><span>→</span><span>←</span><span>→</span>',
+                '<span>←</span><span>←</span><span>→</span><span>→</span><span>←</span>',
+                '<span>→</span><span>←</span><span>→</span><span>←</span><span>←</span>',
+                '<span>←</span><span>→</span><span>→</span><span>←</span><span>→</span>'
             ];
             
-            // 조건별 균등 분배 (총 80회 시행)
-            const trialsPerCondition = {
-                congruent: 20,      // 일치 조건 20회
-                incongruent: 60     // 불일치 조건 60회 (더 도전적)
-            };
-            
-            // 일치 조건 생성 (각 패턴 10회씩)
-            for (let i = 0; i < trialsPerCondition.congruent; i++) {
-                const stimIndex = i % congruent.length;
-                const stimulus = congruent[stimIndex];
-                const centerArrow = stimulus.includes('<span>←</span><span>←</span><span>←</span>') ? '←' : '→';
-                
+            for (let i = 0; i < 20; i++) {
+                const congStim = congruent[Math.floor(Math.random() * 2)];
+                const congCenter = congStim.includes('<span>←</span><span>←</span><span>←</span>') ? '←' : '→';
                 flankerData.stimuli.push({
-                    stimulus: stimulus,
+                    stimulus: congStim,
                     condition: 'congruent',
-                    centerArrow: centerArrow,
-                    correctResponse: centerArrow === '←' ? 'KeyQ' : 'KeyP'
+                    centerArrow: congCenter,
+                    correctResponse: congCenter === '←' ? 'KeyQ' : 'KeyP'
                 });
             }
             
-            // 불일치 조건 생성 (각 패턴 5회씩)
-            for (let i = 0; i < trialsPerCondition.incongruent; i++) {
-                const stimIndex = i % incongruent.length;
-                const stimulus = incongruent[stimIndex];
-                
-                // 가운데(3번째) 화살표 추출
-                let centerArrow;
-                if (stimulus.includes('<span>←</span><span>←</span><span>←</span>') || 
-                    stimulus.includes('<span>→</span><span>←</span><span>←</span>') ||
-                    stimulus.includes('<span>←</span><span>→</span><span>←</span>') ||
-                    stimulus.includes('<span>→</span><span>→</span><span>←</span>') ||
-                    stimulus.includes('<span>←</span><span>←</span><span>→</span><span>→</span><span>←</span>') ||
-                    stimulus.includes('<span>→</span><span>←</span><span>→</span><span>←</span><span>←</span>') ||
-                    stimulus.includes('<span>←</span><span>→</span><span>→</span><span>←</span><span>→</span>')) {
-                    // 패턴 분석으로 가운데 화살표 결정
-                    const arrows = stimulus.match(/<span>([←→])<\/span>/g);
-                    centerArrow = arrows[2].includes('←') ? '←' : '→'; // 3번째(인덱스 2) 요소
-                } else {
-                    // 직접 매칭으로 확인
-                    centerArrow = stimulus.includes('><span>←</span><') ? '←' : '→';
-                }
+            for (let i = 0; i < 60; i++) {
+                const incongStim = incongruent[Math.floor(Math.random() * incongruent.length)];
+                const arrows = incongStim.match(/<span>([←→])<\/span>/g);
+                const centerArrow = arrows[2].includes('←') ? '←' : '→';
                 
                 flankerData.stimuli.push({
-                    stimulus: stimulus,
+                    stimulus: incongStim,
                     condition: 'incongruent', 
                     centerArrow: centerArrow,
                     correctResponse: centerArrow === '←' ? 'KeyQ' : 'KeyP'
                 });
             }
             
-            // 시행 순서 무작위 섞기
             flankerData.stimuli = flankerData.stimuli.sort(() => Math.random() - 0.5);
-            
-            console.log(`Flanker 시행 생성 완료: 총 ${flankerData.stimuli.length}개`);
-            console.log(`- 일치 조건: ${flankerData.stimuli.filter(s => s.condition === 'congruent').length}개`);
-            console.log(`- 불일치 조건: ${flankerData.stimuli.filter(s => s.condition === 'incongruent').length}개`);
         }
 
         function showNextFlankerTrial() {
@@ -443,9 +412,8 @@
             const stimulus = document.getElementById('flankerStimulus');
             stimulus.textContent = '+';
             setTimeout(() => {
-                const stimulus = document.getElementById('flankerStimulus');
                 const currentStimulus = flankerData.stimuli[flankerData.currentTrial];
-                stimulus.innerHTML = currentStimulus.stimulus; // innerHTML 사용
+                stimulus.innerHTML = currentStimulus.stimulus;
                 flankerData.stimulusStartTime = performance.now();
                 document.getElementById('flankerProgress').style.width = (flankerData.currentTrial / flankerData.totalTrials) * 100 + '%';
                 document.getElementById('flankerTrialCount').textContent = flankerData.currentTrial + 1;
@@ -471,7 +439,8 @@
             const congruentRT = congruentTrials.filter(r => r.correct).reduce((sum, r) => sum + r.reactionTime, 0) / congruentTrials.filter(r => r.correct).length;
             const incongruentRT = incongruentTrials.filter(r => r.correct).reduce((sum, r) => sum + r.reactionTime, 0) / incongruentTrials.filter(r => r.correct).length;
             testResults.flanker = { participantData, totalAccuracy: correctResponses.length / responses.length, congruentAccuracy, incongruentAccuracy, meanReactionTime: correctResponses.reduce((sum, r) => sum + r.reactionTime, 0) / correctResponses.length, congruentRT, incongruentRT, flankerEffect: incongruentRT - congruentRT, responses, startTime: flankerData.startTime, endTime: new Date() };
-            allResults.flanker = testResults.flanker; completedTests.push('Flanker Task'); showResults('flanker');
+            allResults.flanker = testResults.flanker; completedTests.push('Flanker Task'); 
+            showResults('flanker');
         }
 
         function showResults(testType) {
@@ -522,7 +491,6 @@
                 csv += 'TestName,KeyResult,Accuracy\nDigit Span Test,Max Span: ' + ds.maxSpan + ',' + Math.round(ds.totalCorrect/ds.totalTrials*100) + '%\n';
                 csv += 'Flanker Task,Flanker Effect: ' + Math.round(fl.flankerEffect) + 'ms,' + Math.round(fl.totalAccuracy*100) + '%\n\n';
                 
-                // 상세 결과 추가
                 csv += '=== DIGIT SPAN DETAILED RESULTS ===\nTrial,Length,Sequence,Response,Correct\n';
                 ds.responses.forEach((r, i) => { csv += `${i+1},${r.length},"${r.sequence.join('')}","${r.response}",${r.correct ? 'O' : 'X'}\n`; });
                 
@@ -571,7 +539,8 @@
             }
         });
 
-        console.log('Part 3: 작업 기억 과제 준비 완료 (Digit Span: 3-10자리, Flanker: Q/P 키)');
+        console.log('Part 3: 작업 기억 과제 준비 완료');
+        console.log('안전한 버전으로 로드되었습니다.');
     </script>
 </body>
 </html>

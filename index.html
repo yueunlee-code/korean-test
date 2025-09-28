@@ -123,7 +123,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>한국어 C-Test 온라인 평가</h1>
+            <h1>Part 2. 숙달도 과제</h1>
+            <h2 style="color: #6c757d; font-size: 1.3em; margin-top: 10px;">한국어 C-Test 온라인 평가</h2>
         </div>
 
         <div id="startForm">
@@ -151,9 +152,9 @@
                         <option value="">선택하세요</option>
                         <option value="6개월 미만">6개월 미만</option>
                         <option value="6개월-1년">6개월-1년</option>
-                        <option value="1-3년">1-3년</option>
-                        <option value="3-5년">3-5년</option>
-                        <option value="5년 이상">5년 이상</option>
+                        <option value="1-2년">1-2년</option>
+                        <option value="2-3년">2-3년</option>
+                        <option value="3년 이상">3년 이상</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -219,7 +220,23 @@
             <p>사용 시간: <span id="timeUsed">0</span>분</p>
             <br>
             <button class="btn" onclick="downloadCSV()">결과 다운로드 (CSV)</button>
-            <button class="btn" onclick="location.reload()">다시 시작</button>
+            
+            <!-- Part 3 안내 메시지 추가 -->
+            <div style="background: #e8f5e8; border: 2px solid #4caf50; padding: 20px; border-radius: 10px; margin: 30px 0; text-align: center;">
+                <h3 style="color: #2e7d32; margin-bottom: 15px;">수고 많으셨습니다. Part 2가 마무리 되었습니다.</h3>
+                <p style="color: #388e3c; font-size: 1.1em; margin-bottom: 20px;">이제 Part 3. 작업 기억 과제 (15분)로 이동합니다.</p>
+                <a href="https://yueunlee-code.github.io/korean-test/part3/" 
+                   class="btn" 
+                   style="background: #4caf50; text-decoration: none; display: inline-block; margin: 10px;">
+                   Part 3. 작업 기억 과제 시작하기
+                </a>
+                <br>
+                <small style="color: #666; margin-top: 10px; display: block;">
+                    링크: https://yueunlee-code.github.io/korean-test/part3/
+                </small>
+            </div>
+            
+            <button class="btn" onclick="location.reload()" style="background: #6c757d;">다시 시작</button>
         </div>
     </div>
 
@@ -392,6 +409,9 @@
 
             localStorage.setItem(`result_${userData.pid}_${Date.now()}`, JSON.stringify(window.testResult));
 
+            // Google Sheets 자동 백업
+            sendToGoogleSheets(window.testResult, 'C-Test');
+
             document.getElementById('testArea').style.display = 'none';
             document.getElementById('resultArea').style.display = 'block';
             document.getElementById('score').textContent = percentage + '%';
@@ -486,7 +506,44 @@
             window.URL.revokeObjectURL(url);
         }
 
-        console.log('한국어 C-Test가 준비되었습니다.');
+        // Google Sheets 통합 연동 함수
+        function sendToGoogleSheets(testResults, testType) {
+            // 실제 Google Apps Script URL로 교체 필요
+            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbysAGTa67iRkJDmjEjlJU051dW_AqWXW6m7dEgcbFXsTHzCen9mtvzzsq2sirbqKcB38Q/exec';
+            
+            const summary = testType === 'C-Test' ? 
+                `C-Test 정답: ${testResults.correctCount}/${testResults.totalCount}, 정답률: ${testResults.percentage}%, 소요시간: ${testResults.timeUsed}분` :
+                `${testType} 완료`;
+            
+            const payload = {
+                participantId: testResults.userData.pid,
+                participantName: testResults.userData.pname,
+                testType: testType,
+                summary: summary,
+                details: {
+                    participantInfo: testResults.userData,
+                    testResults: testResults,
+                    timestamp: new Date().toISOString(),
+                    site: 'korean-test-main'
+                }
+            };
+            
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.text())
+            .then(result => {
+                console.log(`${testType} 결과가 성공적으로 백업되었습니다.`);
+            })
+            .catch(error => {
+                console.log('백업 실패 (참여자에게는 영향 없음):', error);
+            });
+        }
+
+        console.log('한국어 C-Test가 로드되었습니다.');
+        console.log('Google Sheets 자동 백업 기능이 준비되었습니다.');
     </script>
 </body>
 </html>

@@ -152,9 +152,9 @@
                         <option value="">선택하세요</option>
                         <option value="6개월 미만">6개월 미만</option>
                         <option value="6개월-1년">6개월-1년</option>
-                        <option value="1-3년">1-3년</option>
-                        <option value="3-5년">3-5년</option>
-                        <option value="5년 이상">5년 이상</option>
+                        <option value="1-2년">1-2년</option>
+                        <option value="2-3년">2-3년</option>
+                        <option value="3년 이상">3년 이상</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -527,7 +527,6 @@
 
         // Google Sheets 통합 연동 함수
         function sendToGoogleSheets(testResults, testType) {
-            // 실제 Google Apps Script URL로 교체 필요
             const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbysAGTa67iRkJDmjEjlJU051dW_AqWXW6m7dEgcbFXsTHzCen9mtvzzsq2sirbqKcB38Q/exec';
             
             const summary = testType === 'C-Test' ? 
@@ -547,17 +546,24 @@
                 }
             };
             
+            console.log('Google Sheets 백업 시도 중...', payload);
+            
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                mode: 'no-cors', // CORS 이슈 해결
+                headers: { 
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify(payload)
             })
-            .then(response => response.text())
-            .then(result => {
-                console.log(`${testType} 결과가 성공적으로 백업되었습니다.`);
+            .then(response => {
+                console.log(`${testType} 결과 백업 요청이 전송되었습니다.`);
+                // no-cors 모드에서는 response를 읽을 수 없음
+                return 'success';
             })
             .catch(error => {
-                console.log('백업 실패 (참여자에게는 영향 없음):', error);
+                console.error('백업 실패:', error);
+                // 에러가 발생해도 사용자에게는 알리지 않음 (백업은 부가 기능)
             });
         }
 

@@ -27,27 +27,8 @@
         .form-group input { padding: 10px; width: 100%; max-width: 300px; border: 1px solid #ddd; border-radius: 5px; }
         .test-screen { display: none; min-height: 80vh; justify-content: center; align-items: center; }
         .stimulus-display { font-size: 4em; font-weight: bold; color: #2c3e50; min-height: 200px; display: flex; align-items: center; justify-content: center; margin: 40px 0; }
-        
-        .flanker-stimulus { 
-            font-family: 'Courier New', monospace; 
-            font-weight: bold; 
-            color: #2c3e50; 
-            line-height: 1.2;
-            font-size: clamp(2em, 6vw, 4em);
-            max-width: 100%;
-            overflow: hidden;
-            white-space: nowrap;
-            letter-spacing: 0.2em;
-            display: inline-block;
-            text-align: center;
-        }
-        
-        .flanker-stimulus span {
-            display: inline-block;
-            margin: 0 0.1em;
-            font-size: inherit;
-        }
-        
+        .flanker-stimulus { font-family: 'Courier New', monospace; font-weight: bold; color: #2c3e50; line-height: 1.2; font-size: clamp(2em, 6vw, 4em); max-width: 100%; overflow: hidden; white-space: nowrap; letter-spacing: 0.2em; display: inline-block; text-align: center; }
+        .flanker-stimulus span { display: inline-block; margin: 0 0.1em; font-size: inherit; }
         .instructions { background: #fff3cd; border: 1px solid #ffeeba; padding: 25px; border-radius: 15px; margin: 25px 0; color: #856404; }
         .instructions h3 { color: #856404; margin-bottom: 15px; font-size: 1.3em; }
         .instructions p { margin-bottom: 12px; line-height: 1.6; }
@@ -70,45 +51,19 @@
         .completion-status { background: #d4edda; border: 1px solid #c3e6cb; padding: 15px; border-radius: 10px; margin: 20px 0; color: #155724; }
         .example-section { background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #e9ecef; }
         .example-section h4 { color: #2c3e50; margin-bottom: 15px; }
-        
-        .flanker-example { 
-            font-family: 'Courier New', monospace; 
-            font-size: clamp(1.8em, 4vw, 2.5em); 
-            margin: 15px 0; 
-            letter-spacing: 0.3em; 
-            max-width: 100%;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-        
+        .flanker-example { font-family: 'Courier New', monospace; font-size: clamp(1.8em, 4vw, 2.5em); margin: 15px 0; letter-spacing: 0.3em; max-width: 100%; overflow: hidden; white-space: nowrap; }
         .correct-answer { color: #28a745; font-weight: bold; }
-        
         @media (max-width: 768px) { 
             .test-selection { grid-template-columns: 1fr; } 
             .stimulus-display { font-size: 2.5em; } 
-            .flanker-stimulus { 
-                font-size: clamp(1.5em, 8vw, 2.5em);
-                letter-spacing: 0.1em;
-            } 
-            .flanker-example {
-                font-size: clamp(1.2em, 6vw, 1.8em);
-                letter-spacing: 0.2em;
-            }
+            .flanker-stimulus { font-size: clamp(1.5em, 8vw, 2.5em); letter-spacing: 0.1em; } 
+            .flanker-example { font-size: clamp(1.2em, 6vw, 1.8em); letter-spacing: 0.2em; }
             .key-demo { flex-direction: column; gap: 15px; } 
-            .container {
-                padding: 20px;
-                width: 95%;
-            }
+            .container { padding: 20px; width: 95%; }
         }
-        
         @media (max-width: 480px) {
-            .flanker-stimulus {
-                font-size: clamp(1.2em, 10vw, 2em);
-                letter-spacing: 0.05em;
-            }
-            .flanker-stimulus span {
-                margin: 0;
-            }
+            .flanker-stimulus { font-size: clamp(1.2em, 10vw, 2em); letter-spacing: 0.05em; }
+            .flanker-stimulus span { margin: 0; }
         }
     </style>
 </head>
@@ -198,7 +153,6 @@
                     <p><strong>중요:</strong> 주변 화살표는 무시하고 오직 <u>가운데 화살표</u>만 보세요!</p>
                     <p><strong>총 시행:</strong> 80회 (약 7-8분 소요)</p>
                 </div>
-                
                 <div class="key-instruction">
                     <h4>🎮 키보드 조작법</h4>
                     <div class="key-demo">
@@ -214,33 +168,27 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="example-section">
                     <h4>📚 예시 문제</h4>
                     <p><strong>문제 1:</strong></p>
                     <div class="flanker-example">←←←←←</div>
                     <p>가운데 화살표: <span class="correct-answer">← (왼쪽)</span> → <strong>Q키</strong> 누르기</p>
-                    
                     <p style="margin-top: 20px;"><strong>문제 2:</strong></p>
                     <div class="flanker-example">←←→←←</div>
                     <p>가운데 화살표: <span class="correct-answer">→ (오른쪽)</span> → <strong>P키</strong> 누르기</p>
-                    
                     <p style="margin-top: 20px;"><strong>문제 3:</strong></p>
                     <div class="flanker-example">→→←→→</div>
                     <p>가운데 화살표: <span class="correct-answer">← (왼쪽)</span> → <strong>Q키</strong> 누르기</p>
                 </div>
-
                 <div class="instructions" style="background: #ffe6e6; border-color: #ff9999;">
                     <h3 style="color: #cc0000;">⚠️ 주의사항</h3>
                     <p style="color: #cc0000;"><strong>속도와 정확성</strong> 모두 중요합니다!</p>
                     <p style="color: #cc0000;">주변 화살표에 <strong>속지 마세요</strong> - 오직 가운데만!</p>
                     <p style="color: #cc0000;">Q키(왼쪽), P키(오른쪽)를 <strong>빠르게</strong> 눌러주세요</p>
                 </div>
-                
                 <button class="btn" onclick="startFlankerTest()">테스트 시작</button>
                 <button class="btn" onclick="returnToStart()" style="background: #6c757d;">돌아가기</button>
             </div>
-            
             <div id="flankerGame" style="display: none;">
                 <h2>Flanker Task</h2>
                 <div class="progress">
@@ -272,11 +220,54 @@
         let digitSpanData = { currentLength: 3, currentTrial: 1, maxTrialsPerLength: 2, maxLength: 10, errors: 0, sequences: [], responses: [], startTime: null };
         let flankerData = { currentTrial: 0, totalTrials: 80, stimuli: [], responses: [], startTime: null, stimulusStartTime: null };
 
+        // ==================== Google Sheets 연동 함수 ====================
+        function sendToGoogleSheets(testResults, testType) {
+            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxayKeCpfgoZzglL04WA6UpZE8ElxOgFxb5Y5A3kyMrgJ3Yl0E6tZaSFC1BxZFbaUTraA/exec';
+            
+            let summary = '';
+            if (testType === 'Digit-Span') {
+                summary = `Digit Span: ${testResults.maxSpan}자리, 정답률: ${Math.round(testResults.totalCorrect/testResults.totalTrials*100)}%`;
+            } else if (testType === 'Flanker') {
+                summary = `Flanker: 정답률 ${Math.round(testResults.totalAccuracy*100)}%, 평균RT ${Math.round(testResults.meanReactionTime)}ms`;
+            }
+            
+            const payload = {
+                participantId: testResults.participantData.pid,
+                participantName: testResults.participantData.name,
+                testType: testType,
+                summary: summary,
+                details: JSON.stringify({
+                    participantInfo: testResults.participantData,
+                    testResults: testResults,
+                    timestamp: new Date().toISOString(),
+                    site: 'korean-test-part3'
+                })
+            };
+            
+            console.log('Google Sheets 전송 시도:', payload);
+            
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                console.log(`${testType} 결과가 Google Sheets에 전송되었습니다.`);
+                alert(`${testType} 결과가 저장되었습니다!`);
+            })
+            .catch(error => {
+                console.error('Google Sheets 전송 실패:', error);
+                alert('결과 저장 중 오류가 발생했습니다.');
+            });
+        }
+
         function selectTest(testType) {
             const pid = document.getElementById('participantId').value.trim();
             const name = document.getElementById('participantName').value.trim();
             if (!pid || !name) { alert('참여자 정보를 모두 입력해주세요.'); return; }
-            participantData = { pid, name }; currentTest = testType;
+            participantData = { pid, name }; 
+            currentTest = testType;
             document.getElementById('startScreen').style.display = 'none';
             document.getElementById(testType === 'digitspan' ? 'digitSpanTest' : 'flankerTest').style.display = 'block';
             startOverallTimer();
@@ -286,7 +277,8 @@
             if (!overallInterval) {
                 document.getElementById('overallTimer').style.display = 'block';
                 overallInterval = setInterval(() => {
-                    overallTimer--; const min = Math.floor(overallTimer / 60), sec = overallTimer % 60;
+                    overallTimer--;
+                    const min = Math.floor(overallTimer / 60), sec = overallTimer % 60;
                     document.getElementById('overallTimer').textContent = `남은 시간: ${min}:${sec < 10 ? '0' : ''}${sec}`;
                     if (overallTimer <= 0) { clearInterval(overallInterval); alert('시간 종료!'); finishCurrentTest(); }
                 }, 1000);
@@ -296,67 +288,145 @@
         function startDigitSpanTest() {
             document.getElementById('digitSpanInstructions').style.display = 'none';
             document.getElementById('digitSpanGame').style.display = 'block';
-            digitSpanData.startTime = new Date(); digitSpanData.currentLength = 3; digitSpanData.currentTrial = 1; digitSpanData.errors = 0;
-            digitSpanData.sequences = []; digitSpanData.responses = []; generateDigitSequence();
+            digitSpanData.startTime = new Date(); 
+            digitSpanData.currentLength = 3; 
+            digitSpanData.currentTrial = 1; 
+            digitSpanData.errors = 0;
+            digitSpanData.sequences = []; 
+            digitSpanData.responses = []; 
+            generateDigitSequence();
         }
 
         function generateDigitSequence() {
             const sequence = [];
             let previousDigit = null;
-            
             for (let i = 0; i < digitSpanData.currentLength; i++) {
                 let digit;
                 do {
-                    digit = Math.floor(Math.random() * 9) + 1; // 1-9 사이의 숫자
-                } while (digit === previousDigit); // 이전 숫자와 같으면 다시 생성
-                
+                    digit = Math.floor(Math.random() * 9) + 1;
+                } while (digit === previousDigit);
                 sequence.push(digit);
                 previousDigit = digit;
             }
-            
             digitSpanData.sequences.push(sequence); 
             displayDigitSequence(sequence);
         }
 
         function displayDigitSequence(sequence) {
-            const display = document.getElementById('digitDisplay'), responseArea = document.getElementById('digitResponseArea');
-            responseArea.style.display = 'none'; document.getElementById('digitFeedback').textContent = ''; display.textContent = '준비하세요...';
+            const display = document.getElementById('digitDisplay');
+            const responseArea = document.getElementById('digitResponseArea');
+            responseArea.style.display = 'none'; 
+            document.getElementById('digitFeedback').textContent = ''; 
+            display.textContent = '준비하세요...';
             document.getElementById('currentLength').textContent = digitSpanData.currentLength;
             document.getElementById('currentTrial').textContent = digitSpanData.currentTrial;
+            
             setTimeout(() => {
-                let index = 0; const showNextDigit = () => {
-                    if (index < sequence.length) { display.textContent = sequence[index]; index++; setTimeout(showNextDigit, 1000); }
-                    else { display.textContent = '입력하세요'; responseArea.style.display = 'block'; document.getElementById('digitInput').focus(); }
-                }; showNextDigit();
+                let index = 0; 
+                const showNextDigit = () => {
+                    if (index < sequence.length) { 
+                        display.textContent = sequence[index]; 
+                        index++; 
+                        setTimeout(showNextDigit, 1000); 
+                    } else { 
+                        display.textContent = '입력하세요'; 
+                        responseArea.style.display = 'block'; 
+                        document.getElementById('digitInput').value = '';
+                        document.getElementById('digitInput').focus(); 
+                    }
+                }; 
+                showNextDigit();
             }, 1500);
         }
 
         function submitDigitResponse() {
-            const input = document.getElementById('digitInput'), response = input.value.trim();
+            const input = document.getElementById('digitInput');
+            const response = input.value.trim();
             if (!response) { alert('숫자를 입력해주세요.'); return; }
-            const sequence = digitSpanData.sequences[digitSpanData.sequences.length - 1], correctAnswer = sequence.join(''), isCorrect = response === correctAnswer;
-            digitSpanData.responses.push({ sequence, response, correct: isCorrect, length: digitSpanData.currentLength, trial: digitSpanData.currentTrial, timestamp: new Date() });
+            
+            const sequence = digitSpanData.sequences[digitSpanData.sequences.length - 1];
+            const correctAnswer = sequence.join('');
+            const isCorrect = response === correctAnswer;
+            
+            digitSpanData.responses.push({ 
+                sequence, 
+                response, 
+                correct: isCorrect, 
+                length: digitSpanData.currentLength, 
+                trial: digitSpanData.currentTrial, 
+                timestamp: new Date() 
+            });
+            
             const feedback = document.getElementById('digitFeedback');
-            if (isCorrect) { feedback.textContent = '✅ 정답입니다!'; feedback.className = 'feedback correct'; digitSpanData.currentTrial = 1; digitSpanData.currentLength++; digitSpanData.errors = 0; }
-            else { feedback.textContent = `❌ 오답입니다. 정답: ${correctAnswer}`; feedback.className = 'feedback incorrect'; digitSpanData.errors++; if (digitSpanData.errors >= 2) { finishDigitSpanTest(); return; } else digitSpanData.currentTrial++; }
-            const totalExpectedLengths = digitSpanData.maxLength - 3 + 1; const currentProgress = (digitSpanData.currentLength - 3) / totalExpectedLengths * 100;
-            document.getElementById('digitSpanProgress').style.width = Math.min(currentProgress, 100) + '%'; input.value = '';
-            setTimeout(() => { if (digitSpanData.currentLength > digitSpanData.maxLength) finishDigitSpanTest(); else generateDigitSequence(); }, 2000);
+            
+            if (isCorrect) { 
+                feedback.textContent = '✅ 정답입니다!'; 
+                feedback.className = 'feedback correct'; 
+                digitSpanData.currentTrial = 1; 
+                digitSpanData.currentLength++; 
+                digitSpanData.errors = 0; 
+            } else { 
+                feedback.textContent = `❌ 오답입니다. 정답: ${correctAnswer}`; 
+                feedback.className = 'feedback incorrect'; 
+                digitSpanData.errors++; 
+                
+                if (digitSpanData.errors >= 2) { 
+                    finishDigitSpanTest(); 
+                    return; 
+                } else {
+                    digitSpanData.currentTrial++; 
+                }
+            }
+            
+            const totalExpectedLengths = digitSpanData.maxLength - 3 + 1; 
+            const currentProgress = (digitSpanData.currentLength - 3) / totalExpectedLengths * 100;
+            document.getElementById('digitSpanProgress').style.width = Math.min(currentProgress, 100) + '%'; 
+            input.value = '';
+            
+            setTimeout(() => { 
+                if (digitSpanData.currentLength > digitSpanData.maxLength) {
+                    finishDigitSpanTest(); 
+                } else {
+                    generateDigitSequence(); 
+                }
+            }, 2000);
         }
 
         function finishDigitSpanTest() {
             const maxLength = Math.max(...digitSpanData.responses.filter(r => r.correct).map(r => r.length));
             const totalCorrect = digitSpanData.responses.filter(r => r.correct).length;
-            testResults.digitSpan = { participantData, maxSpan: maxLength, totalCorrect, totalTrials: digitSpanData.responses.length, responses: digitSpanData.responses, startTime: digitSpanData.startTime, endTime: new Date() };
-            allResults.digitSpan = testResults.digitSpan; completedTests.push('Digit Span Test'); 
+            
+            testResults.digitSpan = { 
+                participantData, 
+                maxSpan: maxLength, 
+                totalCorrect, 
+                totalTrials: digitSpanData.responses.length, 
+                responses: digitSpanData.responses, 
+                startTime: digitSpanData.startTime, 
+                endTime: new Date() 
+            };
+            
+            allResults.digitSpan = testResults.digitSpan; 
+            
+            // 중복 방지: 배열에 없을 때만 추가
+            if (!completedTests.includes('Digit Span Test')) {
+                completedTests.push('Digit Span Test');
+            }
+            
+            sendToGoogleSheets(testResults.digitSpan, 'Digit-Span');
             showResults('digitspan');
         }
 
         function startFlankerTest() {
             document.getElementById('flankerInstructions').style.display = 'none';
             document.getElementById('flankerGame').style.display = 'block';
-            flankerData.startTime = new Date(); flankerData.currentTrial = 0; flankerData.responses = []; flankerData.stimuli = [];
-            generateFlankerTrials(); showNextFlankerTrial(); document.addEventListener('keydown', handleFlankerResponse);
+            flankerData.startTime = new Date(); 
+            flankerData.currentTrial = 0; 
+            flankerData.responses = []; 
+            flankerData.stimuli = [];
+            generateFlankerTrials(); 
+            showNextFlankerTrial(); 
+            document.addEventListener('keydown', handleFlankerResponse);
         }
 
         function generateFlankerTrials() {
@@ -367,180 +437,186 @@
             
             const incongruent = [
                 '<span>→</span><span>→</span><span>←</span><span>→</span><span>→</span>',
-                '<span>→</span><span>←</span><span>←</span><span>←</span><span>→</span>',
-                '<span>←</span><span>→</span><span>←</span><span>→</span><span>←</span>',
-                '<span>→</span><span>→</span><span>←</span><span>←</span><span>→</span>',
-                '<span>←</span><span>→</span><span>←</span><span>→</span><span>→</span>',
-                '<span>→</span><span>←</span><span>←</span><span>→</span><span>←</span>',
-                '<span>←</span><span>←</span><span>→</span><span>←</span><span>←</span>',
-                '<span>←</span><span>→</span><span>→</span><span>→</span><span>←</span>',
-                '<span>→</span><span>←</span><span>→</span><span>←</span><span>→</span>',
-                '<span>←</span><span>←</span><span>→</span><span>→</span><span>←</span>',
-                '<span>→</span><span>←</span><span>→</span><span>←</span><span>←</span>',
-                '<span>←</span><span>→</span><span>→</span><span>←</span><span>→</span>'
+                '<span>←</span><span>←</span><span>→</span><span>←</span><span>←</span>'
             ];
             
-            for (let i = 0; i < 20; i++) {
-                const congStim = congruent[Math.floor(Math.random() * 2)];
-                const congCenter = congStim.includes('<span>←</span><span>←</span><span>←</span>') ? '←' : '→';
-                flankerData.stimuli.push({
-                    stimulus: congStim,
-                    condition: 'congruent',
-                    centerArrow: congCenter,
-                    correctResponse: congCenter === '←' ? 'KeyQ' : 'KeyP'
-                });
+            for (let i = 0; i < flankerData.totalTrials / 2; i++) {
+                flankerData.stimuli.push({ stimulus: congruent[0], correctAnswer: 'q', type: 'congruent' });
+                flankerData.stimuli.push({ stimulus: congruent[1], correctAnswer: 'p', type: 'congruent' });
+                flankerData.stimuli.push({ stimulus: incongruent[0], correctAnswer: 'q', type: 'incongruent' });
+                flankerData.stimuli.push({ stimulus: incongruent[1], correctAnswer: 'p', type: 'incongruent' });
             }
             
-            for (let i = 0; i < 60; i++) {
-                const incongStim = incongruent[Math.floor(Math.random() * incongruent.length)];
-                const arrows = incongStim.match(/<span>([←→])<\/span>/g);
-                const centerArrow = arrows[2].includes('←') ? '←' : '→';
-                
-                flankerData.stimuli.push({
-                    stimulus: incongStim,
-                    condition: 'incongruent', 
-                    centerArrow: centerArrow,
-                    correctResponse: centerArrow === '←' ? 'KeyQ' : 'KeyP'
-                });
+            for (let i = flankerData.stimuli.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [flankerData.stimuli[i], flankerData.stimuli[j]] = [flankerData.stimuli[j], flankerData.stimuli[i]];
             }
-            
-            flankerData.stimuli = flankerData.stimuli.sort(() => Math.random() - 0.5);
         }
 
         function showNextFlankerTrial() {
-            if (flankerData.currentTrial >= flankerData.totalTrials) { finishFlankerTest(); return; }
-            const stimulus = document.getElementById('flankerStimulus');
-            stimulus.textContent = '+';
+            if (flankerData.currentTrial >= flankerData.totalTrials) {
+                finishFlankerTest();
+                return;
+            }
+            
+            const display = document.getElementById('flankerStimulus');
+            display.innerHTML = '+';
+            
             setTimeout(() => {
-                const currentStimulus = flankerData.stimuli[flankerData.currentTrial];
-                stimulus.innerHTML = currentStimulus.stimulus;
-                flankerData.stimulusStartTime = performance.now();
-                document.getElementById('flankerProgress').style.width = (flankerData.currentTrial / flankerData.totalTrials) * 100 + '%';
-                document.getElementById('flankerTrialCount').textContent = flankerData.currentTrial + 1;
-            }, 500 + Math.random() * 1000);
+                const trial = flankerData.stimuli[flankerData.currentTrial];
+                display.innerHTML = trial.stimulus;
+                flankerData.stimulusStartTime = Date.now();
+            }, 500);
         }
 
         function handleFlankerResponse(event) {
-            if (currentTest !== 'flanker' || document.getElementById('flankerGame').style.display === 'none') return;
-            if (event.code === 'KeyQ' || event.code === 'KeyP') {
-                const reactionTime = performance.now() - flankerData.stimulusStartTime;
-                const currentStimulus = flankerData.stimuli[flankerData.currentTrial], isCorrect = event.code === currentStimulus.correctResponse;
-                flankerData.responses.push({ trial: flankerData.currentTrial, stimulus: currentStimulus.stimulus, condition: currentStimulus.condition, correctResponse: currentStimulus.correctResponse, userResponse: event.code, correct: isCorrect, reactionTime, timestamp: new Date() });
-                flankerData.currentTrial++; setTimeout(() => { showNextFlankerTrial(); }, 500);
-            }
+            if (event.key !== 'q' && event.key !== 'p') return;
+            if (flankerData.currentTrial >= flankerData.totalTrials) return;
+            if (!flankerData.stimulusStartTime) return;
+            
+            const reactionTime = Date.now() - flankerData.stimulusStartTime;
+            const trial = flankerData.stimuli[flankerData.currentTrial];
+            const isCorrect = event.key === trial.correctAnswer;
+            
+            flankerData.responses.push({
+                trial: flankerData.currentTrial + 1,
+                stimulus: trial.stimulus,
+                correctAnswer: trial.correctAnswer,
+                response: event.key,
+                correct: isCorrect,
+                reactionTime: reactionTime,
+                type: trial.type,
+                timestamp: new Date()
+            });
+            
+            flankerData.currentTrial++;
+            document.getElementById('flankerTrialCount').textContent = flankerData.currentTrial;
+            document.getElementById('flankerProgress').style.width = (flankerData.currentTrial / flankerData.totalTrials * 100) + '%';
+            
+            flankerData.stimulusStartTime = null;
+            showNextFlankerTrial();
         }
 
         function finishFlankerTest() {
             document.removeEventListener('keydown', handleFlankerResponse);
-            const responses = flankerData.responses, correctResponses = responses.filter(r => r.correct);
-            const congruentTrials = responses.filter(r => r.condition === 'congruent'), incongruentTrials = responses.filter(r => r.condition === 'incongruent');
+            
+            const correctResponses = flankerData.responses.filter(r => r.correct);
+            const totalAccuracy = correctResponses.length / flankerData.responses.length;
+            const meanReactionTime = flankerData.responses.reduce((sum, r) => sum + r.reactionTime, 0) / flankerData.responses.length;
+            
+            const congruentTrials = flankerData.responses.filter(r => r.type === 'congruent');
+            const incongruentTrials = flankerData.responses.filter(r => r.type === 'incongruent');
+            
             const congruentAccuracy = congruentTrials.filter(r => r.correct).length / congruentTrials.length;
             const incongruentAccuracy = incongruentTrials.filter(r => r.correct).length / incongruentTrials.length;
-            const congruentRT = congruentTrials.filter(r => r.correct).reduce((sum, r) => sum + r.reactionTime, 0) / congruentTrials.filter(r => r.correct).length;
-            const incongruentRT = incongruentTrials.filter(r => r.correct).reduce((sum, r) => sum + r.reactionTime, 0) / incongruentTrials.filter(r => r.correct).length;
-            testResults.flanker = { participantData, totalAccuracy: correctResponses.length / responses.length, congruentAccuracy, incongruentAccuracy, meanReactionTime: correctResponses.reduce((sum, r) => sum + r.reactionTime, 0) / correctResponses.length, congruentRT, incongruentRT, flankerEffect: incongruentRT - congruentRT, responses, startTime: flankerData.startTime, endTime: new Date() };
-            allResults.flanker = testResults.flanker; completedTests.push('Flanker Task'); 
+            
+            const congruentRT = congruentTrials.reduce((sum, r) => sum + r.reactionTime, 0) / congruentTrials.length;
+            const incongruentRT = incongruentTrials.reduce((sum, r) => sum + r.reactionTime, 0) / incongruentTrials.length;
+            
+            testResults.flanker = {
+                participantData,
+                totalAccuracy,
+                meanReactionTime,
+                congruentAccuracy,
+                incongruentAccuracy,
+                congruentRT,
+                incongruentRT,
+                flankerEffect: incongruentRT - congruentRT,
+                responses: flankerData.responses,
+                startTime: flankerData.startTime,
+                endTime: new Date()
+            };
+            
+            allResults.flanker = testResults.flanker;
+            
+            // 중복 방지: 배열에 없을 때만 추가
+            if (!completedTests.includes('Flanker Task')) {
+                completedTests.push('Flanker Task');
+            }
+            
+            sendToGoogleSheets(testResults.flanker, 'Flanker');
             showResults('flanker');
         }
 
         function showResults(testType) {
-            document.getElementById('digitSpanTest').style.display = 'none'; document.getElementById('flankerTest').style.display = 'none';
+            document.getElementById('digitSpanTest').style.display = 'none';
+            document.getElementById('flankerTest').style.display = 'none';
             document.getElementById('resultsScreen').style.display = 'block';
+            
             const resultsDiv = document.getElementById('testResults');
+            
             if (testType === 'digitspan') {
-                const result = testResults.digitSpan;
-                resultsDiv.innerHTML = `<div class="score">${result.maxSpan}</div><h3>🧠 Digit Span Test 결과</h3><p>최대 기억 범위: <strong>${result.maxSpan}자리</strong></p><p>정답률: <strong>${Math.round(result.totalCorrect/result.totalTrials*100)}%</strong></p><p>총 시행 수: ${result.totalTrials}회</p><p>소요 시간: ${Math.round((result.endTime - result.startTime)/1000)}초</p>`;
+                const results = testResults.digitSpan;
+                resultsDiv.innerHTML = `
+                    <h3>Digit Span Test 결과</h3>
+                    <div class="score">${results.maxSpan}자리</div>
+                    <p>최대 기억 범위: ${results.maxSpan}자리</p>
+                    <p>정답률: ${Math.round(results.totalCorrect / results.totalTrials * 100)}%</p>
+                    <p>총 시도 횟수: ${results.totalTrials}회</p>
+                `;
             } else if (testType === 'flanker') {
-                const result = testResults.flanker;
-                resultsDiv.innerHTML = `<div class="score">${Math.round(result.totalAccuracy*100)}%</div><h3>⚡ Flanker Task 결과</h3><p>전체 정답률: <strong>${Math.round(result.totalAccuracy*100)}%</strong></p><p>평균 반응시간: <strong>${Math.round(result.meanReactionTime)}ms</strong></p><p>Flanker 효과: <strong>${Math.round(result.flankerEffect)}ms</strong></p><p>일치 조건 정답률: <strong>${Math.round(result.congruentAccuracy*100)}%</strong></p><p>불일치 조건 정답률: <strong>${Math.round(result.incongruentAccuracy*100)}%</strong></p><p>소요 시간: ${Math.round((result.endTime - result.startTime)/1000)}초</p>`;
+                const results = testResults.flanker;
+                resultsDiv.innerHTML = `
+                    <h3>Flanker Task 결과</h3>
+                    <div class="score">${Math.round(results.totalAccuracy * 100)}%</div>
+                    <p>전체 정확도: ${Math.round(results.totalAccuracy * 100)}%</p>
+                    <p>평균 반응 시간: ${Math.round(results.meanReactionTime)}ms</p>
+                    <p>일치 조건 정확도: ${Math.round(results.congruentAccuracy * 100)}%</p>
+                    <p>불일치 조건 정확도: ${Math.round(results.incongruentAccuracy * 100)}%</p>
+                    <p>Flanker 효과: ${Math.round(results.flankerEffect)}ms</p>
+                `;
             }
         }
 
-        function finishCurrentTest() { if (currentTest === 'digitspan') finishDigitSpanTest(); else if (currentTest === 'flanker') finishFlankerTest(); }
-
         function downloadResults() {
-            const BOM = '\uFEFF'; let csv = BOM; const timestamp = new Date().toISOString();
-            if (testResults.digitSpan) {
-                const ds = testResults.digitSpan;
-                csv += '=== DIGIT SPAN TEST RESULTS ===\nParticipantID,Name,TestDate,MaxSpan,TotalCorrect,TotalTrials,Accuracy\n';
-                csv += `${ds.participantData.pid},${ds.participantData.name},${timestamp},${ds.maxSpan},${ds.totalCorrect},${ds.totalTrials},${Math.round(ds.totalCorrect/ds.totalTrials*100)}%\n\nTrial,Length,Sequence,Response,Correct\n`;
-                ds.responses.forEach((r, i) => { csv += `${i+1},${r.length},"${r.sequence.join('')}","${r.response}",${r.correct ? 'O' : 'X'}\n`; });
-            }
-            if (testResults.flanker) {
-                const fl = testResults.flanker;
-                csv += '\n=== FLANKER TASK RESULTS ===\nParticipantID,Name,TestDate,TotalAccuracy,MeanRT,FlankerEffect,CongruentAccuracy,IncongruentAccuracy\n';
-                csv += `${fl.participantData.pid},${fl.participantData.name},${timestamp},${Math.round(fl.totalAccuracy*100)}%,${Math.round(fl.meanReactionTime)}ms,${Math.round(fl.flankerEffect)}ms,${Math.round(fl.congruentAccuracy*100)}%,${Math.round(fl.incongruentAccuracy*100)}%\n\nTrial,Stimulus,Condition,CorrectKey,UserKey,Correct,ReactionTime\n`;
-                fl.responses.forEach(r => { 
-                    const correctKey = r.correctResponse === 'KeyQ' ? 'Q' : 'P';
-                    const userKey = r.userResponse === 'KeyQ' ? 'Q' : 'P';
-                    csv += `${r.trial+1},"${r.stimulus}",${r.condition},${correctKey},${userKey},${r.correct ? 'O' : 'X'},${Math.round(r.reactionTime)}ms\n`; 
-                });
-            }
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const url = window.URL.createObjectURL(blob); const a = document.createElement('a');
-            a.href = url; a.download = `WorkingMemoryTest_${participantData.pid}_${new Date().toISOString().slice(0,10)}.csv`;
-            a.click(); window.URL.revokeObjectURL(url);
+            const testType = currentTest === 'digitspan' ? 'digitSpan' : 'flanker';
+            const results = testResults[testType];
+            const dataStr = JSON.stringify(results, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${participantData.pid}_${testType}_${new Date().toISOString().slice(0,10)}.json`;
+            link.click();
         }
 
         function downloadAllResults() {
-            if (Object.keys(allResults).length === 0) { alert('완료된 테스트가 없습니다.'); return; }
-            const BOM = '\uFEFF'; let csv = BOM + '=== 작업 기억 과제 전체 결과 ===\nParticipantID,Name,CompletedTests\n';
-            csv += `${participantData.pid},${participantData.name},"${completedTests.join(', ')}"\n\n`;
-            if (allResults.digitSpan && allResults.flanker) {
-                const ds = allResults.digitSpan, fl = allResults.flanker;
-                csv += 'TestName,KeyResult,Accuracy\nDigit Span Test,Max Span: ' + ds.maxSpan + ',' + Math.round(ds.totalCorrect/ds.totalTrials*100) + '%\n';
-                csv += 'Flanker Task,Flanker Effect: ' + Math.round(fl.flankerEffect) + 'ms,' + Math.round(fl.totalAccuracy*100) + '%\n\n';
-                
-                csv += '=== DIGIT SPAN DETAILED RESULTS ===\nTrial,Length,Sequence,Response,Correct\n';
-                ds.responses.forEach((r, i) => { csv += `${i+1},${r.length},"${r.sequence.join('')}","${r.response}",${r.correct ? 'O' : 'X'}\n`; });
-                
-                csv += '\n=== FLANKER TASK DETAILED RESULTS ===\nTrial,Stimulus,Condition,CorrectKey,UserKey,Correct,ReactionTime\n';
-                fl.responses.forEach(r => { 
-                    const correctKey = r.correctResponse === 'KeyQ' ? 'Q' : 'P';
-                    const userKey = r.userResponse === 'KeyQ' ? 'Q' : 'P';
-                    csv += `${r.trial+1},"${r.stimulus}",${r.condition},${correctKey},${userKey},${r.correct ? 'O' : 'X'},${Math.round(r.reactionTime)}ms\n`; 
-                });
-            }
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = `WorkingMemoryTests_Complete_${participantData.pid}_${new Date().toISOString().slice(0,10)}.csv`;
-            a.click(); window.URL.revokeObjectURL(url);
+            const dataStr = JSON.stringify(allResults, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${participantData.pid}_all_results_${new Date().toISOString().slice(0,10)}.json`;
+            link.click();
         }
 
         function returnToStart() {
-            if (overallInterval) { clearInterval(overallInterval); overallInterval = null; }
-            document.removeEventListener('keydown', handleFlankerResponse);
-            document.getElementById('resultsScreen').style.display = 'none'; 
             document.getElementById('digitSpanTest').style.display = 'none';
-            document.getElementById('flankerTest').style.display = 'none'; 
+            document.getElementById('flankerTest').style.display = 'none';
+            document.getElementById('resultsScreen').style.display = 'none';
             document.getElementById('startScreen').style.display = 'block';
-            document.getElementById('overallTimer').style.display = 'none';
+            
+            document.getElementById('digitSpanInstructions').style.display = 'block';
+            document.getElementById('digitSpanGame').style.display = 'none';
+            document.getElementById('flankerInstructions').style.display = 'block';
+            document.getElementById('flankerGame').style.display = 'none';
+            
             if (completedTests.length > 0) {
                 document.getElementById('completionStatus').style.display = 'block';
                 document.getElementById('completedTests').textContent = completedTests.join(', ');
-                if (completedTests.length >= 2) document.getElementById('downloadAllBtn').style.display = 'inline-block';
+                if (completedTests.length >= 2) {
+                    document.getElementById('downloadAllBtn').style.display = 'inline-block';
+                }
             }
-            currentTest = '';
         }
 
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && currentTest === 'digitspan') {
-                const responseArea = document.getElementById('digitResponseArea');
-                if (responseArea && responseArea.style.display !== 'none') submitDigitResponse();
+        function finishCurrentTest() {
+            if (currentTest === 'digitspan') {
+                finishDigitSpanTest();
+            } else if (currentTest === 'flanker') {
+                finishFlankerTest();
             }
-        });
-
-        document.addEventListener('input', function(e) {
-            if (e.target.id === 'digitInput') e.target.value = e.target.value.replace(/[^0-9]/g, '');
-        });
-
-        window.addEventListener('beforeunload', function(e) {
-            if (currentTest && overallInterval) {
-                e.preventDefault(); e.returnValue = '테스트가 진행 중입니다.';
-            }
-        });
-
-        console.log('Part 3: 작업 기억 과제 준비 완료');
-        console.log('안전한 버전으로 로드되었습니다.');
+        }
     </script>
 </body>
 </html>

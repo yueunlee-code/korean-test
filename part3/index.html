@@ -571,22 +571,96 @@
         function downloadResults() {
             const testType = currentTest === 'digitspan' ? 'digitSpan' : 'flanker';
             const results = testResults[testType];
-            const dataStr = JSON.stringify(results, null, 2);
-            const dataBlob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(dataBlob);
+            
+            if (testType === 'digitSpan') {
+                downloadDigitSpanCSV(results);
+            } else {
+                downloadFlankerCSV(results);
+            }
+        }
+
+        function downloadDigitSpanCSV(results) {
+            let csv = 'Participant ID,Name,Trial,Length,Sequence,Response,Correct,Timestamp\n';
+            
+            results.responses.forEach((r, index) => {
+                csv += `${results.participantData.pid},${results.participantData.name},${index + 1},${r.length},"${r.sequence.join('')}",${r.response},${r.correct ? 'TRUE' : 'FALSE'},${r.timestamp}\n`;
+            });
+            
+            csv += `\nSummary\n`;
+            csv += `Max Span,${results.maxSpan}\n`;
+            csv += `Total Correct,${results.totalCorrect}\n`;
+            csv += `Total Trials,${results.totalTrials}\n`;
+            csv += `Accuracy,${Math.round(results.totalCorrect / results.totalTrials * 100)}%\n`;
+            
+            const BOM = '\uFEFF';
+            const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = `${participantData.pid}_${testType}_${new Date().toISOString().slice(0,10)}.json`;
+            link.download = `DigitSpan_${participantData.pid}_${new Date().toISOString().slice(0,10)}.csv`;
+            link.click();
+        }
+
+        function downloadFlankerCSV(results) {
+            let csv = 'Participant ID,Name,Trial,Stimulus Type,Correct Answer,Response,Correct,Reaction Time (ms),Timestamp\n';
+            
+            results.responses.forEach(r => {
+                const stimulusType = r.type === 'congruent' ? 'Congruent' : 'Incongruent';
+                csv += `${results.participantData.pid},${results.participantData.name},${r.trial},${stimulusType},${r.correctAnswer.toUpperCase()},${r.response.toUpperCase()},${r.correct ? 'TRUE' : 'FALSE'},${r.reactionTime},${r.timestamp}\n`;
+            });
+            
+            csv += `\nSummary\n`;
+            csv += `Total Accuracy,${Math.round(results.totalAccuracy * 100)}%\n`;
+            csv += `Mean Reaction Time,${Math.round(results.meanReactionTime)} ms\n`;
+            csv += `Congruent Accuracy,${Math.round(results.congruentAccuracy * 100)}%\n`;
+            csv += `Incongruent Accuracy,${Math.round(results.incongruentAccuracy * 100)}%\n`;
+            csv += `Congruent RT,${Math.round(results.congruentRT)} ms\n`;
+            csv += `Incongruent RT,${Math.round(results.incongruentRT)} ms\n`;
+            csv += `Flanker Effect,${Math.round(results.flankerEffect)} ms\n`;
+            
+            const BOM = '\uFEFF';
+            const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `Flanker_${participantData.pid}_${new Date().toISOString().slice(0,10)}.csv`;
             link.click();
         }
 
         function downloadAllResults() {
-            const dataStr = JSON.stringify(allResults, null, 2);
-            const dataBlob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(dataBlob);
+            let csv = '=== PARTICIPANT INFORMATION ===\n';
+            csv += `Participant ID,${participantData.pid}\n`;
+            csv += `Name,${participantData.name}\n`;
+            csv += `Test Date,${new Date().toISOString().slice(0,10)}\n\n`;
+            
+            if (allResults.digitSpan) {
+                csv += '=== DIGIT SPAN TEST ===\n';
+                csv += 'Trial,Length,Sequence,Response,Correct,Timestamp\n';
+                allResults.digitSpan.responses.forEach((r, index) => {
+                    csv += `${index + 1},${r.length},"${r.sequence.join('')}",${r.response},${r.correct ? 'TRUE' : 'FALSE'},${r.timestamp}\n`;
+                });
+                csv += `\nMax Span,${allResults.digitSpan.maxSpan}\n`;
+                csv += `Accuracy,${Math.round(allResults.digitSpan.totalCorrect / allResults.digitSpan.totalTrials * 100)}%\n\n`;
+            }
+            
+            if (allResults.flanker) {
+                csv += '=== FLANKER TASK ===\n';
+                csv += 'Trial,Stimulus Type,Correct Answer,Response,Correct,Reaction Time (ms),Timestamp\n';
+                allResults.flanker.responses.forEach(r => {
+                    const stimulusType = r.type === 'congruent' ? 'Congruent' : 'Incongruent';
+                    csv += `${r.trial},${stimulusType},${r.correctAnswer.toUpperCase()},${r.response.toUpperCase()},${r.correct ? 'TRUE' : 'FALSE'},${r.reactionTime},${r.timestamp}\n`;
+                });
+                csv += `\nTotal Accuracy,${Math.round(allResults.flanker.totalAccuracy * 100)}%\n`;
+                csv += `Mean RT,${Math.round(allResults.flanker.meanReactionTime)} ms\n`;
+                csv += `Flanker Effect,${Math.round(allResults.flanker.flankerEffect)} ms\n`;
+            }
+            
+            const BOM = '\uFEFF';
+            const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = `${participantData.pid}_all_results_${new Date().toISOString().slice(0,10)}.json`;
+            link.download = `WorkingMemoryTest_${participantData.pid}_${new Date().toISOString().slice(0,10)}.csv`;
             link.click();
         }
 

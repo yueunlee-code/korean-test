@@ -221,7 +221,7 @@
         let flankerData = { currentTrial: 0, totalTrials: 80, stimuli: [], responses: [], startTime: null, stimulusStartTime: null };
 
         function sendToGoogleSheets(testResults, testType) {
-            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxayKeCpfgoZzglL04WA6UpZE8ElxOgFxb5Y5A3kyMrgJ3Yl0E6tZaSFC1BxZFbaUTraA/exec';
+            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzdXwqWVXTvEjbgyIyQoiBB6b9Ir_1efKUa0PQ-qy3kH-B7vxGwR_aIjAn0xbYySXGllg/exec';
             
             let summary = '';
             if (testType === 'Digit-Span') {
@@ -238,7 +238,7 @@
                 details: JSON.stringify({
                     participantInfo: testResults.participantData,
                     testResults: testResults,
-                    timestamp: new Date().toISOString(),
+                    timestamp: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }),
                     site: 'korean-test-part3'
                 })
             };

@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>한국어 능력 평가 실험</title>
     <style>
         body { 
@@ -54,8 +55,8 @@
         }
         .blank { 
             display: inline-block; 
-            width: 25px; 
-            height: 25px; 
+            width: 28px; 
+            height: 28px; 
             border: none;
             border-bottom: 2px solid #667eea; 
             margin: 0 3px; 
@@ -64,6 +65,10 @@
             background: #f8f9ff; 
             padding: 2px;
             vertical-align: baseline;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            border-radius: 0;
         }
         .blank:focus { 
             outline: none; 
@@ -131,16 +136,16 @@
             <h2>참여자 정보</h2>
             <div class="participant-info">
                 <div class="form-group">
-                    <label>실험자 ID:</label>
-                    <input type="text" id="pid" placeholder="예: P001" required>
-                </div>
-                <div class="form-group">
                     <label>이름:</label>
                     <input type="text" id="pname" placeholder="예: 홍길동" required>
                 </div>
                 <div class="form-group">
                     <label>나이:</label>
                     <input type="number" id="age" placeholder="예: 25" required>
+                </div>
+                <div class="form-group">
+                    <label>전공:</label>
+                    <input type="text" id="major" placeholder="예: 경영학" required>
                 </div>
                 <div class="form-group">
                     <label>모어:</label>
@@ -175,13 +180,13 @@
             <div class="passage">
                 <h3>지문 1: 일상생활 (Level 1)</h3>
                 <div class="passage-text">
-                    안녕하세요. 제 이름은 김철수입니다. 저는 대학<input class="blank" data-answer="교" maxlength="1"><input class="blank" data-answer="에" maxlength="1">다닙니다.
-                    아침에 일어<input class="blank" data-answer="나" maxlength="1"><input class="blank" data-answer="서" maxlength="1">학교 체육<input class="blank" data-answer="관" maxlength="1"><input class="blank" data-answer="에" maxlength="1">갑니다. 체육<input class="blank" data-answer="관" maxlength="1"><input class="blank" data-answer="에" maxlength="1"><input class="blank" data-answer="서" maxlength="1">운동을 합<input class="blank" data-answer="니" maxlength="1"><input class="blank" data-answer="다" maxlength="1">.
-                    운동을 한 다<input class="blank" data-answer="음" maxlength="1"><input class="blank" data-answer="에" maxlength="1">아침을 먹습니다. 아침은 기숙<input class="blank" data-answer="사" maxlength="1">식당에서 먹습니다. 저는 대학<input class="blank" data-answer="교" maxlength="1"><input class="blank" data-answer="에" maxlength="1"><input class="blank" data-answer="서" maxlength="1">한국어를 배<input class="blank" data-answer="웁" maxlength="1"><input class="blank" data-answer="니" maxlength="1"><input class="blank" data-answer="다" maxlength="1">. 한국어 수<input class="blank" data-answer="업" maxlength="1"><input class="blank" data-answer="은" maxlength="1">매일
-                    오<input class="blank" data-answer="전" maxlength="1">10시에 시작<input class="blank" data-answer="합" maxlength="1"><input class="blank" data-answer="니" maxlength="1"><input class="blank" data-answer="다" maxlength="1">. 한국어는 쓰<input class="blank" data-answer="기" maxlength="1"><input class="blank" data-answer="와" maxlength="1">말하기가 어<input class="blank" data-answer="렵" maxlength="1"><input class="blank" data-answer="습" maxlength="1"><input class="blank" data-answer="니" maxlength="1"><input class="blank" data-answer="다" maxlength="1">.
-                    그렇지만 듣<input class="blank" data-answer="기" maxlength="1"><input class="blank" data-answer="와" maxlength="1">읽기는 쉽<input class="blank" data-answer="습" maxlength="1"><input class="blank" data-answer="니" maxlength="1"><input class="blank" data-answer="다" maxlength="1">. 한국어 배<input class="blank" data-answer="우" maxlength="1"><input class="blank" data-answer="는" maxlength="1">것이 참 재미<input class="blank" data-answer="있" maxlength="1"><input class="blank" data-answer="습" maxlength="1"><input class="blank" data-answer="니" maxlength="1"><input class="blank" data-answer="다" maxlength="1">. 주말에는 친<input class="blank" data-answer="구" maxlength="1"><input class="blank" data-answer="와" maxlength="1">같이 극<input class="blank" data-answer="장" maxlength="1"><input class="blank" data-answer="에" maxlength="1"><input class="blank" data-answer="서" maxlength="1">영화를 봅니다. 영화를 <input class="blank" data-answer="본" maxlength="1">
-                    후에 한국 식당에서 저<input class="blank" data-answer="녁" maxlength="1"><input class="blank" data-answer="을" maxlength="1">먹습니다. 한국 식<input class="blank" data-answer="당" maxlength="1"><input class="blank" data-answer="이" maxlength="1">극장 바<input class="blank" data-answer="로" maxlength="1">옆에
-                    있습니다. 불고<input class="blank" data-answer="기" maxlength="1"><input class="blank" data-answer="가" maxlength="1">맛있습니다. 김치찌개는 맵습니다.
+                    안녕하세요. 제 이름은 김철수입니다. 저는 대학<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="교" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="에" maxlength="1">다닙니다.
+                    아침에 일어<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="나" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="서" maxlength="1">학교 체육<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="관" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="에" maxlength="1">갑니다. 체육<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="관" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="에" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="서" maxlength="1">운동을 합<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="니" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="다" maxlength="1">.
+                    운동을 한 다<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="음" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="에" maxlength="1">아침을 먹습니다. 아침은 기숙<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="사" maxlength="1">식당에서 먹습니다. 저는 대학<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="교" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="에" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="서" maxlength="1">한국어를 배<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="웁" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="니" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="다" maxlength="1">. 한국어 수<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="업" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="은" maxlength="1">매일
+                    오<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="전" maxlength="1">10시에 시작<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="합" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="니" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="다" maxlength="1">. 한국어는 쓰<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="기" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="와" maxlength="1">말하기가 어<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="렵" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="습" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="니" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="다" maxlength="1">.
+                    그렇지만 듣<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="기" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="와" maxlength="1">읽기는 쉽<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="습" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="니" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="다" maxlength="1">. 한국어 배<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="우" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="는" maxlength="1">것이 참 재미<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="있" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="습" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="니" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="다" maxlength="1">. 주말에는 친<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="구" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="와" maxlength="1">같이 극<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="장" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="에" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="서" maxlength="1">영화를 봅니다. 영화를 <input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="본" maxlength="1">
+                    후에 한국 식당에서 저<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="녁" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="을" maxlength="1">먹습니다. 한국 식<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="당" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="이" maxlength="1">극장 바<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="로" maxlength="1">옆에
+                    있습니다. 불고<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="기" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="가" maxlength="1">맛있습니다. 김치찌개는 맵습니다.
                 </div>
             </div>
 
@@ -189,12 +194,12 @@
                 <h3>지문 2: 여행 계획 (Level 1+)</h3>
                 <div class="passage-text">
                     올 여름에는 가족들과 함께 제주도에 여행을 가려고 해요. 제
-                    주도는 한반<input class="blank" data-answer="도" maxlength="1"><input class="blank" data-answer="의" maxlength="1">남쪽에 있<input class="blank" data-answer="는" maxlength="1">섬이예요. 한국의 하와이라 불<input class="blank" data-answer="리" maxlength="1"><input class="blank" data-answer="는" maxlength="1">
-                    제주도는 자<input class="blank" data-answer="연" maxlength="1"><input class="blank" data-answer="이" maxlength="1">아름다워서 신혼<input class="blank" data-answer="여" maxlength="1"><input class="blank" data-answer="행" maxlength="1">장소로 인<input class="blank" data-answer="기" maxlength="1"><input class="blank" data-answer="가" maxlength="1">굉장히 많<input class="blank" data-answer="아" maxlength="1"><input class="blank" data-answer="요" maxlength="1">. 오늘은 여행<input class="blank" data-answer="사" maxlength="1"><input class="blank" data-answer="에" maxlength="1">전화를 걸<input class="blank" data-answer="어" maxlength="1">서울에서 제주도<input class="blank" data-answer="까" maxlength="1"><input class="blank" data-answer="지" maxlength="1">왕복 비
-                    행<input class="blank" data-answer="기" maxlength="1"><input class="blank" data-answer="표" maxlength="1"><input class="blank" data-answer="를" maxlength="1">네장 예<input class="blank" data-answer="약" maxlength="1"><input class="blank" data-answer="했" maxlength="1"><input class="blank" data-answer="어" maxlength="1"><input class="blank" data-answer="요" maxlength="1">. 여행<input class="blank" data-answer="사" maxlength="1"><input class="blank" data-answer="에" maxlength="1"><input class="blank" data-answer="서" maxlength="1">호텔도 소개<input class="blank" data-answer="해" maxlength="1">주었지만 호
-                    텔은 아직 안 정<input class="blank" data-answer="했" maxlength="1"><input class="blank" data-answer="어" maxlength="1"><input class="blank" data-answer="요" maxlength="1">. 인터넷으로 정<input class="blank" data-answer="보" maxlength="1"><input class="blank" data-answer="를" maxlength="1">더 찾아 보<input class="blank" data-answer="고" maxlength="1">어느 호
-                    텔이 좋<input class="blank" data-answer="은" maxlength="1">지 알아 보<input class="blank" data-answer="려" maxlength="1"><input class="blank" data-answer="고" maxlength="1">해요. 요<input class="blank" data-answer="즘" maxlength="1"><input class="blank" data-answer="은" maxlength="1">인터넷이 있<input class="blank" data-answer="어" maxlength="1"><input class="blank" data-answer="서" maxlength="1">호텔 뿐
-                    아<input class="blank" data-answer="니" maxlength="1"><input class="blank" data-answer="라" maxlength="1">유명한 관<input class="blank" data-answer="광" maxlength="1">명소와 맛<input class="blank" data-answer="있" maxlength="1"><input class="blank" data-answer="는" maxlength="1">식당도 찾아 볼 <input class="blank" data-answer="수" maxlength="1">있어서 참
+                    주도는 한반<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="도" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="의" maxlength="1">남쪽에 있<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="는" maxlength="1">섬이예요. 한국의 하와이라 불<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="리" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="는" maxlength="1">
+                    제주도는 자<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="연" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="이" maxlength="1">아름다워서 신혼<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="여" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="행" maxlength="1">장소로 인<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="기" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="가" maxlength="1">굉장히 많<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="아" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="요" maxlength="1">. 오늘은 여행<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="사" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="에" maxlength="1">전화를 걸<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="어" maxlength="1">서울에서 제주도<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="까" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="지" maxlength="1">왕복 비
+                    행<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="기" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="표" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="를" maxlength="1">네장 예<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="약" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="했" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="어" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="요" maxlength="1">. 여행<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="사" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="에" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="서" maxlength="1">호텔도 소개<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="해" maxlength="1">주었지만 호
+                    텔은 아직 안 정<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="했" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="어" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="요" maxlength="1">. 인터넷으로 정<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="보" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="를" maxlength="1">더 찾아 보<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="고" maxlength="1">어느 호
+                    텔이 좋<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="은" maxlength="1">지 알아 보<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="려" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="고" maxlength="1">해요. 요<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="즘" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="은" maxlength="1">인터넷이 있<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="어" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="서" maxlength="1">호텔 뿐
+                    아<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="니" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="라" maxlength="1">유명한 관<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="광" maxlength="1">명소와 맛<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="있" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="는" maxlength="1">식당도 찾아 볼 <input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="수" maxlength="1">있어서 참
                     편리해요.
                 </div>
             </div>
@@ -203,13 +208,13 @@
                 <h3>지문 3: 백화점 광고 (Level 1+)</h3>
                 <div class="passage-text">
                     안녕하세요. 서울역 앞에 위치한 서울 백화점입니다. 저희 백
-                    화점<input class="blank" data-answer="에" maxlength="1"><input class="blank" data-answer="서" maxlength="1"><input class="blank" data-answer="는" maxlength="1">겨울철을 맞<input class="blank" data-answer="아" maxlength="1">겨울옷과 난<input class="blank" data-answer="방" maxlength="1">제품을 세일<input class="blank" data-answer="하" maxlength="1"><input class="blank" data-answer="고" maxlength="1">있습니
-                    다. 직장 여<input class="blank" data-answer="성" maxlength="1"><input class="blank" data-answer="을" maxlength="1">위한 여성복 코너<input class="blank" data-answer="에" maxlength="1"><input class="blank" data-answer="서" maxlength="1">여성 정<input class="blank" data-answer="장" maxlength="1"><input class="blank" data-answer="과" maxlength="1">겨울 속<input class="blank" data-answer="옷" maxlength="1"><input class="blank" data-answer="을" maxlength="1">
-                    50 프로 세일하고 있<input class="blank" data-answer="고" maxlength="1">, 삼층 아동<input class="blank" data-answer="복" maxlength="1">코너에서도 코<input class="blank" data-answer="트" maxlength="1">, 목도
-                    리, 장<input class="blank" data-answer="갑" maxlength="1">등의 겨<input class="blank" data-answer="울" maxlength="1">상품이 각 30프로씩 할<input class="blank" data-answer="인" maxlength="1"><input class="blank" data-answer="된" maxlength="1">가격에 판<input class="blank" data-answer="매" maxlength="1"><input class="blank" data-answer="되" maxlength="1"><input class="blank" data-answer="고" maxlength="1">
-                    있습니다. 칠<input class="blank" data-answer="층" maxlength="1">에서는 집안을 따<input class="blank" data-answer="뜻" maxlength="1"><input class="blank" data-answer="하" maxlength="1"><input class="blank" data-answer="게" maxlength="1">해 줄 전<input class="blank" data-answer="기" maxlength="1">히터와 가스
-                    난<input class="blank" data-answer="로" maxlength="1">등 다양<input class="blank" data-answer="한" maxlength="1">난방용 가<input class="blank" data-answer="전" maxlength="1">제품을 특가판<input class="blank" data-answer="매" maxlength="1"><input class="blank" data-answer="하" maxlength="1"><input class="blank" data-answer="고" maxlength="1">있습니다. 저
-                    <input class="blank" data-answer="희" maxlength="1">서울 백화점과 함<input class="blank" data-answer="께" maxlength="1">겨울나기 준<input class="blank" data-answer="비" maxlength="1"><input class="blank" data-answer="를" maxlength="1">시작하세요. 고객 여러
+                    화점<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="에" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="서" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="는" maxlength="1">겨울철을 맞<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="아" maxlength="1">겨울옷과 난<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="방" maxlength="1">제품을 세일<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="하" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="고" maxlength="1">있습니
+                    다. 직장 여<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="성" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="을" maxlength="1">위한 여성복 코너<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="에" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="서" maxlength="1">여성 정<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="장" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="과" maxlength="1">겨울 속<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="옷" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="을" maxlength="1">
+                    50 프로 세일하고 있<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="고" maxlength="1">, 삼층 아동<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="복" maxlength="1">코너에서도 코<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="트" maxlength="1">, 목도
+                    리, 장<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="갑" maxlength="1">등의 겨<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="울" maxlength="1">상품이 각 30프로씩 할<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="인" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="된" maxlength="1">가격에 판<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="매" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="되" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="고" maxlength="1">
+                    있습니다. 칠<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="층" maxlength="1">에서는 집안을 따<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="뜻" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="하" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="게" maxlength="1">해 줄 전<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="기" maxlength="1">히터와 가스
+                    난<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="로" maxlength="1">등 다양<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="한" maxlength="1">난방용 가<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="전" maxlength="1">제품을 특가판<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="매" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="하" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="고" maxlength="1">있습니다. 저
+                    <input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="희" maxlength="1">서울 백화점과 함<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="께" maxlength="1">겨울나기 준<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="비" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="를" maxlength="1">시작하세요. 고객 여러
                     분의 많은 성원 부탁드립니다. 감사합니다.
                 </div>
             </div>
@@ -218,13 +223,13 @@
                 <h3>지문 4: 교통 체증 (Level 2)</h3>
                 <div class="passage-text">
                     도시의 가장 큰 문제점이라면 뭐니뭐니해도 교통 문제가 제일 크
-                    다. 도로에서는 교<input class="blank" data-answer="통" maxlength="1">체증으로 인<input class="blank" data-answer="하" maxlength="1"><input class="blank" data-answer="여" maxlength="1">에너지와 시<input class="blank" data-answer="간" maxlength="1"><input class="blank" data-answer="이" maxlength="1">낭비된다.
-                    특히 출<input class="blank" data-answer="퇴" maxlength="1"><input class="blank" data-answer="근" maxlength="1">시간에는 한꺼<input class="blank" data-answer="번" maxlength="1"><input class="blank" data-answer="에" maxlength="1">차량이 일제<input class="blank" data-answer="히" maxlength="1">몰려서 도<input class="blank" data-answer="로" maxlength="1"><input class="blank" data-answer="가" maxlength="1">아
-                    주 복<input class="blank" data-answer="잡" maxlength="1"><input class="blank" data-answer="하" maxlength="1"><input class="blank" data-answer="다" maxlength="1">. 게다가 뉴욕 같은 대도<input class="blank" data-answer="시" maxlength="1"><input class="blank" data-answer="의" maxlength="1">주차난은 매<input class="blank" data-answer="우" maxlength="1">심각한
-                    수준<input class="blank" data-answer="이" maxlength="1"><input class="blank" data-answer="다" maxlength="1">. 자동<input class="blank" data-answer="차" maxlength="1"><input class="blank" data-answer="는" maxlength="1">점점 많아<input class="blank" data-answer="지" maxlength="1"><input class="blank" data-answer="는" maxlength="1">반면 주<input class="blank" data-answer="차" maxlength="1">공간은 제<input class="blank" data-answer="한" maxlength="1"><input class="blank" data-answer="되" maxlength="1"><input class="blank" data-answer="어" maxlength="1">있
-                    기 때<input class="blank" data-answer="문" maxlength="1"><input class="blank" data-answer="에" maxlength="1">주차난이 생<input class="blank" data-answer="긴" maxlength="1"><input class="blank" data-answer="다" maxlength="1">. 주차장이 부족하면 사람<input class="blank" data-answer="들" maxlength="1"><input class="blank" data-answer="이" maxlength="1">주택
-                    가 골<input class="blank" data-answer="목" maxlength="1">이나 도로에까지 주차를 하<input class="blank" data-answer="는" maxlength="1">경우가 많다. 이렇게 불<input class="blank" data-answer="법" maxlength="1">
-                    으로 주<input class="blank" data-answer="차" maxlength="1"><input class="blank" data-answer="된" maxlength="1">차량은 또 다시 교통 혼<input class="blank" data-answer="잡" maxlength="1"><input class="blank" data-answer="의" maxlength="1">원인이 되<input class="blank" data-answer="어" maxlength="1">더 심<input class="blank" data-answer="각" maxlength="1"><input class="blank" data-answer="한" maxlength="1">
+                    다. 도로에서는 교<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="통" maxlength="1">체증으로 인<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="하" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="여" maxlength="1">에너지와 시<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="간" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="이" maxlength="1">낭비된다.
+                    특히 출<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="퇴" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="근" maxlength="1">시간에는 한꺼<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="번" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="에" maxlength="1">차량이 일제<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="히" maxlength="1">몰려서 도<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="로" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="가" maxlength="1">아
+                    주 복<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="잡" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="하" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="다" maxlength="1">. 게다가 뉴욕 같은 대도<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="시" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="의" maxlength="1">주차난은 매<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="우" maxlength="1">심각한
+                    수준<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="이" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="다" maxlength="1">. 자동<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="차" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="는" maxlength="1">점점 많아<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="지" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="는" maxlength="1">반면 주<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="차" maxlength="1">공간은 제<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="한" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="되" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="어" maxlength="1">있
+                    기 때<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="문" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="에" maxlength="1">주차난이 생<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="긴" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="다" maxlength="1">. 주차장이 부족하면 사람<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="들" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="이" maxlength="1">주택
+                    가 골<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="목" maxlength="1">이나 도로에까지 주차를 하<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="는" maxlength="1">경우가 많다. 이렇게 불<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="법" maxlength="1">
+                    으로 주<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="차" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="된" maxlength="1">차량은 또 다시 교통 혼<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="잡" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="의" maxlength="1">원인이 되<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="어" maxlength="1">더 심<input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="각" maxlength="1"><input class="blank" type="text" inputmode="text" autocomplete="off" data-answer="한" maxlength="1">
                     교통 체증을 일으킨다. 따라서 교통 문제를 해결하기 위해서
                     는 자가용보다는 버스나 지하철을 많이 이용해야 할 것이다.
                 </div>
@@ -240,7 +245,6 @@
             <br>
             <button class="btn" onclick="downloadCSV()">결과 다운로드 (CSV)</button>
             
-            <!-- Part 3 안내 메시지 추가 -->
             <div style="background: #e8f5e8; border: 2px solid #4caf50; padding: 20px; border-radius: 10px; margin: 30px 0; text-align: center;">
                 <h3 style="color: #2e7d32; margin-bottom: 15px;">수고 많으셨습니다. Part 2가 마무리 되었습니다.</h3>
                 <p style="color: #388e3c; font-size: 1.1em; margin-bottom: 20px;">이제 Part 3. 작업 기억 과제 (15분)로 이동합니다.</p>
@@ -266,20 +270,20 @@
         let userData = {};
 
         function startTest() {
-            const pid = document.getElementById('pid').value.trim();
             const pname = document.getElementById('pname').value.trim();
             const age = document.getElementById('age').value.trim();
+            const major = document.getElementById('major').value.trim();
             const lang = document.getElementById('lang').value.trim();
             const duration = document.getElementById('duration').value;
             const email = document.getElementById('email').value.trim();
             const phone = document.getElementById('phone').value.trim();
 
-            if (!pid || !pname || !age || !lang || !duration || !email || !phone) {
+            if (!pname || !age || !major || !lang || !duration || !email || !phone) {
                 alert('모든 정보를 입력해주세요.');
                 return;
             }
 
-            userData = { pid, pname, age, lang, duration, email, phone };
+            userData = { pname, age, major, lang, duration, email, phone };
             startTime = new Date();
 
             document.getElementById('startForm').style.display = 'none';
@@ -305,53 +309,61 @@
             const blanks = document.querySelectorAll('.blank');
             blanks.forEach(function(blank, index) {
                 blank.id = 'blank_' + index;
-                let lastValue = '';
                 let isComposing = false;
+                let previousValue = '';
+                
+                blank.addEventListener('touchstart', function(e) {
+                    e.stopPropagation();
+                }, { passive: true });
                 
                 blank.addEventListener('compositionstart', function() {
                     isComposing = true;
+                    previousValue = this.value;
                 });
                 
-                blank.addEventListener('compositionupdate', function() {
-                });
-                
-                blank.addEventListener('compositionend', function() {
+                blank.addEventListener('compositionend', function(e) {
                     isComposing = false;
-                    handleInput.call(this);
+                    setTimeout(() => {
+                        processInput.call(this);
+                    }, 0);
                 });
                 
-                function handleInput() {
-                    if (isComposing) return;
+                function processInput() {
+                    let value = this.value.trim();
+                    let koreanChar = value.match(/[가-힣]/g);
                     
-                    let value = this.value;
-                    let koreanChar = value.match(/[가-힣]/);
-                    
-                    if (koreanChar) {
+                    if (koreanChar && koreanChar.length > 0) {
                         this.value = koreanChar[0];
                         
-                        if (this.value !== lastValue) {
-                            lastValue = this.value;
+                        if (this.value !== previousValue) {
+                            previousValue = this.value;
                             setTimeout(() => {
                                 moveToNext(this);
-                            }, 10);
+                            }, 50);
                         }
                     } else {
                         this.value = '';
-                        lastValue = '';
+                        previousValue = '';
                     }
                 }
                 
-                blank.addEventListener('input', handleInput);
+                blank.addEventListener('input', function() {
+                    if (!isComposing) {
+                        processInput.call(this);
+                    }
+                });
                 
                 blank.addEventListener('keydown', function(e) {
                     if (e.key === 'Backspace') {
-                        lastValue = '';
+                        previousValue = '';
                         return;
                     }
                     
                     if (e.key === 'Enter') {
                         e.preventDefault();
-                        moveToNext(this);
+                        if (this.value) {
+                            moveToNext(this);
+                        }
                         return;
                     }
                     
@@ -359,14 +371,15 @@
                         return;
                     }
                     
-                    if (this.value && !isComposing) {
-                        lastValue = '';
+                    if (this.value && !isComposing && e.key.length === 1) {
+                        previousValue = '';
                         this.value = '';
                     }
                 });
                 
                 blank.addEventListener('focus', function() {
-                    if (this.value && !isComposing) {
+                    previousValue = this.value;
+                    if (this.value) {
                         this.select();
                     }
                 });
@@ -426,9 +439,8 @@
                 details: results
             };
 
-            localStorage.setItem(`result_${userData.pid}_${Date.now()}`, JSON.stringify(window.testResult));
+            localStorage.setItem(`result_${userData.email.split('@')[0]}_${Date.now()}`, JSON.stringify(window.testResult));
 
-            // Google Sheets 자동 백업
             sendToGoogleSheets(window.testResult, 'C-Test');
 
             document.getElementById('testArea').style.display = 'none';
@@ -446,8 +458,8 @@
             let csv = '';
             
             csv += '=== 참여자 기본 정보 ===\n';
-            csv += 'ParticipantID,Name,Age,MotherTongue,StudyDuration,Email,Phone,TestDate,StartTime,EndTime,TotalTimeUsed\n';
-            csv += `${r.userData.pid},${r.userData.pname},${r.userData.age},${r.userData.lang},"${r.userData.duration}",${r.userData.email},${r.userData.phone},${r.startTime.toLocaleDateString()},${r.startTime.toLocaleTimeString()},${r.endTime.toLocaleTimeString()},${r.timeUsed}분\n\n`;
+            csv += 'Name,Age,Major,MotherTongue,StudyDuration,Email,Phone,TestDate,StartTime,EndTime,TotalTimeUsed\n';
+            csv += `${r.userData.pname},${r.userData.age},${r.userData.major},${r.userData.lang},"${r.userData.duration}",${r.userData.email},${r.userData.phone},${r.startTime.toLocaleDateString()},${r.startTime.toLocaleTimeString()},${r.endTime.toLocaleTimeString()},${r.timeUsed}분\n\n`;
             
             csv += '=== 점수 요약 ===\n';
             csv += 'TotalItems,CorrectCount,IncorrectCount,EmptyCount,AccuracyPercentage\n';
@@ -458,10 +470,10 @@
             csv += 'PassageNumber,PassageTitle,ItemNumber,CorrectAnswer,UserAnswer,IsCorrect,ItemType\n';
             
             const passages = [
-                { title: '지문1_일상생활', start: 1, end: 25 },
-                { title: '지문2_여행계획', start: 26, end: 50 },
-                { title: '지문3_백화점광고', start: 51, end: 75 },
-                { title: '지문4_교통체증', start: 76, end: 100 }
+                { title: '지문1_일상생활', start: 1, end: 56 },
+                { title: '지문2_여행계획', start: 57, end: 106 },
+                { title: '지문3_백화점광고', start: 107, end: 143 },
+                { title: '지문4_교통체증', start: 144, end: 157 }
             ];
             
             r.details.forEach(function(item, index) {
@@ -520,12 +532,11 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `Korean_CTest_DetailedResults_${r.userData.pid}_${new Date().toISOString().slice(0,10)}.csv`;
+            a.download = `Korean_CTest_DetailedResults_${r.userData.email.split('@')[0]}_${new Date().toISOString().slice(0,10)}.csv`;
             a.click();
             window.URL.revokeObjectURL(url);
         }
 
-        // Google Sheets 통합 연동 함수
         function sendToGoogleSheets(testResults, testType) {
             const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbysAGTa67iRkJDmjEjlJU051dW_AqWXW6m7dEgcbFXsTHzCen9mtvzzsq2sirbqKcB38Q/exec';
             
@@ -534,7 +545,7 @@
                 `${testType} 완료`;
             
             const payload = {
-                participantId: testResults.userData.pid,
+                participantId: testResults.userData.email,
                 participantName: testResults.userData.pname,
                 testType: testType,
                 summary: summary,
@@ -550,7 +561,7 @@
             
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
-                mode: 'no-cors', // CORS 이슈 해결
+                mode: 'no-cors',
                 headers: { 
                     'Content-Type': 'application/json',
                 },
@@ -558,17 +569,15 @@
             })
             .then(response => {
                 console.log(`${testType} 결과 백업 요청이 전송되었습니다.`);
-                // no-cors 모드에서는 response를 읽을 수 없음
                 return 'success';
             })
             .catch(error => {
                 console.error('백업 실패:', error);
-                // 에러가 발생해도 사용자에게는 알리지 않음 (백업은 부가 기능)
             });
         }
 
         console.log('한국어 C-Test가 로드되었습니다.');
-        console.log('논문 기반 정확한 100개 빈칸이 구현되었습니다.');
+        console.log('총 157개 빈칸이 구현되었습니다.');
         console.log('Google Sheets 자동 백업 기능이 준비되었습니다.');
     </script>
 </body>

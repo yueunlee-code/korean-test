@@ -538,7 +538,7 @@
         }
 
         function sendToGoogleSheets(testResults, testType) {
-            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbysAGTa67iRkJDmjEjlJU051dW_AqWXW6m7dEgcbFXsTHzCen9mtvzzsq2sirbqKcB38Q/exec';
+            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzdXwqWVXTvEjbgyIyQoiBB6b9Ir_1efKUa0PQ-qy3kH-B7vxGwR_aIjAn0xbYySXGllg/exec';
             
             const summary = testType === 'C-Test' ? 
                 `C-Test 정답: ${testResults.correctCount}/${testResults.totalCount}, 정답률: ${testResults.percentage}%, 소요시간: ${testResults.timeUsed}분` :

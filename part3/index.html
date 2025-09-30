@@ -82,8 +82,8 @@
             <div class="participant-info">
                 <h3>참여자 정보</h3>
                 <div class="form-group">
-                    <label>참여자 ID:</label>
-                    <input type="text" id="participantId" placeholder="예: P001" required>
+                    <label>이메일:</label>
+                    <input type="email" id="participantEmail" placeholder="example@email.com" required>
                 </div>
                 <div class="form-group">
                     <label>이름:</label>
@@ -220,7 +220,6 @@
         let digitSpanData = { currentLength: 3, currentTrial: 1, maxTrialsPerLength: 2, maxLength: 10, errors: 0, sequences: [], responses: [], startTime: null };
         let flankerData = { currentTrial: 0, totalTrials: 80, stimuli: [], responses: [], startTime: null, stimulusStartTime: null };
 
-        // ==================== Google Sheets 연동 함수 ====================
         function sendToGoogleSheets(testResults, testType) {
             const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxayKeCpfgoZzglL04WA6UpZE8ElxOgFxb5Y5A3kyMrgJ3Yl0E6tZaSFC1BxZFbaUTraA/exec';
             
@@ -232,7 +231,7 @@
             }
             
             const payload = {
-                participantId: testResults.participantData.pid,
+                participantId: testResults.participantData.email,
                 participantName: testResults.participantData.name,
                 testType: testType,
                 summary: summary,
@@ -254,19 +253,17 @@
             })
             .then(() => {
                 console.log(`${testType} 결과가 Google Sheets에 전송되었습니다.`);
-                alert(`${testType} 결과가 저장되었습니다!`);
             })
             .catch(error => {
                 console.error('Google Sheets 전송 실패:', error);
-                alert('결과 저장 중 오류가 발생했습니다.');
             });
         }
 
         function selectTest(testType) {
-            const pid = document.getElementById('participantId').value.trim();
+            const email = document.getElementById('participantEmail').value.trim();
             const name = document.getElementById('participantName').value.trim();
-            if (!pid || !name) { alert('참여자 정보를 모두 입력해주세요.'); return; }
-            participantData = { pid, name }; 
+            if (!email || !name) { alert('참여자 정보를 모두 입력해주세요.'); return; }
+            participantData = { email, name }; 
             currentTest = testType;
             document.getElementById('startScreen').style.display = 'none';
             document.getElementById(testType === 'digitspan' ? 'digitSpanTest' : 'flankerTest').style.display = 'block';
@@ -408,7 +405,6 @@
             
             allResults.digitSpan = testResults.digitSpan; 
             
-            // 중복 방지: 배열에 없을 때만 추가
             if (!completedTests.includes('Digit Span Test')) {
                 completedTests.push('Digit Span Test');
             }
@@ -470,19 +466,21 @@
         }
 
         function handleFlankerResponse(event) {
-            if (event.key !== 'q' && event.key !== 'p') return;
+            // 대소문자 구분 없이 Q, P 키 모두 인식
+            const key = event.key.toLowerCase();
+            if (key !== 'q' && key !== 'p') return;
             if (flankerData.currentTrial >= flankerData.totalTrials) return;
             if (!flankerData.stimulusStartTime) return;
             
             const reactionTime = Date.now() - flankerData.stimulusStartTime;
             const trial = flankerData.stimuli[flankerData.currentTrial];
-            const isCorrect = event.key === trial.correctAnswer;
+            const isCorrect = key === trial.correctAnswer;
             
             flankerData.responses.push({
                 trial: flankerData.currentTrial + 1,
                 stimulus: trial.stimulus,
                 correctAnswer: trial.correctAnswer,
-                response: event.key,
+                response: key,
                 correct: isCorrect,
                 reactionTime: reactionTime,
                 type: trial.type,
@@ -529,7 +527,6 @@
             
             allResults.flanker = testResults.flanker;
             
-            // 중복 방지: 배열에 없을 때만 추가
             if (!completedTests.includes('Flanker Task')) {
                 completedTests.push('Flanker Task');
             }
@@ -580,10 +577,10 @@
         }
 
         function downloadDigitSpanCSV(results) {
-            let csv = 'Participant ID,Name,Trial,Length,Sequence,Response,Correct,Timestamp\n';
+            let csv = 'Participant Email,Name,Trial,Length,Sequence,Response,Correct,Timestamp\n';
             
             results.responses.forEach((r, index) => {
-                csv += `${results.participantData.pid},${results.participantData.name},${index + 1},${r.length},"${r.sequence.join('')}",${r.response},${r.correct ? 'TRUE' : 'FALSE'},${r.timestamp}\n`;
+                csv += `${results.participantData.email},${results.participantData.name},${index + 1},${r.length},"${r.sequence.join('')}",${r.response},${r.correct ? 'TRUE' : 'FALSE'},${r.timestamp}\n`;
             });
             
             csv += `\nSummary\n`;
@@ -597,16 +594,16 @@
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = `DigitSpan_${participantData.pid}_${new Date().toISOString().slice(0,10)}.csv`;
+            link.download = `DigitSpan_${participantData.email.split('@')[0]}_${new Date().toISOString().slice(0,10)}.csv`;
             link.click();
         }
 
         function downloadFlankerCSV(results) {
-            let csv = 'Participant ID,Name,Trial,Stimulus Type,Correct Answer,Response,Correct,Reaction Time (ms),Timestamp\n';
+            let csv = 'Participant Email,Name,Trial,Stimulus Type,Correct Answer,Response,Correct,Reaction Time (ms),Timestamp\n';
             
             results.responses.forEach(r => {
                 const stimulusType = r.type === 'congruent' ? 'Congruent' : 'Incongruent';
-                csv += `${results.participantData.pid},${results.participantData.name},${r.trial},${stimulusType},${r.correctAnswer.toUpperCase()},${r.response.toUpperCase()},${r.correct ? 'TRUE' : 'FALSE'},${r.reactionTime},${r.timestamp}\n`;
+                csv += `${results.participantData.email},${results.participantData.name},${r.trial},${stimulusType},${r.correctAnswer.toUpperCase()},${r.response.toUpperCase()},${r.correct ? 'TRUE' : 'FALSE'},${r.reactionTime},${r.timestamp}\n`;
             });
             
             csv += `\nSummary\n`;
@@ -623,13 +620,13 @@
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = `Flanker_${participantData.pid}_${new Date().toISOString().slice(0,10)}.csv`;
+            link.download = `Flanker_${participantData.email.split('@')[0]}_${new Date().toISOString().slice(0,10)}.csv`;
             link.click();
         }
 
         function downloadAllResults() {
             let csv = '=== PARTICIPANT INFORMATION ===\n';
-            csv += `Participant ID,${participantData.pid}\n`;
+            csv += `Participant Email,${participantData.email}\n`;
             csv += `Name,${participantData.name}\n`;
             csv += `Test Date,${new Date().toISOString().slice(0,10)}\n\n`;
             
@@ -660,7 +657,7 @@
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = `WorkingMemoryTest_${participantData.pid}_${new Date().toISOString().slice(0,10)}.csv`;
+            link.download = `WorkingMemoryTest_${participantData.email.split('@')[0]}_${new Date().toISOString().slice(0,10)}.csv`;
             link.click();
         }
 

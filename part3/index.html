@@ -149,7 +149,7 @@
                 <h2>⚡ Flanker Task</h2>
                 <div class="instructions">
                     <h3>🎯 테스트 방법</h3>
-                    <p><strong>목표:</strong> 화면 중앙의 화살표 방향을 빠르고 정확하게 판단하세요</p>
+                    <p><strong>목표:</strong> 화면 중앙의 화살표(세번째 화살표) 방향을 빠르고 정확하게 판단하세요</p>
                     <p><strong>중요:</strong> 주변 화살표는 무시하고 오직 <u>가운데 화살표</u>만 보세요!</p>
                     <p><strong>총 시행:</strong> 80회 (약 7-8분 소요)</p>
                 </div>
@@ -221,7 +221,7 @@
         let flankerData = { currentTrial: 0, totalTrials: 80, stimuli: [], responses: [], startTime: null, stimulusStartTime: null };
 
         function sendToGoogleSheets(testResults, testType) {
-            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzdXwqWVXTvEjbgyIyQoiBB6b9Ir_1efKUa0PQ-qy3kH-B7vxGwR_aIjAn0xbYySXGllg/exec';
+            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKjs1xh66XPk_eVIB89reK2lNUYtDd9Ox7zY7SpLicAIRUXTZMia1M7yM8VyNLGayRmw/exec';
             
             let summary = '';
             if (testType === 'Digit-Span') {

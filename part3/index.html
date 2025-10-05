@@ -223,24 +223,20 @@
         function sendToGoogleSheets(testResults, testType) {
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2diTCg6icSldswBaKODF1riYMJiHFBLZAcDTKkRDRUlfrUgzi5Fd1b5Jd11MM4OLXvw/exec';
     
-    const summary = testType === 'C-Test' ? 
-        `C-Test 정답: ${testResults.correctCount}/${testResults.totalCount}, 정답률: ${testResults.percentage}%, 소요시간: ${testResults.timeUsed}분` :
-        `${testType} 완료`;
+    let summary = '';
+    if (testType === 'Digit-Span') {
+        summary = `Digit Span: ${testResults.maxSpan}자리, 정답률: ${Math.round(testResults.totalCorrect/testResults.totalTrials*100)}%`;
+    } else if (testType === 'Flanker') {
+        summary = `Flanker: 정확도 ${Math.round(testResults.totalAccuracy*100)}%, 평균RT ${Math.round(testResults.meanReactionTime)}ms`;
+    }
     
     const payload = {
-        participantId: testResults.userData.email,
-        participantName: testResults.userData.pname,
+        participantId: testResults.participantData.email,
+        participantName: testResults.participantData.name,
         testType: testType,
         summary: summary,
-        participantInfo: testResults.userData,
-        testResults: {
-            details: testResults.details,
-            correctCount: testResults.correctCount,
-            totalCount: testResults.totalCount,
-            percentage: testResults.percentage,
-            totalAccuracy: testResults.percentage / 100,
-            timeUsed: testResults.timeUsed
-        }
+        participantInfo: testResults.participantData,
+        testResults: testResults
     };
     
     console.log('📤 Google Sheets로 전송:', payload);
@@ -248,19 +244,16 @@
     fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
-        headers: { 
-            'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
     })
-    .then(response => {
-        console.log('✅ Google Sheets 저장 완료!');
+    .then(() => {
+        console.log(`✅ ${testType} 결과 저장 완료!`);
         alert('결과가 성공적으로 저장되었습니다!');
-        return 'success';
     })
     .catch(error => {
         console.error('❌ 저장 실패:', error);
-        alert('저장 중 오류가 발생했습니다. 하지만 로컬에는 저장되었습니다.');
+        alert('저장 중 오류가 발생했습니다. 로컬 다운로드로 백업하세요.');
     });
 }
 

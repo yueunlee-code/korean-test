@@ -221,43 +221,48 @@
         let flankerData = { currentTrial: 0, totalTrials: 80, stimuli: [], responses: [], startTime: null, stimulusStartTime: null };
 
         function sendToGoogleSheets(testResults, testType) {
-            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKjs1xh66XPk_eVIB89reK2lNUYtDd9Ox7zY7SpLicAIRUXTZMia1M7yM8VyNLGayRmw/exec';
-            
-            let summary = '';
-            if (testType === 'Digit-Span') {
-                summary = `Digit Span: ${testResults.maxSpan}자리, 정답률: ${Math.round(testResults.totalCorrect/testResults.totalTrials*100)}%`;
-            } else if (testType === 'Flanker') {
-                summary = `Flanker: 정답률 ${Math.round(testResults.totalAccuracy*100)}%, 평균RT ${Math.round(testResults.meanReactionTime)}ms`;
-            }
-            
-            const payload = {
-                participantId: testResults.participantData.email,
-                participantName: testResults.participantData.name,
-                testType: testType,
-                summary: summary,
-                details: JSON.stringify({
-                    participantInfo: testResults.participantData,
-                    testResults: testResults,
-                    timestamp: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }),
-                    site: 'korean-test-part3'
-                })
-            };
-            
-            console.log('Google Sheets 전송 시도:', payload);
-            
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            })
-            .then(() => {
-                console.log(`${testType} 결과가 Google Sheets에 전송되었습니다.`);
-            })
-            .catch(error => {
-                console.error('Google Sheets 전송 실패:', error);
-            });
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2diTCg6icSldswBaKODF1riYMJiHFBLZAcDTKkRDRUlfrUgzi5Fd1b5Jd11MM4OLXvw/exec';
+    
+    const summary = testType === 'C-Test' ? 
+        `C-Test 정답: ${testResults.correctCount}/${testResults.totalCount}, 정답률: ${testResults.percentage}%, 소요시간: ${testResults.timeUsed}분` :
+        `${testType} 완료`;
+    
+    const payload = {
+        participantId: testResults.userData.email,
+        participantName: testResults.userData.pname,
+        testType: testType,
+        summary: summary,
+        participantInfo: testResults.userData,
+        testResults: {
+            details: testResults.details,
+            correctCount: testResults.correctCount,
+            totalCount: testResults.totalCount,
+            percentage: testResults.percentage,
+            totalAccuracy: testResults.percentage / 100,
+            timeUsed: testResults.timeUsed
         }
+    };
+    
+    console.log('📤 Google Sheets로 전송:', payload);
+    
+    fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(response => {
+        console.log('✅ Google Sheets 저장 완료!');
+        alert('결과가 성공적으로 저장되었습니다!');
+        return 'success';
+    })
+    .catch(error => {
+        console.error('❌ 저장 실패:', error);
+        alert('저장 중 오류가 발생했습니다. 하지만 로컬에는 저장되었습니다.');
+    });
+}
 
         function selectTest(testType) {
             const email = document.getElementById('participantEmail').value.trim();
